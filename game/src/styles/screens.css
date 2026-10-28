@@ -115,6 +115,8 @@
   /* Characters stand on the top edge of the dialogue box, not behind it. */
   bottom: var(--hud-height);
   pointer-events: none;
+  /* Sprite sizes use cqh/cqw of this area (see --sprite-height / --sprite-max-width). */
+  container-type: size;
 }
 
 .cast-slot {
@@ -127,6 +129,8 @@
   transition: left var(--dur-med);
   translate: -50% 0;
   left: 50%;
+  /* Without this the slot shrinks to the space right of `left` and squashes the sprite. */
+  width: max-content;
 }
 
 .cast-slot[data-position='left'] {
@@ -140,7 +144,7 @@
 .sprite-sheet {
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  max-width: 70vw;
+  flex-shrink: 0; /* never squash: size comes only from height + aspect-ratio */
 }
 
 .sprite-placeholder {
@@ -556,7 +560,7 @@
 
 @media (max-width: 640px) {
   :root {
-    --sprite-height: 88%;
+    --sprite-height: 88cqh;
     --hud-height: calc(var(--dialog-height) + 86px);
   }
 

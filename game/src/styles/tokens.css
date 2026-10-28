@@ -69,8 +69,9 @@
   /* Dialogue box ≈ 23–30% of the screen height (brief 6.2); the toolbar sits under it. */
   --dialog-height: clamp(118px, 25vh, 230px);
   --hud-height: calc(var(--dialog-height) + 52px);
-  /* Sprite height relative to the area above the dialogue box. */
-  --sprite-height: 96%;
+  /* Sprite size limits relative to the area above the dialogue box (.stage-cast container). */
+  --sprite-height: 96cqh;
+  --sprite-max-width: 96cqw;
   --dialog-opacity: 0.94;
 
   /* Semantic defaults = app space */
