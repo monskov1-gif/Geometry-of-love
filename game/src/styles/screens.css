@@ -1,0 +1,581 @@
+.screen-root,
+.screen {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- Title screen ---------------------------------------------
+   Rule from the brief: decorative maximalism at the edges, calm readable centre.
+   The decor layer is an original placeholder pattern (clouds/stars made of
+   CSS gradients), not copied from the references. */
+.title-screen {
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: var(--baby-pink);
+}
+
+.title-decor {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8% 14%, var(--lemon) 0 22px, transparent 23px),
+    radial-gradient(circle at 92% 20%, var(--mint) 0 30px, transparent 31px),
+    radial-gradient(circle at 85% 88%, var(--lavender) 0 40px, transparent 41px),
+    radial-gradient(circle at 12% 82%, var(--paper) 0 34px, transparent 35px),
+    radial-gradient(circle at 18% 86%, var(--paper) 0 26px, transparent 27px),
+    conic-gradient(from 45deg at 50% 50%, var(--baby-pink), var(--lavender), var(--mint), var(--lemon), var(--baby-pink));
+  opacity: 0.9;
+  image-rendering: pixelated;
+}
+
+.title-center {
+  position: relative;
+  width: min(560px, 100%);
+  text-align: center;
+}
+
+.logo {
+  font-size: clamp(34px, 7vw, 64px);
+  color: var(--ink);
+  text-shadow:
+    3px 3px 0 var(--pink),
+    6px 6px 0 var(--lavender);
+}
+
+.prototype-badge {
+  display: inline-block;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: 2px 10px;
+  border: 2px dashed var(--correction-red);
+  color: var(--correction-red);
+  font-size: var(--fs-small);
+}
+
+.title-menu {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+}
+
+.btn-menu {
+  min-width: min(280px, 100%);
+  font-size: var(--fs-body);
+  padding: 10px 24px;
+}
+
+/* ---------- Stage ----------------------------------------------------- */
+.stage,
+.stage-bg,
+.stage-cast {
+  position: absolute;
+  inset: 0;
+}
+
+.stage-bg {
+  transition: background-color var(--dur-med);
+}
+
+.stage-bg[data-bg='app-notebook'] {
+  background-color: var(--notebook-paper);
+  background-image:
+    linear-gradient(90deg, transparent 6%, var(--notebook-margin) 6%, var(--notebook-margin) calc(6% + 2px), transparent calc(6% + 2px)),
+    repeating-linear-gradient(180deg, transparent 0 31px, var(--notebook-blue) 31px 32px);
+}
+
+/* Placeholder: Dameo's room — dim, cool grey-teal, window light from the left
+   (after the real-life room reference). */
+.stage-bg[data-bg='dameo-room'] {
+  background:
+    linear-gradient(100deg, rgba(216, 211, 201, 0.35) 0 14%, transparent 30%),
+    linear-gradient(180deg, var(--room-teal) 0 62%, var(--reality-shadow) 62% 64%, var(--room-sheet) 64% 100%);
+}
+
+.stage-bg[data-bg='code-space'] {
+  background-color: var(--code-black);
+  background-image:
+    linear-gradient(var(--code-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--code-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-placeholder-label {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 2px 8px;
+  font-size: 12px;
+  font-family: var(--font-pixel);
+  color: var(--text-muted);
+  border: 1px dashed currentColor;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.stage-cast {
+  /* Characters stand on the top edge of the dialogue box, not behind it. */
+  bottom: var(--hud-height);
+  pointer-events: none;
+}
+
+.cast-slot {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: left var(--dur-med);
+  translate: -50% 0;
+  left: 50%;
+}
+
+.cast-slot[data-position='left'] {
+  left: 24%;
+}
+
+.cast-slot[data-position='right'] {
+  left: 76%;
+}
+
+.sprite-sheet {
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  max-width: 70vw;
+}
+
+.sprite-placeholder {
+  height: 72%;
+  aspect-ratio: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  text-align: center;
+  border: 3px dashed var(--text-muted);
+  border-radius: 45% 45% 8px 8px / 30% 30% 8px 8px;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  color: var(--text);
+}
+
+.placeholder-note {
+  font-size: 12px;
+  color: var(--danger);
+}
+
+.sprite-error {
+  display: grid;
+  place-items: center;
+  color: var(--danger);
+  border: 3px dashed var(--danger);
+  font-size: 12px;
+}
+
+/* ---------- HUD: dialogue + toolbar ------------------------------------ */
+.hud {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 var(--space-4) max(var(--space-3), env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ui-hidden .hud,
+.ui-hidden .choice-layer {
+  visibility: hidden;
+}
+
+.dialogue {
+  position: relative;
+  height: var(--dialog-height);
+  display: flex;
+  margin: 0 auto;
+  width: min(1100px, 100%);
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  background: color-mix(in srgb, var(--surface) calc(var(--dialog-opacity) * 100%), transparent);
+  border: var(--border) solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--pixel-shadow) var(--panel-border);
+  cursor: pointer;
+}
+
+.nameplate {
+  position: absolute;
+  top: 0;
+  left: var(--space-6);
+  translate: 0 -60%;
+  padding: 2px 14px;
+  background: var(--accent);
+  background: var(--accent, var(--pink));
+  color: var(--ink);
+  border: var(--border) solid var(--panel-border);
+  border-radius: 6px;
+  max-width: calc(100% - 2 * var(--space-6));
+  overflow-wrap: anywhere;
+}
+
+.dialogue-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.dialogue-text {
+  margin: 0 0 var(--space-4);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.continue-indicator {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-2);
+  opacity: 0;
+  color: var(--accent);
+}
+
+.dialogue.done .continue-indicator {
+  opacity: 1;
+}
+
+.dialogue[data-kind='narration'] .dialogue-text {
+  font-style: normal;
+  color: var(--text);
+}
+
+.dialogue[data-kind='thought'] .dialogue-text {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.dialogue[data-kind='thought'] .dialogue-text::before {
+  content: '( ';
+}
+
+.dialogue[data-kind='thought'] .dialogue-text::after {
+  content: ' )';
+}
+
+.dialogue[data-kind='memory'] {
+  filter: sepia(0.35);
+}
+
+.dialogue[data-kind='system'] {
+  background: var(--system-gray);
+  color: var(--ink);
+  border-radius: 2px;
+  font-family: var(--font-pixel);
+}
+
+.dialogue[data-kind='error'] {
+  background: var(--paper);
+  border-color: var(--correction-red);
+  box-shadow: var(--pixel-shadow) var(--correction-red);
+  color: var(--correction-red);
+  font-family: var(--font-pixel);
+  border-radius: 2px;
+}
+
+.dialogue[data-kind='corrupted'] .dialogue-text {
+  text-decoration: line-through wavy var(--correction-red);
+  letter-spacing: 0.06em;
+}
+
+[data-space='code'] .dialogue[data-kind='system'] {
+  background: var(--code-panel);
+  color: var(--code-green);
+}
+
+.toolbar {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: flex-end;
+  margin: 0 auto;
+  width: min(1100px, 100%);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.btn-tool {
+  padding: 2px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 0 var(--panel-border);
+}
+
+[data-mode='episode'] .hud,
+[data-mode='ending'] .hud {
+  visibility: hidden;
+}
+
+/* ---------- Choices --------------------------------------------------- */
+.choice-layer:empty {
+  display: none;
+}
+
+/* A soft veil keeps choices readable over sprites (calm, readable centre). */
+.choice-layer {
+  position: absolute;
+  inset: 0 0 auto 0;
+  bottom: var(--hud-height);
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+.choices {
+  pointer-events: auto;
+  display: grid;
+  gap: var(--space-3);
+  width: min(640px, calc(100% - 2 * var(--space-4)));
+}
+
+.choice-prompt {
+  margin: 0;
+  text-align: center;
+  padding: var(--space-2);
+  background: var(--surface);
+  border: 2px solid var(--panel-border);
+}
+
+.choice-option {
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-family: var(--font-text); /* options can be long sentences */
+  font-size: var(--fs-body);
+  text-align: left;
+  background: var(--surface);
+}
+
+.choice-option:disabled {
+  opacity: 1;
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+/* ---------- Episodes / endings layer ---------------------------------- */
+.episode-layer:empty {
+  display: none;
+}
+
+.episode-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--surface-alt) 70%, transparent);
+}
+
+.episode-intro,
+.ending-card {
+  width: min(560px, 100%);
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.episode-kind {
+  font-size: var(--fs-small);
+  color: var(--accent);
+}
+
+.episode-failure {
+  color: var(--danger);
+}
+
+/* ---------- Overlays -------------------------------------------------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(21, 19, 27, 0.55);
+  z-index: 10;
+}
+
+.panel {
+  width: min(560px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--text);
+  border: var(--border) solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--pixel-shadow) var(--panel-border);
+}
+
+.panel:focus {
+  outline: none;
+}
+
+.panel-wide {
+  width: min(900px, 100%);
+}
+
+.panel-small {
+  width: min(420px, 100%);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid var(--line);
+}
+
+.panel-body {
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+.menu-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.backlog {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.backlog-entry {
+  display: grid;
+  gap: 2px;
+  border-left: 3px solid var(--line);
+  padding-left: var(--space-3);
+}
+
+.backlog-speaker {
+  font-family: var(--font-pixel);
+  color: var(--accent);
+}
+
+.backlog-entry[data-kind='thought'] .backlog-text {
+  font-style: italic;
+}
+
+.backlog-entry[data-kind='system'],
+.backlog-entry[data-kind='error'] {
+  font-family: var(--font-pixel);
+  border-left-color: var(--danger);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-3);
+}
+
+.slot {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 2px solid var(--panel-border);
+  border-radius: 6px;
+  background: var(--surface-alt);
+}
+
+.slot[data-status='empty'] {
+  border-style: dashed;
+}
+
+.slot-info {
+  display: grid;
+  font-size: var(--fs-small);
+}
+
+.slot-corrupted {
+  color: var(--danger);
+}
+
+.slot-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.settings {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.setting {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(120px, 2fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.setting-toggle {
+  grid-template-columns: 1fr auto;
+}
+
+.setting output {
+  min-width: 7ch;
+  text-align: right;
+  font-size: var(--fs-small);
+}
+
+/* ---------- Toasts ---------------------------------------------------- */
+.toast-root {
+  position: absolute;
+  top: var(--space-4);
+  left: 50%;
+  translate: -50% 0;
+  display: grid;
+  gap: var(--space-2);
+  z-index: 20;
+  width: min(520px, calc(100% - 2 * var(--space-4)));
+  pointer-events: none;
+}
+
+.toast {
+  padding: var(--space-2) var(--space-4);
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  font-size: var(--fs-small);
+}
+
+.toast-error {
+  border-color: var(--correction-red);
+  color: var(--correction-red);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --sprite-height: 88%;
+    --hud-height: calc(var(--dialog-height) + 86px);
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dialogue {
+    padding: var(--space-6) var(--space-4) var(--space-4);
+  }
+
+  .setting {
+    grid-template-columns: 1fr auto;
+  }
+
+  .setting input[type='range'],
+  .setting select {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}

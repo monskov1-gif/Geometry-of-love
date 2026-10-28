@@ -1,0 +1,121 @@
+/* Design tokens. Hex values come from the art brief (docs/ART_BRIEF.md).
+   Components use only the semantic tokens (--surface, --text, …); each
+   space (reality / app / game / code) remaps them. */
+:root {
+  /* App «メロディのまほう» — brand accents */
+  --pink: #ff6cc5;
+  --baby-pink: #ffc9f6;
+  --mint: #b2f5e4;
+  --lemon: #f8feb4;
+  --lavender: #deccff;
+  /* App / horror system colours */
+  --ink: #30243b;
+  --plum: #5a3d78;
+  --paper: #fff9fd;
+  --system-gray: #c9c9d2;
+  --error-red: #ff315a;
+  --terminal-black: #15131b;
+  --rainbow-blue: #55c9f5;
+  /* Notebook */
+  --notebook-paper: #fffef8;
+  --notebook-blue: #b8d9f2;
+  --notebook-margin: #e7a6b4;
+  --geometry-line: #397fb7;
+  --geometry-ink: #26384b;
+  --correction-red: #d94c62;
+  /* Reality */
+  --reality-walnut: #392b27;
+  --reality-wood: #59463d;
+  --reality-stone: #77736f;
+  --reality-gray: #96938f;
+  --reality-paper: #d8d3c9;
+  --reality-shadow: #242322;
+  --reality-olive: #686957;
+  /* Reality — Dameo's room, from the real-life photo references (cool, dim, grey-teal).
+     Working values, not from the brief: confirm with the author. */
+  --room-teal: #3c4644;
+  --room-sheet: #a9ab9f;
+  /* Code space */
+  --code-black: #080d0a;
+  --code-panel: #101a14;
+  --code-green: #39ff88;
+  --code-green-muted: #70b98a;
+  --code-grid: #1b3928;
+  --code-warning: #d7f36a;
+  --code-corruption: #f04b67;
+
+  /* Typography: pixel font for short UI text, system sans for reading */
+  --font-pixel: 'Tiny5', ui-monospace, monospace;
+  --font-text: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Noto Sans JP', sans-serif;
+  --text-scale: 1;
+  --fs-body: calc(clamp(15px, 1.05rem + 0.3vw, 21px) * var(--text-scale));
+  --fs-small: calc(0.85 * var(--fs-body));
+
+  /* Shape and spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --border: 3px;
+  --radius: 10px;
+  --pixel-shadow: 4px 4px 0 0;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur-med: 280ms;
+
+  /* Stage */
+  /* Dialogue box ≈ 23–30% of the screen height (brief 6.2); the toolbar sits under it. */
+  --dialog-height: clamp(118px, 25vh, 230px);
+  --hud-height: calc(var(--dialog-height) + 52px);
+  /* Sprite height relative to the area above the dialogue box. */
+  --sprite-height: 96%;
+  --dialog-opacity: 0.94;
+
+  /* Semantic defaults = app space */
+  --surface: var(--notebook-paper);
+  --surface-alt: var(--paper);
+  --text: var(--geometry-ink);
+  --text-muted: #5c6b7a;
+  --line: var(--notebook-blue);
+  --panel-border: var(--ink);
+  --accent: var(--pink);
+  --accent-soft: var(--baby-pink);
+  --danger: var(--correction-red);
+  --focus: var(--geometry-line);
+}
+
+[data-space='reality'] {
+  --surface: var(--reality-paper);
+  --surface-alt: #c9c3b8;
+  --text: var(--reality-shadow);
+  --text-muted: #55514c;
+  --line: var(--reality-gray);
+  --panel-border: var(--reality-walnut);
+  --accent: var(--reality-olive);
+  --accent-soft: #b9b5a8;
+  --danger: #8a3b36;
+  --focus: var(--reality-olive);
+}
+
+[data-space='code'] {
+  --surface: var(--code-panel);
+  --surface-alt: var(--code-black);
+  --text: var(--code-green);
+  --text-muted: var(--code-green-muted);
+  --line: var(--code-grid);
+  --panel-border: var(--code-green-muted);
+  --accent: var(--code-green);
+  --accent-soft: var(--code-grid);
+  --danger: var(--code-corruption);
+  --focus: var(--code-warning);
+}
+
+/* 'game' (in-game 2.5D world) keeps the app shell for now; its own
+   palette arrives with the first Sandbox art. */
+
+.reduce-motion {
+  --dur-fast: 0ms;
+  --dur-med: 0ms;
+}
