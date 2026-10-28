@@ -7,12 +7,21 @@ import type { StageState, StagedCharacter } from '../core/types';
 import { loadImage } from '../platform/assets';
 import { el } from './dom';
 
-function sheetSprite(pose: SheetPose, referenceHeight: number): HTMLElement {
+/** Widest frame among a character's sheet poses, so narrow screens shrink every pose by the same factor. */
+function widestFrame(charId: string): number {
+  const poses = Object.values(characters[charId]?.poses ?? {});
+  return Math.max(1, ...poses.map((p) => (p.kind === 'sheet' ? p.frame.w : 0)));
+}
+
+function sheetSprite(pose: SheetPose, referenceHeight: number, maxFrameWidth: number): HTMLElement {
   const { frame, sheet } = pose;
-  const node = el('div', { class: 'sprite sprite-sheet' });
-  const scale = frame.h / referenceHeight;
+  const node = el('div', { class: 'sprite sprite-sheet', dataset: { frameRatio: (frame.w / frame.h).toFixed(4) } });
+  // One pixel scale per character: limited by the stage height (taller screens) or by the
+  // stage width (phones). Width follows from aspect-ratio, so proportions never change.
+  const byHeight = (frame.h / referenceHeight).toFixed(4);
+  const byWidth = (frame.h / maxFrameWidth).toFixed(4);
   Object.assign(node.style, {
-    height: `calc(var(--sprite-height) * ${scale.toFixed(4)})`,
+    height: `min(calc(var(--sprite-height) * ${byHeight}), calc(var(--sprite-max-width) * ${byWidth}))`,
     aspectRatio: `${frame.w} / ${frame.h}`,
     backgroundImage: `url("${pose.src}")`,
     backgroundSize: `${((sheet.w / frame.w) * 100).toFixed(3)}% ${((sheet.h / frame.h) * 100).toFixed(3)}%`,
@@ -36,7 +45,7 @@ function renderPose(charId: string, poseId: string): HTMLElement {
     console.error(`[stage] unknown character/pose ${charId}/${poseId}`);
     return el('div', { class: 'sprite sprite-placeholder sprite-error' }, `Нет позы ${charId}/${poseId}`);
   }
-  if (pose.kind === 'sheet') return sheetSprite(pose, def.referenceHeight ?? pose.frame.h);
+  if (pose.kind === 'sheet') return sheetSprite(pose, def.referenceHeight ?? pose.frame.h, widestFrame(charId));
   return el(
     'div',
     { class: 'sprite sprite-placeholder', title: pose.note },

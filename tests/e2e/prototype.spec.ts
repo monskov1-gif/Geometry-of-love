@@ -101,6 +101,28 @@ test('full prototype loop: dialogue → choice → mandatory mini-game → episo
   expect(errors).toEqual([]);
 });
 
+// Regression: on phones the sprite used to be squashed horizontally (max-width
+// clamped the width while the height stayed). Every pose must keep the
+// aspect ratio of its source frame and fit on screen.
+test('sprites keep their source proportions on every screen size', async ({ page }) => {
+  await page.getByTestId('new-game').click();
+  const viewport = page.viewportSize()!;
+  const seen = new Set<string>();
+  for (let i = 0; i < 30 && !(await page.locator('.choices').isVisible()); i++) {
+    for (const sprite of await page.locator('.sprite-sheet').all()) {
+      const m = await sprite.evaluate((n) => {
+        const r = n.getBoundingClientRect();
+        return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, bg: n.style.backgroundPosition };
+      });
+      seen.add(m.bg);
+      expect(Math.abs(m.ratio - m.expected) / m.expected, `pose at ${m.bg}`).toBeLessThan(0.01);
+      expect(m.width).toBeLessThanOrEqual(viewport.width);
+    }
+    await page.getByTestId('dialogue').click();
+  }
+  expect(seen.size).toBe(4); // all four Melody poses were checked
+});
+
 test('opening the backlog or menu does not advance the story', async ({ page }) => {
   await page.getByTestId('new-game').click();
   const dialogue = page.getByTestId('dialogue');
