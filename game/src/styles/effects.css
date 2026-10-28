@@ -180,9 +180,14 @@
   animation: fx-erase 2600ms steps(12) forwards;
 }
 
-.cast-slot[data-fx='distorted'] .sprite {
-  /* Chapter 14: the body distorts, the smile stays. */
+/* Chapter 14: the body distorts, the smile stays. The animation runs on the
+   slot so it never overrides the sprite's own baseline transform. */
+.cast-slot[data-fx='distorted'] {
   animation: fx-distort 2400ms steps(4) infinite;
+  transform-origin: 50% 100%;
+}
+
+.cast-slot[data-fx='distorted'] .sprite {
   filter: saturate(0.6) contrast(1.2);
 }
 
@@ -218,7 +223,7 @@
   opacity: 0.25;
 }
 
-.reduce-motion .cast-slot[data-fx='distorted'] .sprite {
+.reduce-motion .cast-slot[data-fx='distorted'] {
   animation: none;
   transform: skewX(-6deg) scaleY(1.08);
 }

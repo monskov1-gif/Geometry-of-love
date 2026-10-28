@@ -32,6 +32,8 @@ jobs:
         run: npm test
       - name: Production build
         run: npm run build
+      - name: Production build has no test hook
+        run: "! grep -q __golTest dist/assets/*.js"
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
       - name: Browser tests (served under /Geometry-of-love/)
