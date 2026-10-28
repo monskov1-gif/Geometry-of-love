@@ -113,8 +113,20 @@
   --focus: var(--code-warning);
 }
 
-/* 'game' (in-game 2.5D world) keeps the app shell for now; its own
-   palette arrives with the first Sandbox art. */
+/* In-game world (Sandbox, corridors): the app's toy palette turned into a
+   place — lavender/plum surroundings, paper panels. Working values. */
+[data-space='game'] {
+  --surface: var(--paper);
+  --surface-alt: #f3ecff;
+  --text: var(--ink);
+  --text-muted: #6a5a7c;
+  --line: var(--lavender);
+  --panel-border: var(--plum);
+  --accent: var(--lavender);
+  --accent-soft: var(--baby-pink);
+  --danger: var(--error-red);
+  --focus: var(--plum);
+}
 
 .reduce-motion {
   --dur-fast: 0ms;

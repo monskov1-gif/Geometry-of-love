@@ -1,10 +1,12 @@
 // Small helpers that keep scene files readable. They only build plain Step
 // objects; scripts may also use object literals directly.
 import type {
+  CharacterFx,
   ChoiceOption,
   Condition,
   Effect,
   Scene,
+  ScreenEffect,
   SpaceId,
   StagePosition,
   Step,
@@ -19,6 +21,9 @@ export const say = (speaker: string, text: string, kind: TextKind = 'speech'): S
   text,
   kind,
 });
+/** A line the program rewrites right after it is shown. */
+export const rewritten = (speaker: string | null, text: string, revision: string, kind: TextKind = 'corrupted'): Step =>
+  speaker ? { type: 'say', speaker, text, kind, revision } : { type: 'say', text, kind, revision };
 export const narrate = (text: string): Step => ({ type: 'say', text, kind: 'narration' });
 export const think = (speaker: string, text: string): Step => ({ type: 'say', speaker, text, kind: 'thought' });
 export const system = (text: string, kind: 'system' | 'error' | 'corrupted' = 'system'): Step => ({
@@ -26,8 +31,14 @@ export const system = (text: string, kind: 'system' | 'error' | 'corrupted' = 's
   text,
   kind,
 });
-export const show = (character: string, pose: string, position?: StagePosition): Step =>
-  position ? { type: 'show', character, pose, position } : { type: 'show', character, pose };
+export const show = (character: string, pose: string, position?: StagePosition, fx?: CharacterFx): Step => ({
+  type: 'show',
+  character,
+  pose,
+  ...(position ? { position } : {}),
+  ...(fx ? { fx } : {}),
+});
+export const fx = (effect: ScreenEffect): Step => ({ type: 'effect', effect });
 export const hide = (character: string): Step => ({ type: 'hide', character });
 export const background = (id: string): Step => ({ type: 'background', background: id });
 export const space = (id: SpaceId, phase?: VisualPhase): Step =>

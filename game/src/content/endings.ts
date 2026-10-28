@@ -1,7 +1,6 @@
-// The three endings from the synopsis, plus the technical test ending.
-export const endings: Record<string, { title: string; status: 'canon' | 'test' }> = {
-  'self-taught': { title: 'Самоучка', status: 'canon' },
-  'favorite-student': { title: 'Мой любимый ученик', status: 'canon' },
-  'beyond-the-screen': { title: 'За пределами экрана', status: 'canon' },
-  'test-complete': { title: 'Тестовый прогон завершён', status: 'test' },
+// The three endings from the synopsis.
+export const endings: Record<string, { title: string; number: number }> = {
+  'self-taught': { title: 'Концовка № 1 «Самоучка»', number: 1 },
+  'favorite-student': { title: 'Концовка № 2 «Мой любимый ученик»', number: 2 },
+  'beyond-the-screen': { title: 'Концовка № 3 «За пределами экрана»', number: 3 },
 };

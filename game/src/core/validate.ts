@@ -97,7 +97,10 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
             if (o.condition) checkCondition(where, o.condition);
             if (o.goto) checkTarget(where, o.goto);
           }
-          if (step.options.every((o) => o.condition)) {
+          // A hub ("talk to whoever is left") may make every option conditional
+          // only if a branch right before it leaves once all are used up.
+          const guarded = scene.steps[i - 1]?.type === 'branch';
+          if (step.options.every((o) => o.condition) && !guarded) {
             problems.push(`${where}: every option is conditional — the player could be left with no choice`);
           }
           break;
@@ -116,6 +119,7 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
           if (!has(index.endings, step.ending)) problems.push(`${where}: unknown ending "${step.ending}"`);
           break;
         case 'space':
+        case 'effect':
           break;
       }
     });

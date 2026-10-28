@@ -13,10 +13,12 @@ import { el } from './dom';
 import { runEpisode } from './episode-host';
 import type { Overlays } from './overlays';
 import { backlogView, choicePanel, saveLoadView, settingsView, speakerName } from './panels';
+import { EffectsLayer } from './effects';
 import { Stage } from './stage';
 
 const BACKLOG_LIMIT = 200;
 const SKIP_INTERVAL_MS = 60;
+const REVISION_DELAY_MS = 1100;
 
 export interface GameServices {
   input: InputManager;
@@ -41,6 +43,9 @@ export class GameScreen {
   private readonly runtime: StoryRuntime;
   private readonly stage = new Stage();
   private readonly dialogue = new DialogueBox();
+  private readonly effects = new EffectsLayer();
+  private pendingRevision: string | null = null;
+  private revisionTimer = 0;
   // Clicks inside these layers must not bubble up and advance the dialogue.
   private readonly choiceLayer = el('div', { class: 'choice-layer', onclick: (e: Event) => e.stopPropagation() });
   private readonly episodeLayer = el('div', { class: 'episode-layer', onclick: (e: Event) => e.stopPropagation() });
@@ -96,6 +101,7 @@ export class GameScreen {
       'div',
       { class: 'screen game-screen', 'data-testid': 'game-screen', onclick: () => this.onStageClick() },
       this.stage.root,
+      this.effects.root,
       el('div', { class: 'hud' }, this.dialogue.root, toolbar),
       this.choiceLayer,
       this.episodeLayer,
@@ -120,19 +126,26 @@ export class GameScreen {
 
   private show(p: Presentation): void {
     this.presentation = p;
+    window.clearTimeout(this.revisionTimer);
+    this.pendingRevision = null;
     this.stage.render(this.runtime.state.stage, this.services.themeRoot);
+    this.effects.play(this.runtime.takeEffects(), this.services.settings.get().reduceMotion);
     this.choiceLayer.replaceChildren();
     this.root.dataset.mode = p.kind;
 
     switch (p.kind) {
       case 'line': {
         const accent = p.speaker ? (characters[p.speaker]?.accent ?? null) : null;
-        this.backlog.push({ speaker: p.speaker, text: p.text, kind: p.textKind });
+        // The backlog only ever remembers the program's "corrected" version.
+        this.backlog.push({ speaker: p.speaker, text: p.revision ?? p.text, kind: p.revision ? 'corrupted' : p.textKind });
         if (this.backlog.length > BACKLOG_LIMIT) this.backlog.splice(0, this.backlog.length - BACKLOG_LIMIT);
         const speed = this.skipping ? 0 : this.services.settings.get().textSpeed;
-        this.dialogue.show({ speaker: speakerName(p.speaker), accent, text: p.text, kind: p.textKind }, speed, () =>
-          this.onLineShown(),
-        );
+        const name = speakerName(p.speaker, this.runtime.state.flags);
+        this.dialogue.show({ speaker: name, accent, text: p.text, kind: p.textKind }, speed, () => {
+          if (!p.revision) return this.onLineShown();
+          this.pendingRevision = p.revision;
+          this.revisionTimer = window.setTimeout(() => this.applyRevision(), this.skipping ? 0 : REVISION_DELAY_MS);
+        });
         break;
       }
       case 'choice':
@@ -206,10 +219,22 @@ export class GameScreen {
     }
   }
 
+  private applyRevision(): void {
+    if (this.pendingRevision === null) return;
+    window.clearTimeout(this.revisionTimer);
+    this.dialogue.rewrite(this.pendingRevision);
+    this.pendingRevision = null;
+    this.onLineShown();
+  }
+
   private advance(): void {
     if (this.presentation.kind !== 'line') return;
     if (this.dialogue.typing) {
       this.dialogue.complete();
+      return;
+    }
+    if (this.pendingRevision !== null) {
+      this.applyRevision();
       return;
     }
     this.act(() => this.runtime.advance());
@@ -278,6 +303,7 @@ export class GameScreen {
         this.skipTimer = window.setTimeout(tick, SKIP_INTERVAL_MS);
         return;
       }
+      if (this.pendingRevision !== null) this.applyRevision();
       if (!this.canSkipCurrent()) {
         this.skipToggle = false;
         this.skipHeld = false;
@@ -304,6 +330,7 @@ export class GameScreen {
   }
 
   private stopTimers(): void {
+    window.clearTimeout(this.revisionTimer);
     window.clearTimeout(this.autoTimer);
     window.clearTimeout(this.skipTimer);
   }
@@ -386,7 +413,7 @@ export class GameScreen {
   }
 
   private openBacklog(): void {
-    this.services.overlays.open('Журнал', backlogView(this.backlog), { className: 'panel-backlog' });
+    this.services.overlays.open('Журнал', backlogView(this.backlog, this.runtime.state.flags), { className: 'panel-backlog' });
   }
 
   private openSaveLoad(mode: 'save' | 'load'): void {

@@ -369,7 +369,8 @@
   position: absolute;
   inset: 0;
   display: grid;
-  place-items: center;
+  place-items: safe center;
+  overflow-y: auto;
   padding: var(--space-4);
   background: color-mix(in srgb, var(--surface-alt) 70%, transparent);
 }

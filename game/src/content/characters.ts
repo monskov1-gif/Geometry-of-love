@@ -84,8 +84,9 @@ export const characters: Record<string, CharacterDef> = {
   calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: placeholder() },
   ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: placeholder() },
   compass: { id: 'compass', name: 'Циркулёнок', accent: 'var(--lavender)', poses: placeholder() },
-  // The synopsis never names the three eraser twins; ids are technical.
-  'eraser-1': { id: 'eraser-1', name: 'Ластик', accent: 'var(--baby-pink)', poses: placeholder() },
-  'eraser-2': { id: 'eraser-2', name: 'Ластик', accent: 'var(--baby-pink)', poses: placeholder() },
-  'eraser-3': { id: 'eraser-3', name: 'Ластик', accent: 'var(--baby-pink)', poses: placeholder() },
+  // The synopsis never names the three eraser twins: the numbers are technical
+  // labels, not names. Melody's use of a name in chapter 9 is shown erased.
+  'eraser-1': { id: 'eraser-1', name: 'Ластик №1', accent: 'var(--baby-pink)', poses: placeholder() },
+  'eraser-2': { id: 'eraser-2', name: 'Ластик №2', accent: 'var(--baby-pink)', poses: placeholder() },
+  'eraser-3': { id: 'eraser-3', name: 'Ластик №3', accent: 'var(--baby-pink)', poses: placeholder() },
 };

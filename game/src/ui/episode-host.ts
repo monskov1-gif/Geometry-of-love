@@ -2,9 +2,23 @@
 // with retry. There is deliberately no "skip" path; only a confirmed success
 // resolves the returned promise.
 import { episodes } from '../content';
-import type { EpisodeInstance } from '../episodes/types';
+import type { EpisodeInstance, EpisodeOutcome } from '../episodes/types';
 import type { InputManager } from '../platform/input';
 import { el } from './dom';
+
+// Browser tests drive the whole story; real-time mini-games cannot be played
+// reliably by a script, so the e2e build (VITE_E2E_HOOKS=1, see .env.e2e)
+// exposes `window.__golTest.winEpisode()`. The production build has no hook:
+// the condition is replaced at build time and the code is removed.
+const E2E_HOOKS = import.meta.env.VITE_E2E_HOOKS === '1';
+let pendingTestWin: (() => void) | null = null;
+if (E2E_HOOKS) {
+  (window as unknown as { __golTest: object }).__golTest = { winEpisode: () => pendingTestWin?.() };
+}
+function testWin(): Promise<EpisodeOutcome> {
+  if (!E2E_HOOKS) return new Promise(() => {});
+  return new Promise((resolve) => (pendingTestWin = () => resolve({ outcome: 'success' })));
+}
 
 export interface EpisodeHostOptions {
   input: InputManager;
@@ -61,7 +75,7 @@ export function runEpisode(
       root.replaceChildren(stageRoot);
       try {
         instance = def.create({ root: stageRoot, params, reduceMotion: opts.reduceMotion });
-        const result = await instance.run();
+        const result = await Promise.race([instance.run(), testWin()]);
         if (cancelled) return;
         instance.destroy();
         instance = null;

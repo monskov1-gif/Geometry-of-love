@@ -36,12 +36,16 @@ export function choicePanel(prompt: string | null, options: PresentedOption[], o
   );
 }
 
-export function speakerName(id: string | null): string | null {
+/** Flag `erased.<characterId>` removes a character's name from the whole interface (state D). */
+export const ERASED_NAME = '▒▒▒▒▒';
+
+export function speakerName(id: string | null, flags: Readonly<Record<string, boolean>> = {}): string | null {
   if (!id) return null;
+  if (flags[`erased.${id}`]) return ERASED_NAME;
   return characters[id]?.name ?? id;
 }
 
-export function backlogView(entries: BacklogEntry[]): HTMLElement {
+export function backlogView(entries: BacklogEntry[], flags: Readonly<Record<string, boolean>> = {}): HTMLElement {
   if (entries.length === 0) return el('p', { class: 'muted' }, 'Журнал пока пуст.');
   const list = el(
     'ol',
@@ -50,7 +54,7 @@ export function backlogView(entries: BacklogEntry[]): HTMLElement {
       el(
         'li',
         { class: 'backlog-entry', dataset: { kind: e.kind } },
-        e.speaker ? el('span', { class: 'backlog-speaker' }, speakerName(e.speaker)) : null,
+        e.speaker ? el('span', { class: 'backlog-speaker' }, speakerName(e.speaker, flags)) : null,
         el('span', { class: 'backlog-text' }, e.text),
       ),
     ),

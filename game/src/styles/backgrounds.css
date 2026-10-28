@@ -1,0 +1,148 @@
+/* Placeholder backgrounds drawn with CSS in each space's palette (brief §3).
+   Original compositions, not copies of the references. Replace with real
+   art by giving the background a `src` in content/backgrounds.ts. */
+
+.stage-bg {
+  background-color: var(--surface);
+  image-rendering: pixelated;
+}
+
+/* ---------- Reality: muted, grey-brown, practical light --------------- */
+.stage-bg[data-bg='dameo-desk'] {
+  background:
+    radial-gradient(ellipse 26% 22% at 50% 44%, rgba(216, 211, 201, 0.55), transparent 70%),
+    linear-gradient(180deg, transparent 0 30%, var(--reality-shadow) 30% 31%, transparent 31%),
+    linear-gradient(90deg, transparent 0 34%, #2a3230 34% 66%, transparent 66%) 0 0 / 100% 60% no-repeat,
+    linear-gradient(180deg, var(--room-teal) 0 66%, var(--reality-wood) 66% 100%);
+}
+
+.stage-bg[data-bg='university-library'] {
+  background:
+    linear-gradient(180deg, rgba(216, 211, 201, 0.25) 0 4%, transparent 4% 12%, rgba(216, 211, 201, 0.25) 12% 14%, transparent 14%),
+    repeating-linear-gradient(180deg, transparent 0 18%, var(--reality-walnut) 18% 20%),
+    repeating-linear-gradient(90deg, var(--reality-wood) 0 14px, #4a3b33 14px 22px, var(--reality-olive) 22px 30px, var(--reality-walnut) 30px 38px, #6b564a 38px 46px),
+    var(--reality-walnut);
+}
+
+.stage-bg[data-bg='university-hall'] {
+  background:
+    linear-gradient(180deg, transparent 0 70%, var(--reality-stone) 70% 100%),
+    repeating-linear-gradient(90deg, var(--reality-walnut) 0 12%, var(--reality-wood) 12% 13%),
+    var(--reality-walnut);
+}
+
+.stage-bg[data-bg='street-dusk'] {
+  background:
+    linear-gradient(180deg, transparent 0 22%, rgba(36, 35, 34, 0.6) 22% 22.4%, transparent 22.4% 30%, rgba(36, 35, 34, 0.5) 30% 30.3%, transparent 30.3%),
+    linear-gradient(90deg, transparent 0 6%, var(--reality-shadow) 6% 7%, transparent 7% 70%, var(--reality-shadow) 70% 71%, transparent 71%),
+    linear-gradient(180deg, transparent 0 48%, #3d3b38 48% 100%) 0 0 / 34% 100% no-repeat,
+    linear-gradient(180deg, transparent 0 40%, #46433f 40% 100%) 100% 0 / 40% 100% no-repeat,
+    linear-gradient(180deg, transparent 0 82%, var(--reality-stone) 82% 100%),
+    linear-gradient(180deg, #b6aca2 0%, #8f8a84 55%, var(--reality-olive) 100%);
+}
+
+/* An old desktop on Dameo's monitor (chapter 1 and the epilogue). */
+.stage-bg[data-bg='desktop'] {
+  background:
+    linear-gradient(180deg, transparent 0 92%, var(--system-gray) 92% 100%),
+    linear-gradient(90deg, transparent 0 8%, var(--paper) 8% 13%, transparent 13%) 0 12% / 100% 9% no-repeat,
+    linear-gradient(160deg, #5f6f74, #3c4644);
+}
+
+/* ---------- The app «メロディのまほう» ---------------------------------- */
+.stage-bg[data-bg='app-splash'] {
+  background:
+    radial-gradient(circle at 15% 25%, var(--lemon) 0 4%, var(--pink) 4% 6%, transparent 6.5%),
+    radial-gradient(circle at 85% 20%, var(--mint) 0 5%, var(--lavender) 5% 7%, transparent 7.5%),
+    radial-gradient(circle at 10% 80%, var(--lavender) 0 6%, var(--baby-pink) 6% 9%, transparent 9.5%),
+    radial-gradient(circle at 90% 78%, var(--lemon) 0 5%, var(--mint) 5% 8%, transparent 8.5%),
+    radial-gradient(circle at 50% 50%, var(--notebook-paper) 0 30%, transparent 30.5%),
+    var(--baby-pink);
+}
+
+/* ---------- Inside the game: 2.5D pixel world (placeholders) ---------- */
+.stage-bg[data-bg='exit-level'] {
+  background:
+    radial-gradient(ellipse 12% 5% at 20% 30%, var(--paper) 0 90%, transparent 100%),
+    radial-gradient(ellipse 15% 6% at 72% 18%, var(--paper) 0 90%, transparent 100%),
+    linear-gradient(180deg, var(--lavender), var(--mint));
+}
+
+.stage-bg[data-bg='monitor-back'] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0 2%, transparent 2%),
+    radial-gradient(ellipse 40% 30% at 50% 45%, rgba(60, 70, 68, 0.95), rgba(36, 35, 34, 0.98) 80%),
+    var(--reality-shadow);
+}
+
+.stage-bg[data-bg='study-room'] {
+  background:
+    linear-gradient(90deg, transparent 0 20%, #2f4b45 20% 80%, transparent 80%) 0 14% / 100% 38% no-repeat,
+    linear-gradient(180deg, transparent 0 74%, var(--lavender) 74% 100%),
+    repeating-linear-gradient(180deg, transparent 0 31px, var(--notebook-blue) 31px 32px),
+    var(--notebook-paper);
+}
+
+.stage-bg[data-bg='sandbox'] {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 31px, rgba(90, 61, 120, 0.15) 31px 32px) 0 72% / 100% 28% no-repeat,
+    repeating-linear-gradient(180deg, transparent 0 31px, rgba(90, 61, 120, 0.15) 31px 32px) 0 72% / 100% 28% no-repeat,
+    linear-gradient(180deg, transparent 0 72%, var(--mint) 72% 100%),
+    radial-gradient(circle at 80% 22%, var(--lemon) 0 5%, transparent 5.5%),
+    linear-gradient(180deg, var(--baby-pink), var(--lavender) 72%);
+}
+
+.stage-bg[data-bg='sandbox-dim'] {
+  background:
+    linear-gradient(180deg, transparent 0 72%, #8aa79f 72% 100%),
+    linear-gradient(180deg, #b9a4b6, #8c7f9b 72%);
+}
+
+.stage-bg[data-bg='corridor'] {
+  background:
+    linear-gradient(90deg, var(--plum) 0 18%, transparent 18% 82%, var(--plum) 82%),
+    repeating-linear-gradient(180deg, var(--lavender) 0 40px, #c9b6ee 40px 42px),
+    var(--lavender);
+}
+
+.stage-bg[data-bg='archive'] {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 22%, var(--plum) 22% 23.5%),
+    repeating-linear-gradient(90deg, var(--lavender) 0 26px, var(--system-gray) 26px 30px, var(--baby-pink) 30px 52px, var(--system-gray) 52px 56px),
+    var(--plum);
+}
+
+.stage-bg[data-bg='tech-door'] {
+  background:
+    repeating-linear-gradient(45deg, var(--lemon) 0 16px, var(--ink) 16px 32px) 50% 88% / 60% 6% no-repeat,
+    linear-gradient(90deg, transparent 0 20%, var(--system-gray) 20% 49.6%, var(--ink) 49.6% 50.4%, var(--system-gray) 50.4% 80%, transparent 80%) 0 10% / 100% 78% no-repeat,
+    var(--plum);
+}
+
+.stage-bg[data-bg='chasm'] {
+  background:
+    linear-gradient(90deg, var(--lavender) 0 32%, transparent 32% 68%, var(--lavender) 68%) 0 100% / 100% 34% no-repeat,
+    linear-gradient(180deg, var(--baby-pink) 0 40%, var(--plum) 100%);
+}
+
+/* ---------- Code / system space ---------------------------------------- */
+.stage-bg[data-bg='system-files'] {
+  background-color: var(--code-black);
+  background-image:
+    radial-gradient(circle at 30% 40%, var(--code-green-muted) 0 3px, transparent 4px),
+    radial-gradient(circle at 62% 30%, var(--code-green) 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 64%, var(--code-warning) 0 3px, transparent 4px),
+    linear-gradient(var(--code-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--code-grid) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+}
+
+.stage-bg[data-bg='collapse'] {
+  background-color: var(--terminal-black);
+  background-image:
+    linear-gradient(90deg, transparent 0 40%, color-mix(in srgb, var(--pink) 40%, transparent) 40% 41%, transparent 41%),
+    linear-gradient(180deg, transparent 0 63%, color-mix(in srgb, var(--mint) 30%, transparent) 63% 64%, transparent 64%),
+    linear-gradient(var(--code-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--code-grid) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 48px 37px, 61px 48px;
+}
