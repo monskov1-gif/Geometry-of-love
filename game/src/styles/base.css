@@ -1,0 +1,152 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--terminal-black);
+  overscroll-behavior: none;
+}
+
+.app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* Notebook paper: warm white, thin low-contrast blue rules, optional margin line. */
+.notebook-sheet {
+  background-color: var(--notebook-paper);
+  background-image:
+    linear-gradient(90deg, transparent 38px, var(--notebook-margin) 38px, var(--notebook-margin) 40px, transparent 40px),
+    repeating-linear-gradient(180deg, transparent 0 27px, var(--notebook-blue) 27px 28px);
+  color: var(--geometry-ink);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--pixel-shadow) var(--ink);
+  padding: var(--space-6) var(--space-6) var(--space-6) 56px;
+}
+
+[data-space='reality'] .notebook-sheet {
+  background-color: var(--reality-paper);
+  background-image: repeating-linear-gradient(180deg, transparent 0 27px, #b7b2a8 27px 28px);
+  color: var(--reality-shadow);
+  border-color: var(--reality-walnut);
+  box-shadow: none;
+}
+
+[data-space='code'] .notebook-sheet {
+  background: var(--code-panel);
+  color: var(--code-green);
+  border: 1px solid var(--code-green-muted);
+  box-shadow: none;
+}
+
+/* Buttons: rounded, thick outline, simple pixel shadow (state A of the brief). */
+.btn {
+  font: inherit;
+  font-family: var(--font-pixel);
+  font-size: var(--fs-small);
+  color: var(--ink);
+  background: var(--surface-alt);
+  border: var(--border) solid var(--panel-border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  box-shadow: 3px 3px 0 0 var(--panel-border);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast),
+    box-shadow var(--dur-fast),
+    background var(--dur-fast);
+  touch-action: manipulation;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--panel-border);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.btn-danger {
+  color: var(--danger);
+}
+
+.btn[aria-pressed='true'] {
+  background: var(--accent);
+  box-shadow: inset 2px 2px 0 0 var(--panel-border);
+}
+
+.btn-icon {
+  padding: 0 12px;
+  font-size: 1.3em;
+  line-height: 1.4;
+}
+
+[data-space='reality'] .btn,
+[data-space='code'] .btn {
+  color: var(--text);
+  border-radius: 4px;
+}
+
+[data-space='reality'] .btn-primary {
+  color: var(--reality-paper);
+}
+
+[data-space='code'] .btn-primary {
+  color: var(--code-black);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
