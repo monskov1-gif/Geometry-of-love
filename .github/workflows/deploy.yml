@@ -1,25 +1,34 @@
-# Builds, re-runs all checks and publishes the game to GitHub Pages on every
-# push to main. Requires Settings → Pages → Source = "GitHub Actions"
-# (see README, "Publishing"). Nothing is deployed if any check fails.
-name: Deploy to GitHub Pages
+# GitHub Pages is set to "Deploy from a branch: main / (root)", so the site
+# is whatever index.html + assets/ sit at the root of main. On every push to
+# main this workflow runs all checks, rebuilds the game and, if the build
+# changed, commits the fresh index.html + assets/ back to main. GitHub's own
+# "pages build and deployment" then publishes that commit.
+# Nothing is committed if any check fails.
+name: Publish build to main
 
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - index.html
+      - assets/**
+      - .nojekyll
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages
+  group: publish-build
   cancel-in-progress: false
 
 jobs:
-  build:
-    name: Check and build
+  publish:
+    name: Check, build and commit the published build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: write # only to push the regenerated build to main
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -29,23 +38,19 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
-      - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist
-
-  deploy:
-    name: Publish
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Browser tests (served under /Geometry-of-love/)
+        run: npm run test:e2e
+      - name: Build and copy to repository root
+        run: npm run build:pages
+      - name: Commit the build if it changed
+        run: |
+          git add -A index.html assets .nojekyll
+          if git diff --cached --quiet; then
+            echo "Published build is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update published game build (${GITHUB_SHA::7})"
+          git push origin HEAD:main
