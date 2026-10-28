@@ -130,3 +130,45 @@ describe('StoryRuntime', () => {
     expect(() => rt.advance()).toThrow(/ended without a goto or ending/);
   });
 });
+
+describe('StoryRuntime presentation extras', () => {
+  const fxStory: Story = {
+    startScene: 's',
+    scenes: {
+      s: {
+        id: 's',
+        title: 's',
+        chapter: null,
+        steps: [
+          { type: 'effect', effect: 'glitch' },
+          { type: 'show', character: 'melody', pose: 'cheerful', fx: 'distorted' },
+          { type: 'say', speaker: 'dameo', text: 'Вас было трое!', revision: 'Вас было двое.' },
+          { type: 'show', character: 'melody', pose: 'neutral' },
+          { type: 'effect', effect: 'shake' },
+          { type: 'say', text: 'next' },
+          ending('x'),
+        ],
+      },
+    },
+  };
+
+  it('queues one-shot effects without saving them', () => {
+    const rt = new StoryRuntime(fxStory);
+    expect(rt.takeEffects()).toEqual(['glitch']);
+    expect(rt.takeEffects()).toEqual([]);
+    expect(JSON.stringify(rt.snapshot())).not.toContain('glitch');
+    rt.advance();
+    expect(rt.takeEffects()).toEqual(['shake']);
+  });
+
+  it('presents a line together with its revision', () => {
+    expect(new StoryRuntime(fxStory).present()).toMatchObject({ text: 'Вас было трое!', revision: 'Вас было двое.' });
+  });
+
+  it('keeps sprite fx on the stage and clears it on the next show without fx', () => {
+    const rt = new StoryRuntime(fxStory);
+    expect(rt.state.stage.characters[0]).toMatchObject({ pose: 'cheerful', fx: 'distorted' });
+    rt.advance();
+    expect(rt.state.stage.characters[0]).toEqual({ id: 'melody', pose: 'neutral', position: 'center' });
+  });
+});

@@ -37,6 +37,15 @@ function renderFigure(figure: FigureSpec): SVGSVGElement {
   return svg;
 }
 
+/** Spots around the sheet (outside the task area). */
+const WALL_SPOTS = [
+  { top: '-2.2em', left: '0' },
+  { bottom: '-2.2em', right: '0' },
+  { top: '-2.2em', right: '0' },
+  { bottom: '-2.2em', left: '0' },
+  { top: '40%', right: '-0.5em' },
+];
+
 const WALL_MESSAGES = ['ТЫ НЕДОСТАТОЧНО СТАРАЕШЬСЯ', 'НЕПРАВИЛЬНО', 'ПОПРОБУЙ СНОВА', 'ТЫ НЕДОСТАТОЧНО СТАРАЕШЬСЯ', 'СЛУШАЙСЯ'];
 
 export const geometryQuiz: EpisodeDefinition = {
@@ -55,7 +64,8 @@ export const geometryQuiz: EpisodeDefinition = {
     const later = (ms: number, fn: () => void) => timers.push(window.setTimeout(() => finish && fn(), reduceMotion ? Math.min(ms, 150) : ms));
 
     const historyList = el('ol', { class: 'quiz-history', 'aria-label': 'Ваши ответы' });
-    const exitButton = el('button', { class: 'btn quiz-exit', type: 'button', disabled: true, title: 'Выход из урока' }, 'Выйти из урока');
+    // Not a working control: it appears only when the program locks the exit (story beat).
+    const exitButton = el('div', { class: 'quiz-exit is-locked', role: 'status', hidden: true }, '🔒 Выход из урока заблокирован');
     const walls = el('div', { class: 'quiz-walls', 'aria-hidden': 'true' });
     const sheet = el('div', { class: 'quiz notebook-sheet' });
     root.replaceChildren(el('div', { class: 'quiz-room' }, walls, sheet, el('aside', { class: 'quiz-side' }, el('h3', { class: 'pixel' }, 'Ответы'), historyList, exitButton)));
@@ -66,8 +76,7 @@ export const geometryQuiz: EpisodeDefinition = {
     const lockdown = (feedback: HTMLElement) => {
       feedback.textContent = 'Выход заблокирован.';
       feedback.dataset.state = 'wrong';
-      exitButton.textContent = '🔒 Выход заблокирован';
-      exitButton.classList.add('is-locked');
+      exitButton.hidden = false;
       sheet.querySelectorAll('button, input').forEach((n) => ((n as HTMLButtonElement).disabled = true));
       // Earlier correct answers are rewritten one by one.
       [...historyList.children].forEach((li, i) =>
@@ -77,7 +86,7 @@ export const geometryQuiz: EpisodeDefinition = {
         }),
       );
       WALL_MESSAGES.forEach((text, i) =>
-        later(700 + i * 400, () => walls.append(el('span', { class: 'wall-message pixel', style: { top: `${10 + i * 17}%`, left: `${(i * 23) % 60}%` } }, text))),
+        later(700 + i * 400, () => walls.append(el('span', { class: 'wall-message pixel', style: WALL_SPOTS[i % WALL_SPOTS.length] }, text))),
       );
       later(700 + WALL_MESSAGES.length * 400 + 1200, () => finish?.({ outcome: 'success' }));
     };

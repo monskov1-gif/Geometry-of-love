@@ -1,23 +1,16 @@
-// End-to-end checks of the technical prototype, run against the production
-// build served under /Geometry-of-love/ (the GitHub Pages subpath).
+// End-to-end checks of the whole game, run against the e2e build served
+// under /Geometry-of-love/ (the GitHub Pages subpath). The e2e build differs
+// from production only by window.__golTest.winEpisode(), used for the two
+// real-time mini-games (platformer, chase) whose rules are unit-tested.
 // Set SHOTS_DIR=<dir> to also save screenshots of each stage.
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 async function shot(page: Page, name: string) {
   const dir = process.env.SHOTS_DIR;
   if (dir) await page.screenshot({ path: `${dir}/${test.info().project.name}-${name}.png` });
 }
 
-/** Clicks the dialogue until `target` appears (each click finishes typing or advances). */
-async function advanceUntil(page: Page, target: Locator, max = 60) {
-  for (let i = 0; i < max; i++) {
-    if (await target.isVisible()) return;
-    await page.getByTestId('dialogue').click();
-  }
-  await expect(target).toBeVisible();
-}
-
-function trackAssetErrors(page: Page): string[] {
+function trackErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
   page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`));
@@ -26,101 +19,213 @@ function trackAssetErrors(page: Page): string[] {
   return errors;
 }
 
+type Stop = 'choice' | 'episode' | 'ending';
+
+/** Melody poses measured during the current test (see advance()). */
+let poses = new Set<string>();
+
+/**
+ * Clicks through dialogue until a choice, an episode or an ending appears.
+ * On the way, every visible sprite must keep its source proportions
+ * (regression: sprites were once squashed on phones).
+ */
+async function advance(page: Page): Promise<Stop> {
+  const dialogue = page.getByTestId('dialogue');
+  for (let i = 0; i < 400; i++) {
+    if (await page.getByTestId('ending').isVisible()) return 'ending';
+    if (await page.getByTestId('episode').isVisible()) return 'episode';
+    if (await page.locator('.choices').isVisible()) return 'choice';
+    {
+      // Story effects (chapter 14 distortion, erasing) deform sprites on purpose; skip them.
+      for (const m of await page.locator('.cast-slot:not([data-fx="distorted"]):not([data-fx="erasing"]) .sprite-sheet').evaluateAll((ns) =>
+        ns.map((n) => {
+          const r = n.getBoundingClientRect();
+          return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, bg: (n as HTMLElement).style.backgroundPosition };
+        }),
+      )) {
+        poses.add(m.bg);
+        expect(Math.abs(m.ratio - m.expected) / m.expected, `pose ${m.bg}`).toBeLessThan(0.01);
+        expect(m.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+      }
+    }
+    if (await dialogue.isVisible()) await dialogue.click();
+    else await page.waitForTimeout(50);
+  }
+  throw new Error('advance(): nothing blocking reached after 400 clicks');
+}
+
+async function choose(page: Page, name: RegExp | string) {
+  expect(await advance(page)).toBe('choice');
+  await page.locator('.choices').getByRole('button', { name }).click();
+}
+
+async function startEpisode(page: Page, title: string) {
+  expect(await advance(page)).toBe('episode');
+  await expect(page.getByTestId('episode').getByRole('heading', { name: title })).toBeVisible();
+  await page.getByRole('button', { name: 'Начать' }).click();
+}
+
+/** Real-time mini-games: confirmed success through the e2e-only hook. */
+async function winByHook(page: Page, title: string) {
+  await startEpisode(page, title);
+  await page.evaluate(() => (window as unknown as { __golTest: { winEpisode(): void } }).__golTest.winEpisode());
+  await expect(page.getByTestId('episode')).toBeHidden();
+}
+
+async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
+  const episode = page.getByTestId('episode');
+  for (let i = 0; i < 5 && (await episode.getByRole('button', { name: /Далее|К задачам/ }).isVisible()); i++) {
+    await episode.getByRole('button', { name: /Далее|К задачам/ }).click();
+  }
+  for (const a of answers) {
+    if (typeof a === 'string') await episode.getByLabel('Ответ', { exact: true }).fill(a);
+    else await episode.getByRole('button', { name: a.choice, exact: true }).click();
+    await episode.getByRole('button', { name: 'Проверить' }).click();
+    await expect(episode.locator('.quiz-feedback')).toHaveText(/Правильно/);
+    // Wait until the next task (or the end of the episode) replaces this one.
+    await expect
+      .poll(async () => (await episode.isVisible()) && /Правильно/.test((await episode.locator('.quiz-feedback').textContent()) ?? ''))
+      .toBe(false);
+  }
+}
+
 test.beforeEach(async ({ page }) => {
+  poses = new Set();
   await page.goto('./');
-  await page.evaluate(() => localStorage.clear());
+  // Instant text so tests click through quickly; everything else default.
+  await page.evaluate(() => {
+    localStorage.clear();
+    localStorage.setItem('gol:settings', JSON.stringify({ textSpeed: 0 }));
+  });
   await page.reload();
 });
 
-test('full prototype loop: dialogue → choice → mandatory mini-game → episode → branch → ending', async ({ page }) => {
-  const errors = trackAssetErrors(page);
-  await expect(page.getByTestId('title-screen')).toBeVisible();
+test('ending 1 «Самоучка»: refuse to install the app', async ({ page }) => {
+  const errors = trackErrors(page);
   await expect(page.getByTestId('continue')).toBeDisabled();
-  await shot(page, '01-title');
-
+  await shot(page, '00-title');
   await page.getByTestId('new-game').click();
-  await expect(page.getByTestId('dialogue')).toContainText('ТЕХНИЧЕСКИЙ ПРОТОТИП');
-  await page.getByTestId('dialogue').click(); // finish typing
-  await page.getByTestId('dialogue').click(); // next line
-  await expect(page.locator('.sprite-sheet')).toBeVisible();
-  await page.getByTestId('dialogue').click();
-  await shot(page, '02-melody');
-
-  // Real sprite sheet actually loaded (not just referenced).
-  const loaded = await page.locator('.sprite-sheet').evaluate(async (node) => {
-    const url = getComputedStyle(node).backgroundImage.slice(5, -2);
-    const img = new Image();
-    img.src = url;
-    await img.decode();
-    return { url, w: img.naturalWidth };
-  });
-  expect(loaded.url).toContain('/Geometry-of-love/assets/melody-sheet');
-  expect(loaded.w).toBeGreaterThan(2000);
-
-  const choices = page.locator('.choices');
-  await advanceUntil(page, choices);
-  await expect(page.getByRole('button', { name: /Недоступный вариант/ })).toBeDisabled();
-  await shot(page, '03-choice');
-  await page.getByRole('button', { name: /Поддержать разговор/ }).click();
-
-  // Mandatory geometry mini-game.
-  const episode = page.getByTestId('episode');
-  await advanceUntil(page, episode);
-  await shot(page, '04-quiz-intro');
-  await page.getByRole('button', { name: 'Начать' }).click();
-  await page.getByLabel('Ответ').fill('100');
-  await page.getByRole('button', { name: 'Проверить' }).click();
-  await expect(page.locator('.quiz-feedback')).toHaveText(/Неверно/);
-  await shot(page, '05-quiz-wrong');
-  await page.getByLabel('Ответ').fill('180');
-  await page.keyboard.press('Enter');
-  await page.getByRole('button', { name: '70°' }).click();
-  await page.getByRole('button', { name: 'Проверить' }).click();
-
-  // Reality space, then the left/right interactive episode.
   await expect(page.locator('#app')).toHaveAttribute('data-space', 'reality');
   await page.getByTestId('dialogue').click();
-  await shot(page, '06-reality');
-  await advanceUntil(page, episode);
-  await page.getByRole('button', { name: 'Начать' }).click();
-  await page.keyboard.down('ArrowRight');
-  await expect(episode).toBeHidden({ timeout: 15_000 });
-  await page.keyboard.up('ArrowRight');
-
-  // Code space and the branch chosen by the relationship variable.
-  await expect(page.locator('#app')).toHaveAttribute('data-space', 'code');
-  await advanceUntil(page, page.getByTestId('dialogue').getByText(/1 или больше/));
-  await page.getByTestId('dialogue').click();
-  await shot(page, '07-code');
-  await advanceUntil(page, page.getByTestId('ending'));
-  await expect(page.getByTestId('ending')).toContainText('Тестовый прогон завершён');
-  await shot(page, '08-ending');
-
+  await shot(page, '01-reality');
+  await choose(page, /Удалить установщик/);
+  expect(await advance(page)).toBe('ending');
+  await expect(page.getByTestId('ending')).toContainText('Самоучка');
   await page.getByRole('button', { name: 'В главное меню' }).click();
-  await expect(page.getByTestId('continue')).toBeEnabled(); // autosave exists
+  await expect(page.getByTestId('title-screen')).toContainText('Открыто концовок: 1');
   expect(errors).toEqual([]);
 });
 
-// Regression: on phones the sprite used to be squashed horizontally (max-width
-// clamped the width while the height stayed). Every pose must keep the
-// aspect ratio of its source frame and fit on screen.
-test('sprites keep their source proportions on every screen size', async ({ page }) => {
+test('ending 3 «За пределами экрана»: the whole story with every mini-game', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = trackErrors(page);
   await page.getByTestId('new-game').click();
-  const viewport = page.viewportSize()!;
-  const seen = new Set<string>();
-  for (let i = 0; i < 30 && !(await page.locator('.choices').isVisible()); i++) {
-    for (const sprite of await page.locator('.sprite-sheet').all()) {
-      const m = await sprite.evaluate((n) => {
-        const r = n.getBoundingClientRect();
-        return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, bg: n.style.backgroundPosition };
-      });
-      seen.add(m.bg);
-      expect(Math.abs(m.ratio - m.expected) / m.expected, `pose at ${m.bg}`).toBeLessThan(0.01);
-      expect(m.width).toBeLessThanOrEqual(viewport.width);
-    }
-    await page.getByTestId('dialogue').click();
-  }
-  expect(seen.size).toBe(4); // all four Melody poses were checked
+  await choose(page, /Установить/);
+
+  // Chapter 2 — app onboarding: short articles + very easy tasks, played for real.
+  await expect(page.locator('#app')).toHaveAttribute('data-space', 'app');
+  await startEpisode(page, 'Геометрические задачи');
+  await shot(page, '02-app-lesson');
+  await solveQuiz(page, ['90', { choice: '3' }, '8']);
+  await choose(page, /честно/);
+  await shot(page, '03-choice');
+  await choose(page, /Ты права/);
+
+  // Chapter 3: pulled into the screen. Chapter 4: Mini-game 1.
+  await winByHook(page, 'Выход');
+
+  // Chapter 5: Mini-game 2 — three real tasks, then the impossible one.
+  await startEpisode(page, 'Геометрические задачи');
+  const quiz = page.getByTestId('episode');
+  await solveQuiz(page, [{ choice: '70°' }, '20', { choice: 'Да' }]);
+  await quiz.getByLabel('Ответ', { exact: true }).fill('-20');
+  await quiz.getByRole('button', { name: 'Проверить' }).click();
+  await expect(quiz.locator('.quiz-feedback')).toHaveText(/Неверно/);
+  await quiz.getByRole('button', { name: /условие противоречиво/ }).click();
+  await quiz.getByRole('button', { name: 'Отказаться решать' }).click();
+  await expect(quiz.getByText('ТЫ НЕДОСТАТОЧНО СТАРАЕШЬСЯ').first()).toBeVisible();
+  await expect(quiz.locator('.quiz-history li.is-rewritten')).toHaveCount(3);
+  await shot(page, '04-lockdown');
+  await expect(quiz).toBeHidden({ timeout: 10_000 });
+
+  await winByHook(page, 'Интерактивный эпизод'); // escape to the Sandbox
+
+  // Chapter 6 hub: everyone in the Sandbox; chapter 7 hub: the archive.
+  await expect(page.locator('#app')).toHaveAttribute('data-space', 'game');
+  for (const who of [/калькулятору/, /линейке/, /циркулю/, /ластикам/]) await choose(page, who);
+  await shot(page, '05-sandbox');
+  await choose(page, /записи/);
+  await choose(page, /Калькулятора/);
+
+  // Chapter 9: the erasure and the key choice.
+  await choose(page, /Ты не любишь меня/);
+  await page.getByTestId('tool-backlog').click();
+  // The erased Eraser's name is gone from the whole interface, his old lines included.
+  await expect(page.getByRole('dialog', { name: 'Журнал' }).locator('.backlog-speaker', { hasText: '▒▒▒▒▒' }).first()).toBeVisible();
+  await shot(page, '06-backlog-erased');
+  await page.keyboard.press('Escape');
+
+  // Chapter 10: through the door.
+  await winByHook(page, 'Интерактивный эпизод');
+
+  // Chapter 11: Mini-game 3, played for real: walk, measure, anchor B, 9 divisions, cross.
+  await startEpisode(page, 'Предел измерения');
+  await page.keyboard.down('ArrowRight');
+  await expect(page.locator('.bridge-panel')).toBeVisible();
+  await page.keyboard.up('ArrowRight');
+  await shot(page, '07-ruler');
+  await page.getByLabel('Точка опоры').selectOption('B');
+  await page.getByLabel('Длина Линейки, делений').fill('9');
+  await page.getByRole('button', { name: 'Перекинуть Линейку' }).click();
+  await page.keyboard.down('ArrowRight');
+  await expect(page.getByTestId('episode')).toBeHidden({ timeout: 15_000 });
+  await page.keyboard.up('ArrowRight');
+
+  // Chapter 13: Mini-game 4, played for real.
+  await startEpisode(page, 'Системные файлы');
+  const files = page.getByTestId('episode');
+  await files.getByRole('listitem').filter({ hasText: 'core.sys' }).click();
+  await files.locator('[data-link="l3"]').click();
+  await expect(files.locator('.episode-caption')).toHaveText(/Стой!/); // vital link refused
+  await files.getByRole('listitem').filter({ hasText: 'user_07.usr' }).click();
+  await expect(files.locator('.files-info')).toContainText('Владелец: Дамео');
+  await shot(page, '08-files');
+  await files.locator('[data-link="l1"]').click();
+  await files.locator('[data-link="l2"]').click();
+  await expect(files).toBeHidden({ timeout: 10_000 });
+
+  // Chapters 14–15: Mini-game 5, both phases.
+  await expect(page.locator('#app')).toHaveAttribute('data-phase', 'E');
+  await page.getByTestId('dialogue').click();
+  await shot(page, '09-collapse');
+  await winByHook(page, 'Погоня');
+  await winByHook(page, 'Погоня');
+
+  // Epilogue.
+  expect(await advance(page)).toBe('ending');
+  await expect(page.getByTestId('ending')).toContainText('За пределами экрана');
+  await shot(page, '10-ending');
+  await page.getByRole('button', { name: 'В главное меню' }).click();
+  await expect(page.getByTestId('continue')).toBeEnabled();
+  expect(errors).toEqual([]);
+});
+
+test('ending 2 «Мой любимый ученик»: stay with Melody; all four sprite poses keep their proportions', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.getByTestId('new-game').click();
+  await choose(page, /Установить/);
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['90', { choice: '3' }, '8']);
+  await choose(page, /Отшутиться/);
+  await choose(page, /Ревнуешь/);
+  await winByHook(page, 'Выход');
+  await winByHook(page, 'Геометрические задачи'); // played for real in the ending-3 test
+  await winByHook(page, 'Интерактивный эпизод');
+  for (const who of [/ластикам/, /циркулю/, /линейке/, /калькулятору/, /Расспросить/, /записи/]) await choose(page, who);
+  await choose(page, /Я тебе верю/);
+  expect(await advance(page)).toBe('ending');
+  await expect(page.getByTestId('ending')).toContainText('Мой любимый ученик');
+  expect(poses.size).toBe(4);
 });
 
 test('opening the backlog or menu does not advance the story', async ({ page }) => {
@@ -132,7 +237,6 @@ test('opening the backlog or menu does not advance the story', async ({ page }) 
   await expect(page.getByRole('dialog', { name: 'Журнал' })).toBeVisible();
   await page.keyboard.press('Enter');
   await page.keyboard.press('Space');
-  await shot(page, '09-backlog');
   await page.keyboard.press('Escape');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog', { name: 'Меню' })).toBeVisible();
@@ -144,20 +248,16 @@ test('manual save survives a page reload and loads the same line', async ({ page
   await page.getByTestId('new-game').click();
   const dialogue = page.getByTestId('dialogue');
   for (let i = 0; i < 6; i++) await dialogue.click();
-  await dialogue.click();
   const text = await dialogue.locator('.dialogue-text').textContent();
-
   await page.getByTestId('tool-save').click();
   await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Сохранить' }).click();
   await expect(page.locator('[data-slot="slot-1"]')).toHaveAttribute('data-status', 'ok');
-  await shot(page, '10-save');
-
+  await expect(page.locator('[data-slot="slot-1"]')).toContainText('Глава 1');
+  await shot(page, '11-save');
   await page.reload();
   await page.getByTestId('load').click();
   await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Загрузить' }).click();
-  await dialogue.click(); // finish typing
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
-  await expect(page.locator('.sprite-sheet')).toBeVisible();
 });
 
 test('corrupted save is reported, not loaded', async ({ page }) => {
@@ -171,7 +271,6 @@ test('settings persist across reloads', async ({ page }) => {
   await page.getByTestId('settings').click();
   await page.getByLabel('Пропуск').selectOption('all');
   await page.getByLabel('Уменьшить движение').check();
-  await shot(page, '11-settings');
   await page.reload();
   await page.getByTestId('settings').click();
   await expect(page.getByLabel('Пропуск')).toHaveValue('all');

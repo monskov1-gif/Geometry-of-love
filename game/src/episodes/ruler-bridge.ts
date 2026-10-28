@@ -22,9 +22,9 @@ export interface Anchor {
 }
 
 export const ANCHORS: Anchor[] = [
-  { id: 'A', x: LEFT_EDGE, firm: false, note: 'самый край, камень в трещинах' },
-  { id: 'B', x: LEFT_EDGE - UNIT, firm: true, note: 'твёрдый выступ в одном делении от края' },
-  { id: 'C', x: LEFT_EDGE - 3 * UNIT, firm: true, note: 'твёрдый выступ в трёх делениях от края' },
+  { id: 'A', x: LEFT_EDGE, firm: false, note: 'край, в трещинах' },
+  { id: 'B', x: LEFT_EDGE - UNIT, firm: true, note: 'твёрдо, 1 деление от края' },
+  { id: 'C', x: LEFT_EDGE - 3 * UNIT, firm: true, note: 'твёрдо, 3 деления от края' },
 ];
 
 export type BridgeResult = 'ok' | 'too-short' | 'too-long' | 'cracked' | 'beyond-limit';

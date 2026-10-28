@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Browser tests run against the production build served under the same
-// subpath GitHub Pages uses, so broken asset paths fail here first.
+// Browser tests run against the built game served under the same subpath
+// GitHub Pages uses, so broken asset paths fail here first.
 const BASE_PATH = '/Geometry-of-love/';
 const PORT = 4173;
 
@@ -19,8 +19,9 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 720 } } },
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
+  // The e2e build = production build + window.__golTest (game/.env.e2e).
   webServer: {
-    command: `npm run build && npx vite preview --port ${PORT} --strictPort --base ${BASE_PATH}`,
+    command: `npx vite build --mode e2e --outDir ../dist-e2e && npx vite preview --outDir ../dist-e2e --port ${PORT} --strictPort --base ${BASE_PATH}`,
     url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
