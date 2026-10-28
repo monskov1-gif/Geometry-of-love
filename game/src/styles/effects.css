@@ -1,0 +1,288 @@
+/* One-shot screen effects (ui/effects.ts), sprite states and visual phases A–E. */
+
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.fx {
+  position: absolute;
+  inset: 0;
+}
+
+.fx-flash {
+  background: var(--paper);
+  animation: fx-fade-out 450ms ease-out forwards;
+}
+
+.fx-blood {
+  /* The first real red in the cartoon world (brief: red gains meaning gradually). */
+  background:
+    radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--error-red) 70%, transparent) 0 12%, transparent 13%),
+    radial-gradient(circle at 62% 58%, color-mix(in srgb, var(--error-red) 60%, transparent) 0 8%, transparent 9%),
+    color-mix(in srgb, var(--error-red) 28%, transparent);
+  animation: fx-fade-out 1600ms ease-in forwards;
+}
+
+.fx-fade-black {
+  background: var(--terminal-black);
+  animation: fx-fade-in-out 1400ms ease-in-out forwards;
+}
+
+.fx-fade-white {
+  background: var(--paper);
+  animation: fx-fade-in-out 1400ms ease-in-out forwards;
+}
+
+.fx-glitch {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 6px, color-mix(in srgb, var(--pink) 25%, transparent) 6px 8px),
+    linear-gradient(90deg, transparent 0 30%, color-mix(in srgb, var(--rainbow-blue) 20%, transparent) 30% 34%, transparent 34%);
+  mix-blend-mode: multiply;
+  animation: fx-glitch 700ms steps(6) forwards;
+}
+
+/* The hand that comes out of the monitor (chapter 3). Original pixel shape. */
+.fx-hand {
+  display: grid;
+  place-items: center;
+}
+
+.fx-hand svg {
+  width: 30vmin;
+  color: var(--ink);
+  image-rendering: pixelated;
+  animation: fx-hand 2200ms cubic-bezier(0.5, 0, 0.9, 0.4) forwards;
+}
+
+.fx-host-shake .stage,
+.fx-host-shake .hud {
+  animation: fx-shake 500ms steps(8);
+}
+
+.fx-host-glitch .stage {
+  animation: fx-jitter 700ms steps(5);
+}
+
+@keyframes fx-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fx-fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  45%,
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fx-glitch {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+}
+
+@keyframes fx-hand {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    transform: scale(4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(9);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-shake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: -6px 2px;
+  }
+  50% {
+    translate: 5px -3px;
+  }
+  75% {
+    translate: -3px 1px;
+  }
+}
+
+@keyframes fx-jitter {
+  0%,
+  100% {
+    translate: 0 0;
+    filter: none;
+  }
+  40% {
+    translate: 4px 0;
+    filter: hue-rotate(40deg);
+  }
+  70% {
+    translate: -3px 0;
+  }
+}
+
+/* Reduce motion: no movement; effects become a short static tint. */
+.reduce-motion .fx-glitch,
+.reduce-motion .fx-blood,
+.reduce-motion .fx-fade-black,
+.reduce-motion .fx-fade-white {
+  animation-timing-function: steps(1, end);
+}
+
+.reduce-motion .fx-hand svg {
+  animation: none;
+  transform: scale(2);
+}
+
+.reduce-motion .fx-host-shake .stage,
+.reduce-motion .fx-host-shake .hud,
+.reduce-motion .fx-host-glitch .stage {
+  animation: none;
+}
+
+/* ---------- Sprite states (StagedCharacter.fx) ------------------------ */
+.cast-slot[data-fx='frozen'] .sprite {
+  filter: grayscale(0.85) contrast(0.9);
+}
+
+.cast-slot[data-fx='erasing'] .sprite {
+  animation: fx-erase 2600ms steps(12) forwards;
+}
+
+/* Chapter 14: the body distorts, the smile stays. The animation runs on the
+   slot so it never overrides the sprite's own baseline transform. */
+.cast-slot[data-fx='distorted'] {
+  animation: fx-distort 2400ms steps(4) infinite;
+  transform-origin: 50% 100%;
+}
+
+.cast-slot[data-fx='distorted'] .sprite {
+  filter: saturate(0.6) contrast(1.2);
+}
+
+@keyframes fx-erase {
+  from {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.1;
+  }
+}
+
+@keyframes fx-distort {
+  0%,
+  100% {
+    transform: skewX(0) scaleY(1);
+  }
+  25% {
+    transform: skewX(-8deg) scaleY(1.08);
+  }
+  50% {
+    transform: skewX(6deg) scaleY(0.95) translateX(12px);
+  }
+  75% {
+    transform: skewX(-3deg) scaleY(1.12);
+  }
+}
+
+.reduce-motion .cast-slot[data-fx='erasing'] .sprite {
+  animation: none;
+  opacity: 0.25;
+}
+
+.reduce-motion .cast-slot[data-fx='distorted'] {
+  animation: none;
+  transform: skewX(-6deg) scaleY(1.08);
+}
+
+/* ---------- Visual phases A–E (brief §7): one system, changing states -- */
+/* A: the default look (no overrides). */
+
+/* B: too much personal attention — notifications feel clingy. */
+[data-phase='B'] .nameplate {
+  box-shadow: 0 0 0 3px var(--baby-pink);
+}
+
+[data-phase='B'] .toast {
+  border-color: var(--pink);
+}
+
+/* C: the Sandbox world: functional, more pixel-heavy panels. */
+[data-phase='C'] .dialogue {
+  border-radius: 4px;
+}
+
+/* D: erasure — the interface starts to deny what happened. */
+[data-phase='D'] .dialogue {
+  border-style: double;
+  border-width: 5px;
+}
+
+[data-phase='D'] .btn-tool:nth-child(3n) {
+  opacity: 0.7;
+}
+
+/* E: system collapse — torn borders, missing textures, shards of colour. */
+[data-phase='E'] .dialogue {
+  border-style: dashed;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--surface) calc(var(--dialog-opacity) * 90%), transparent);
+}
+
+[data-phase='E'] .nameplate {
+  border-style: dashed;
+  border-radius: 0;
+}
+
+[data-phase='E'] .btn {
+  border-radius: 0;
+  border-style: dashed;
+}
+
+/* Rewritten line (say.revision) */
+.dialogue.rewritten .dialogue-text {
+  animation: fx-rewrite 600ms steps(3);
+}
+
+@keyframes fx-rewrite {
+  0% {
+    opacity: 0.2;
+    letter-spacing: 0.3em;
+  }
+  100% {
+    opacity: 1;
+  }
+}

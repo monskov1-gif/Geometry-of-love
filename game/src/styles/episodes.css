@@ -1,7 +1,14 @@
 .episode {
-  width: min(760px, 100%);
+  width: min(980px, 100%);
   display: grid;
   place-items: center;
+}
+
+.episode,
+.episode-stage,
+.episode-canvas-wrap {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .episode-stage {
@@ -79,32 +86,264 @@
   color: var(--geometry-line);
 }
 
-/* horizontal-walk */
-.walk {
+/* ---------- canvas episodes (kit.ts) ---------------------------------- */
+.episode {
+  --episode-max-h: 58vh;
+}
+
+.episode-canvas-wrap {
+  width: 100%;
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+}
+
+.pixel-canvas {
+  display: block;
+  height: auto;
+  image-rendering: pixelated;
+  border: var(--border) solid var(--panel-border);
+  border-radius: 4px;
+  background: var(--reality-shadow);
+  touch-action: none;
+}
+
+.episode-caption {
+  margin: 0;
+  min-height: 1.5em;
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface);
+  border: 2px solid var(--panel-border);
+  border-radius: 6px;
+  font-size: var(--fs-small);
+  width: 100%;
+}
+
+.episode-caption[data-state='wrong'] {
+  color: var(--danger);
+}
+
+.episode-controls {
+  display: flex;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.episode-button {
+  flex: 1;
+  font-size: 26px;
+  padding: 8px;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Hide touch buttons on devices with a fine pointer (keyboard play); keep them on touch screens. */
+@media (hover: hover) and (pointer: fine) {
+  .episode-controls {
+    display: none;
+  }
+}
+
+.chase-meter {
+  width: 100%;
+  height: 8px;
+  border: 2px solid var(--panel-border);
+  background: linear-gradient(90deg, var(--error-red) calc((1 - var(--gap, 1)) * 100%), var(--mint) 0);
+}
+
+.bridge-panel {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.bridge-panel select {
+  font: inherit;
+  max-width: 100%;
+}
+
+.bridge-panel label {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* ---------- geometry quiz room (chapter 5 lockdown) ------------------- */
+.quiz-room {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 220px);
+  gap: var(--space-3);
+}
+
+.quiz-side {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 2px solid var(--panel-border);
+  border-radius: 6px;
+  font-size: var(--fs-small);
+}
+
+.quiz-history {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.quiz-history li.is-rewritten {
+  color: var(--correction-red);
+  text-decoration: line-through;
+}
+
+.quiz-exit {
+  padding: 4px 10px;
+  border: 2px solid var(--correction-red);
+  border-radius: 999px;
+  color: var(--correction-red);
+  font-family: var(--font-pixel);
+  text-align: center;
+}
+
+/* Messages sit on the "walls" around the sheet, never over the task text. */
+.quiz-walls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quiz-room > .quiz,
+.quiz-room > .quiz-side {
+  position: relative;
+  z-index: 1;
+}
+
+.wall-message {
+  position: absolute;
+  color: var(--correction-red);
+  font-size: clamp(14px, 2.4vw, 26px);
+  transform: rotate(-4deg);
+  text-shadow: 2px 2px 0 var(--paper);
+}
+
+@media (max-width: 640px) {
+  .quiz-room {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- system files (chapter 13) ---------------------------------- */
+.files {
   width: 100%;
   display: grid;
   gap: var(--space-3);
 }
 
-.walk-canvas {
-  width: 100%;
-  aspect-ratio: 320 / 120;
-  image-rendering: pixelated;
-  border: var(--border) solid var(--panel-border);
-  border-radius: 4px;
-  background: var(--reality-shadow);
+.files-main {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(200px, 2fr);
+  gap: var(--space-3);
 }
 
-.walk-controls {
+.files-graph {
+  width: 100%;
+  max-height: 60vh;
+  background: var(--code-black);
+  border: 1px solid var(--code-green-muted);
+}
+
+.files-link {
+  stroke: var(--code-green-muted);
+  stroke-width: 0.6;
+}
+
+.files-link.is-active {
+  stroke: var(--code-green);
+  stroke-width: 0.9;
+}
+
+.files-link.is-cut {
+  stroke: var(--code-corruption);
+  stroke-dasharray: 1 1.5;
+}
+
+.files-node {
+  cursor: pointer;
+}
+
+.files-node rect {
+  fill: var(--code-panel);
+  stroke: var(--code-green-muted);
+  stroke-width: 0.5;
+}
+
+.files-node text {
+  fill: var(--code-green);
+  font: 3.2px var(--font-pixel);
+}
+
+.files-node.kind-damaged text {
+  fill: var(--code-corruption);
+}
+
+.files-node.kind-system rect {
+  stroke: var(--code-warning);
+}
+
+.files-node.is-selected rect {
+  stroke: var(--code-green);
+  stroke-width: 1;
+}
+
+.files-side {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.files-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.files-item {
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+.files-info {
+  padding: var(--space-3);
+  border: 1px solid var(--code-green-muted);
+  background: var(--code-panel);
+  color: var(--code-green);
+  font-size: var(--fs-small);
+}
+
+.files-links {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.files-links li {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-2);
+  align-items: center;
 }
 
-.walk-button {
-  flex: 1;
-  font-size: 28px;
-  padding: 10px;
-  user-select: none;
-  touch-action: none;
+@media (max-width: 640px) {
+  .files-main {
+    grid-template-columns: 1fr;
+  }
 }

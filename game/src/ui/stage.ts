@@ -92,6 +92,7 @@ export class Stage {
         this.nodes.set(c.id, entry);
       }
       entry.node.dataset.position = c.position;
+      entry.node.dataset.fx = c.fx ?? '';
     });
   }
 }

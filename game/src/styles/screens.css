@@ -148,8 +148,10 @@
 }
 
 .sprite-placeholder {
-  height: 72%;
+  /* At most a third of the stage wide, so three characters fit side by side on phones. */
+  height: min(72cqh, 64cqw);
   aspect-ratio: 1 / 2;
+  font-size: clamp(9px, 2.6cqw, 14px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -164,8 +166,9 @@
 }
 
 .placeholder-note {
-  font-size: 12px;
+  font-size: 0.85em;
   color: var(--danger);
+  overflow-wrap: anywhere;
 }
 
 .sprite-error {
@@ -369,7 +372,8 @@
   position: absolute;
   inset: 0;
   display: grid;
-  place-items: center;
+  place-items: safe center;
+  overflow-y: auto;
   padding: var(--space-4);
   background: color-mix(in srgb, var(--surface-alt) 70%, transparent);
 }
@@ -462,7 +466,7 @@
 
 .backlog-speaker {
   font-family: var(--font-pixel);
-  color: var(--accent);
+  color: var(--text-muted); /* readable in every space (accent is too pale in some) */
 }
 
 .backlog-entry[data-kind='thought'] .backlog-text {

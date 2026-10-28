@@ -43,6 +43,8 @@ jobs:
         run: npm run test:e2e
       - name: Build and copy to repository root
         run: npm run build:pages
+      - name: Published build has no test hook
+        run: "! grep -q __golTest assets/*.js"
       - name: Commit the build if it changed
         run: |
           git add -A index.html assets .nojekyll

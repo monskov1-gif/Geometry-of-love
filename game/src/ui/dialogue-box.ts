@@ -40,6 +40,7 @@ export class DialogueBox {
   /** Shows a line; `charsPerSecond` 0 = instant. `onDone` fires when fully visible. */
   show(line: DialogueLine, charsPerSecond: number, onDone: () => void): void {
     this.stop();
+    this.root.classList.remove('rewritten');
     this.root.dataset.kind = line.kind;
     this.nameplate.hidden = !line.speaker;
     this.nameplate.textContent = line.speaker ?? '';
@@ -60,6 +61,18 @@ export class DialogueBox {
       else this.finish();
     };
     tick();
+  }
+
+  /** Replaces the visible line: the program "corrects" what was just said. */
+  rewrite(text: string): void {
+    this.stop();
+    this.full = text;
+    this.shown = text.length;
+    this.root.dataset.kind = 'corrupted';
+    this.textNode.textContent = text;
+    this.root.classList.remove('rewritten');
+    void this.root.offsetWidth; // restart the CSS animation
+    this.root.classList.add('rewritten');
   }
 
   /** Reveals the whole line immediately. */

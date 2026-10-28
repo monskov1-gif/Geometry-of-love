@@ -1,5 +1,5 @@
 import { applyEffects, evaluate } from './conditions';
-import type { Presentation, Scene, Step, Story, StoryState, Target } from './types';
+import type { Presentation, Scene, ScreenEffect, Step, Story, StoryState, Target } from './types';
 
 export class StoryError extends Error {
   override name = 'StoryError';
@@ -32,6 +32,7 @@ export function lineKey(scene: string, index: number): string {
 export class StoryRuntime {
   private s: StoryState;
   private checkpoint = true;
+  private effects: ScreenEffect[] = [];
 
   constructor(
     private readonly story: Story,
@@ -63,6 +64,13 @@ export class StoryRuntime {
     return value;
   }
 
+  /** Screen effects passed since the last call (one-shot, not saved). */
+  takeEffects(): ScreenEffect[] {
+    const list = this.effects;
+    this.effects = [];
+    return list;
+  }
+
   present(): Presentation {
     const { scene, index } = this.s.position;
     const step = this.step();
@@ -75,6 +83,7 @@ export class StoryRuntime {
           speaker: step.speaker ?? null,
           text: step.text,
           textKind: step.kind ?? (step.speaker ? 'speech' : 'narration'),
+          revision: step.revision ?? null,
         };
       case 'choice':
         return {
@@ -146,11 +155,15 @@ export class StoryRuntime {
           return;
         case 'show': {
           const position = step.position ?? 'center';
-          const existing = stage.characters.find((c) => c.id === step.character);
-          if (existing) Object.assign(existing, { pose: step.pose, position });
-          else stage.characters.push({ id: step.character, pose: step.pose, position });
+          const staged = { id: step.character, pose: step.pose, position, ...(step.fx ? { fx: step.fx } : {}) };
+          const index = stage.characters.findIndex((c) => c.id === step.character);
+          if (index >= 0) stage.characters[index] = staged;
+          else stage.characters.push(staged);
           break;
         }
+        case 'effect':
+          this.effects.push(step.effect);
+          break;
         case 'hide':
           stage.characters = stage.characters.filter((c) => c.id !== step.character);
           break;

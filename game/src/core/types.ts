@@ -19,6 +19,12 @@ export type TextKind =
 
 export type StagePosition = 'left' | 'center' | 'right';
 
+/** Persistent visual state of a staged character (saved with the stage). */
+export type CharacterFx = 'distorted' | 'erasing' | 'frozen';
+
+/** One-shot screen effects; presentational only, never saved. */
+export type ScreenEffect = 'shake' | 'flash' | 'glitch' | 'blood' | 'fade-black' | 'fade-white' | 'hand';
+
 /** `"sceneId"` (scene start) or `"sceneId#label"`. */
 export type Target = string;
 
@@ -48,8 +54,16 @@ export interface ChoiceOption {
 }
 
 export type Step =
-  | { type: 'say'; speaker?: string; text: string; kind?: TextKind }
-  | { type: 'show'; character: string; pose: string; position?: StagePosition }
+  | {
+      type: 'say';
+      speaker?: string;
+      text: string;
+      kind?: TextKind;
+      /** The program "corrects" the line after it is shown; the backlog keeps only the revision. */
+      revision?: string;
+    }
+  | { type: 'show'; character: string; pose: string; position?: StagePosition; fx?: CharacterFx }
+  | { type: 'effect'; effect: ScreenEffect }
   | { type: 'hide'; character: string }
   | { type: 'background'; background: string }
   | { type: 'space'; space: SpaceId; phase?: VisualPhase }
@@ -78,6 +92,7 @@ export interface StagedCharacter {
   id: string;
   pose: string;
   position: StagePosition;
+  fx?: CharacterFx;
 }
 
 export interface StageState {
@@ -119,6 +134,7 @@ export type Presentation =
       speaker: string | null;
       text: string;
       textKind: TextKind;
+      revision: string | null;
     }
   | { kind: 'choice'; key: string; prompt: string | null; options: PresentedOption[] }
   | { kind: 'episode'; key: string; episode: string; params: Record<string, unknown> }

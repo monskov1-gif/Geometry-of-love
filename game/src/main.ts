@@ -3,6 +3,8 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/screens.css';
 import './styles/episodes.css';
+import './styles/backgrounds.css';
+import './styles/effects.css';
 
 import { SaveStore } from './core/saves';
 import { InputManager } from './platform/input';
