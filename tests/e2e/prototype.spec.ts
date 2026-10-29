@@ -177,7 +177,7 @@ test('ending 1 «Самоучка»: refuse to install the app', async ({ page }
 });
 
 test('ending 3 «За пределами экрана»: the whole story with every mini-game', async ({ page }) => {
-  test.setTimeout(600_000);
+  test.setTimeout(2_400_000); // volumes II–III are ~3x longer (docs/STORY_EXPANSION.md)
   const errors = trackErrors(page);
   await page.getByTestId('new-game').click();
   await choose(page, /Установить/);
@@ -276,7 +276,7 @@ test('ending 3 «За пределами экрана»: the whole story with ev
 });
 
 test('ending 2 «Мой любимый ученик»: stay with Melody; all four sprite poses keep their proportions', async ({ page }) => {
-  test.setTimeout(900_000);
+  test.setTimeout(1_800_000);
   await page.getByTestId('new-game').click();
   await choose(page, /Установить/);
   await startEpisode(page, 'Геометрические задачи');

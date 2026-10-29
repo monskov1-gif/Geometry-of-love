@@ -17,7 +17,7 @@
 // Развитие: побег на рассвете без Пушина, «раз, два…» Ластика №2, список в
 // кармане (флаг ch7.memory-list), искушение Дамео — её слова звучат как то, о
 // чём он мечтал.
-import { background, branch, card, choice, defineScene, effects, fx, goto, hide, label, music, narrate, rewritten, say, sfx, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, defineScene, effects, fx, goto, hide, label, music, narrate, rewritten, say, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter9 = defineScene({
   id: 'ch09',
@@ -38,8 +38,10 @@ export const chapter9 = defineScene({
     hide('eraser-3'),
     say('eraser-2', 'Раз, два, три. Все здесь.'),
     say('eraser-1', 'Да пересчитал уже. Идём.'),
+    shot('long'),
     narrate('Коридор пастельный, как тот, по которому Мелоди вела его в класс. Только длиннее. И звёздочки на стенах здесь старые, выцветшие, с облупленными краями: «Молодец», «Умница», «Ты справишься».'),
     narrate('Ластики идут впереди, быстро, перекатываясь, как резиновые мячики. Дамео — за ними. Его шаги звучат слишком громко.'),
+    shot(null),
     think('dameo', 'Ещё немного. Архив. Коридор. Файлы. Привязка. Дом.'),
     think('dameo', 'Дома я сделаю всё по-другому. Не знаю что. Но по-другому.'),
     hide('eraser-2'),

@@ -11,7 +11,7 @@
 // незаменимым), выбор «доверяю тебе» (флаг ch8.trusted-calculator, отзывается
 // в гл. 10 и 15), разговор Пушина с Мелоди с его точки зрения, «внеплановый
 // урок» по громкой связи.
-import { background, branch, card, choice, defineScene, fx, goto, hide, label, music, narrate, say, sfx, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, defineScene, fx, goto, hide, label, music, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter8 = defineScene({
   id: 'ch08',
@@ -69,7 +69,9 @@ export const chapter8 = defineScene({
 
     // ---- Pushin alone
     background('corridor'),
+    shot('long'),
     narrate('Позже. Песочница спит — если она умеет спать. Калькулятор один идёт по пастельному коридору, ведущему к учебной комнате. Он идёт медленно, останавливаясь через каждые сто шагов. Он считает.'),
+    shot(null),
     show('calculator', 'default', 'left'),
     think('calculator', 'Если он уйдёт — она останется одна. Снова. Насовсем. Я видел, какая она бывает, когда одна.'),
     think('calculator', 'Если он уйдёт через системный раздел — она узнает. Узнает, что я показал дорогу. Что я помог.'),
@@ -77,6 +79,8 @@ export const chapter8 = defineScene({
     think('calculator', 'Это правильный ответ. Самый безопасный. Вероятность плохого исхода — низкая. Низкая. Я пересчитал четыре раза.'),
     narrate('Он не пересчитывал. Он просто повторял одно и то же число, пока оно не стало казаться правдой.'),
     show('melody', 'neutral', 'right'),
+    background('study-room'),
+    shot('board'),
     narrate('Мелоди сидит на учительском столе в пустом классе. Она стирает с доски условие про два угла по сто градусов. Стирает медленно, по одной цифре, как будто ей жалко.'),
     say('melody', 'Пушин. Ты поздно. Ты обычно в это время держишь солнце на сорока процентах.'),
     say('calculator', 'Мелоди… мне нужно тебе сказать. Только обещай, что не рассердишься.'),

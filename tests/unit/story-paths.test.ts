@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { endings, story } from '../../game/src/content';
 import { StoryRuntime } from '../../game/src/core/runtime';
-import type { StoryState } from '../../game/src/core/types';
+import type { Step, StoryState } from '../../game/src/core/types';
 
 interface Walk {
   endings: Map<string, number>;
@@ -12,6 +12,70 @@ interface Walk {
   cutscenes: Set<string>;
   scenes: Set<string>;
   states: number;
+}
+
+type Condition = Extract<Step, { type: 'branch' }>['if'];
+
+/**
+ * Flags that conditions in each scene, or in any scene reachable from it, can
+ * still read. A flag nobody reads again cannot change what happens, so two
+ * choice points that differ only in such flags behave identically and the walk
+ * needs just one of them. Without this, write-only history (an early flag that
+ * is never read again) multiplies the states. Relationships and traits stay in
+ * the key exactly: later effects add to them.
+ */
+function flagsReadAfter(): Map<string, string[]> {
+  const own = new Map<string, Set<string>>();
+  const next = new Map<string, Set<string>>();
+  const addCond = (into: Set<string>, c: Condition): void => {
+    if ('all' in c) c.all.forEach((x) => addCond(into, x));
+    else if ('any' in c) c.any.forEach((x) => addCond(into, x));
+    else if ('not' in c) addCond(into, c.not);
+    else if ('flag' in c) into.add(c.flag);
+  };
+  for (const scene of Object.values(story.scenes)) {
+    const flags = new Set<string>();
+    const targets = new Set<string>();
+    const target = (t: string) => targets.add(t.split('#')[0]!);
+    for (const s of scene.steps) {
+      if (s.type === 'branch') {
+        addCond(flags, s.if);
+        target(s.goto);
+      } else if (s.type === 'goto') target(s.target);
+      else if (s.type === 'choice')
+        for (const o of s.options) {
+          if (o.condition) addCond(flags, o.condition);
+          if (o.goto) target(o.goto);
+        }
+    }
+    own.set(scene.id, flags);
+    next.set(scene.id, targets);
+  }
+  const result = new Map<string, string[]>();
+  for (const id of own.keys()) {
+    const acc = new Set<string>();
+    const seen = new Set([id]);
+    const queue = [id];
+    while (queue.length) {
+      const cur = queue.shift()!;
+      own.get(cur)!.forEach((f) => acc.add(f));
+      for (const n of next.get(cur) ?? []) {
+        if (!seen.has(n)) {
+          seen.add(n);
+          queue.push(n);
+        }
+      }
+    }
+    result.set(id, [...acc].sort());
+  }
+  return result;
+}
+
+const READ_FLAGS = flagsReadAfter();
+
+function stateKey(state: StoryState): string {
+  const flags = READ_FLAGS.get(state.position.scene)!.map((f) => (state.flags[f] ? 1 : 0));
+  return JSON.stringify([state.position, flags, state.relationships, state.traits]);
 }
 
 function explore(): Walk {
@@ -34,7 +98,7 @@ function explore(): Walk {
         result.endings.set(p.ending, (result.endings.get(p.ending) ?? 0) + 1);
         break;
       } else {
-        const key = JSON.stringify([rt.state.position, rt.state.flags, rt.state.relationships]);
+        const key = stateKey(rt.state);
         if (!seen.has(key)) {
           seen.add(key);
           result.states++;

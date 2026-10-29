@@ -12,7 +12,7 @@
 // собственная, проверка памяти (катышки на рукаве Сацуки из гл. 1), список
 // «что я помню» (флаг ch7.memory-list). Что Калькулятор сам был человеком, он
 // скажет только в гл. 12 — здесь он уходит от ответа.
-import { background, branch, card, choice, defineScene, effects, goto, hide, label, narrate, say, sfx, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, defineScene, effects, goto, hide, label, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter7 = defineScene({
   id: 'ch07',
@@ -32,7 +32,9 @@ export const chapter7 = defineScene({
     hide('eraser-3'),
     background('archive'),
     narrate('В дальнем углу Песочницы — старый архив. Стеллажи из серого пластика уходят под самое клетчатое небо. На полках — папки, дискеты, распечатки с дырочками по краям, как в старых принтерах.'),
+    shot('shelves'),
     narrate('Это не математические задания. Задания лежат в другом месте — аккуратные, розовые, подписанные «Урок 01», «Урок 02». А здесь — что-то другое. Что-то, что не убрали, а просто задвинули подальше.'),
+    shot(null),
     show('calculator', 'default', 'right'),
     say('calculator', 'Ты нашёл архив. 8-| Я надеялся, что ты его не найдёшь. Нет. Я знал, что найдёшь. Я просто надеялся.'),
     hide('calculator'),
