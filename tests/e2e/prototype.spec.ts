@@ -113,20 +113,20 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
   for (let i = 0; i < 5 && (await episode.getByRole('button', { name: /Далее|К задачам/ }).isVisible()); i++) {
     await episode.getByRole('button', { name: /Далее|К задачам/ }).click();
   }
+  // read without auto-waiting: after the last task the episode is gone
+  const progress = () => page.evaluate(() => document.querySelector('[data-testid="episode"] .quiz-progress')?.textContent ?? null);
+  // DOM clicks: on a software rasteriser a pointer click can land between frames and be lost
+  const press = (name: string) => episode.getByRole('button', { name, exact: true }).evaluate((b) => (b as HTMLButtonElement).click());
   for (const a of answers) {
-    const progress = episode.locator('.quiz-progress');
-    const before = await progress.textContent();
-    // a slow software-rendered frame can swallow the first click: answer again until it is checked
+    const before = await progress();
     await expect(async () => {
       if (typeof a === 'string') await episode.getByLabel('Ответ', { exact: true }).fill(a);
-      else await episode.getByRole('button', { name: a.choice, exact: true }).click();
-      await episode.getByRole('button', { name: 'Проверить' }).click();
+      else await press(a.choice);
+      await press('Проверить');
       await expect(episode.locator('.quiz-feedback')).toHaveText(/Правильно/, { timeout: 8_000 });
     }).toPass({ timeout: 40_000 });
     // Wait until the next task replaces this one, or the episode closes after its last task.
-    await expect
-      .poll(async () => !(await episode.isVisible()) || (await progress.textContent()) !== before, { timeout: 30_000 })
-      .toBe(true);
+    await expect.poll(async () => (await progress()) !== before, { timeout: 30_000 }).toBe(true);
   }
 }
 
