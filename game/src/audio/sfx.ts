@@ -1,5 +1,5 @@
 // Synthesised sound effects. Each one is a tiny score for the chip voices.
-import { noteFreq, type Voice } from './engine';
+import { noteFreq, type Voice } from './voice';
 
 type Sound = (v: Voice, at: number) => void;
 
