@@ -29,13 +29,13 @@ export const SCENE_MUSIC: Record<string, SceneMusic> = {
   ch04: { game: 'game-cute' },
   // Volume II — inside the game.
   ch05: { game: 'game-wrong' },
-  ch06: { game: 'friends' },
+  ch06: { game: 'game-cute' },
   ch07: { game: 'code-space' },
   ch08: { game: { C: 'friends', D: 'tension', E: 'tension' } },
   ch09: { game: 'app-uneasy' },
   'ending-favorite-student': 'ending-favourite-student',
   // Volume III — the way out.
-  ch10: { game: 'tension' },
+  ch10: { game: 'grief' },
   ch11: { game: 'game-wrong' },
   ch12: { game: { D: 'grief', E: 'tension' } },
   ch13: { code: 'code-space' },
