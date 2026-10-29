@@ -110,8 +110,10 @@ def read_wav(p: Path) -> tuple[np.ndarray, int]:
     return _cache[p]
 
 
-def render_note(o: Oto, length_ms: float, f0_hz: np.ndarray, sr_out: int) -> np.ndarray:
-    """One sample: [offset, offset+consonant] untouched in time, the rest stretched to fit."""
+def render_note(o: Oto, k: float, total_ms: float, f0_hz: np.ndarray, sr_out: int) -> np.ndarray:
+    """One sample rendered to exactly `total_ms`: its consonant part sped up by `k`
+    (UTAU's consonant velocity, needed for speech tempo), its vowel part stretched
+    or shortened to fill the rest, its pitch set to `f0_hz`."""
     x, sr = read_wav(o.wav)
     start = o.offset / 1000
     end = (len(x) / sr - o.cutoff / 1000) if o.cutoff >= 0 else start + (-o.cutoff) / 1000
@@ -123,17 +125,18 @@ def render_note(o: Oto, length_ms: float, f0_hz: np.ndarray, sr_out: int) -> np.
     ap = pyworld.d4c(seg, f0, t, sr)
     n = len(f0)
     fixed = min(n - 1, max(1, int(o.consonant / FRAME_MS)))
-    want = max(fixed + 2, int((length_ms + o.pre) / FRAME_MS))
-    # consonant frames as recorded, vowel frames resampled to the remaining length
-    tail = np.linspace(fixed, n - 1, want - fixed)
-    idx = np.concatenate([np.arange(fixed), tail]).astype(int)
+    fixed_out = max(1, int(o.consonant * k / FRAME_MS))
+    want = max(fixed_out + 2, int(total_ms / FRAME_MS))
+    head = np.linspace(0, fixed - 1, fixed_out)
+    tail = np.linspace(fixed, n - 1, want - fixed_out)
+    idx = np.round(np.concatenate([head, tail])).astype(int)
     sp2, ap2, vo = sp[idx], ap[idx], f0[idx] > 0
     target = np.interp(np.arange(len(idx)), np.linspace(0, len(idx) - 1, len(f0_hz)), f0_hz)
     f02 = np.where(vo, target, 0.0)
     y = pyworld.synthesize(f02, np.ascontiguousarray(sp2), np.ascontiguousarray(ap2), sr, FRAME_MS)
     if sr != sr_out:
         y = np.interp(np.linspace(0, len(y) - 1, int(len(y) * sr_out / sr)), np.arange(len(y)), y)
-    return y
+    return y[: int(total_ms / 1000 * sr_out)]
 
 
 # --- speech: morae → timed notes with an intonation contour --------------------
@@ -160,56 +163,69 @@ def pick_alias(v: Voice, prev_v: str | None, m: str) -> Oto | None:
 def speak(v: Voice, kana: str, question: bool | None = None, energy: float = 1.0) -> np.ndarray:
     ms = morae(kana)
     question = question if question is not None else kana.rstrip().endswith(('？', '?', 'か'))
-    words = [m for m in ms if not m.startswith('_')]
-    total = max(1, len(words))
-    out = np.zeros(int(SR * (len(ms) * v.mora_ms / 1000 + 1.5)))
-    cursor = 0.15 * SR
+    total = max(1, sum(1 for m in ms if not m.startswith('_')))
+    # 1) plan: onset (ms), length, sample, pitch for every mora; pauses only move the clock
+    notes: list[dict] = []
+    clock = 150.0
     prev_v: str | None = None
     k = 0
-    last_end = 0
     for i, m in enumerate(ms):
         if m in ('_pause', '_end'):
-            cursor += SR * (0.18 if m == '_pause' else 0.32)
+            clock += 180 if m == '_pause' else 320
             prev_v = None
+            if notes:
+                notes[-1]['stop'] = True
             continue
         if m == '_q':
-            cursor += SR * v.mora_ms / 1000 * 0.8
-            prev_v = None  # the stop breaks the vowel join
+            clock += v.mora_ms * 0.8
+            prev_v = None
+            if notes:
+                notes[-1]['stop'] = True
             continue
-        length = v.mora_ms * (1.8 if i + 1 < len(ms) and ms[i + 1] == '_long' else 1.0)
         if m == '_long':
             continue
-        # phrase contour: a rise over the first two morae, then a slow declination;
-        # questions lift the last mora, energy widens the range
+        length = v.mora_ms * (1.8 if i + 1 < len(ms) and ms[i + 1] == '_long' else 1.0)
+        o = pick_alias(v, prev_v, m)
+        if o is None:
+            print(f'  no sample for "{m}" (after {prev_v})', file=sys.stderr)
+            clock += length
+            prev_v = vowel(m)
+            continue
         p = k / max(1, total - 1)
         st = v.range_st * energy * (min(1.0, k / 1.5) - 1.3 * p)
         if question and k == total - 1:
             st += 4.0
         k += 1
-        hz = v.base_hz * 2 ** (st / 12)
-        hz_end = v.base_hz * 2 ** ((st - 0.6 * v.range_st / total) / 12)
-        o = pick_alias(v, prev_v, m)
-        if o is None:
-            print(f'  no sample for "{m}" (after {prev_v})', file=sys.stderr)
-            cursor += SR * length / 1000
-            prev_v = vowel(m)
-            continue
-        y = render_note(o, length, np.linspace(hz, hz_end, 8), SR) * v.gain
-        # the sample starts `pre` ms before the mora onset; its first `overlap` ms fade in
-        s0 = int(cursor - o.pre / 1000 * SR)
-        s0 = max(0, s0)
-        fade = min(len(y), int(o.overlap / 1000 * SR))
-        if fade > 0:
-            y[:fade] *= np.linspace(0, 1, fade)
-        fo = min(len(y), int(0.03 * SR))
-        y[-fo:] *= np.linspace(1, 0, fo)
+        # consonant velocity: the recorded lead-in may take at most ~55 % of a spoken mora
+        kv = max(0.3, min(1.0, 0.55 * length / max(o.pre, 1.0)))
+        notes.append({'o': o, 'on': clock, 'len': length, 'k': kv, 'hz': v.base_hz * 2 ** (st / 12), 'stop': False})
+        clock += length
+        prev_v = vowel(m)
+    if not notes:
+        return np.zeros(int(0.3 * SR))
+    # 2) render: each sample starts pre*k before its onset and ends where the next sample
+    #    starts plus that one's overlap (a short cross-fade), or after its own length at a pause
+    out = np.zeros(int(SR * (clock + 1500) / 1000))
+    for j, nt in enumerate(notes):
+        o, kv = nt['o'], nt['k']
+        s_ms = nt['on'] - o.pre * kv
+        nxt = notes[j + 1] if j + 1 < len(notes) and not nt['stop'] else None
+        e_ms = (nxt['on'] - nxt['o'].pre * nxt['k'] + nxt['o'].overlap * nxt['k']) if nxt else nt['on'] + nt['len'] + 40
+        total_ms = max(30.0, e_ms - s_ms)
+        hz_end = nt['hz'] * 2 ** (-0.6 * v.range_st / total / 12)
+        y = render_note(o, kv, total_ms, np.linspace(nt['hz'], hz_end, 8), SR) * v.gain
+        fade_in = min(len(y), int(o.overlap * kv / 1000 * SR))
+        if fade_in > 0 and j > 0:
+            y[:fade_in] *= np.linspace(0, 1, fade_in)
+        fade_out = min(len(y), int((nxt['o'].overlap * nxt['k'] if nxt else 40) / 1000 * SR))
+        if fade_out > 0:
+            y[-fade_out:] *= np.linspace(1, 0, fade_out)
+        s0 = max(0, int(s_ms / 1000 * SR))
         if s0 + len(y) > len(out):
             out = np.concatenate([out, np.zeros(s0 + len(y) - len(out))])
         out[s0:s0 + len(y)] += y
-        last_end = max(last_end, s0 + len(y))
-        cursor += SR * length / 1000
-        prev_v = vowel(m)
-    out = out[: last_end + int(0.1 * SR)]
+    nz = np.nonzero(np.abs(out) > 1e-4)[0]
+    out = out[: (nz[-1] + int(0.1 * SR)) if len(nz) else len(out)]
     peak = np.max(np.abs(out)) or 1.0
     return out / peak * 0.8
 
