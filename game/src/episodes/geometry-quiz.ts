@@ -91,6 +91,31 @@ export const geometryQuiz: EpisodeDefinition = {
       later(700 + WALL_MESSAGES.length * 400 + 1200, () => finish?.({ outcome: 'success' }));
     };
 
+    // The impossible task (гл. 5): huge numbers flash over the room, too big and too fast
+    // to read, like a lesson that has stopped making sense. The task text stays legible.
+    const noise = (room: HTMLElement) => {
+      const layer = el('div', { class: 'quiz-noise', 'aria-hidden': 'true' });
+      room.append(layer);
+      const digits = '0123456789';
+      const shuffle = () => {
+        layer.replaceChildren(
+          ...Array.from({ length: 9 }, () => {
+            const n = Array.from({ length: 1 + Math.floor(Math.random() * 4) }, () => digits[Math.floor(Math.random() * 10)]).join('');
+            return el(
+              'span',
+              {
+                class: 'quiz-noise-n pixel',
+                style: `left:${Math.random() * 90}%;top:${Math.random() * 85}%;font-size:${80 + Math.random() * 260}px;rotate:${(Math.random() - 0.5) * 40}deg;color:hsl(${Math.random() * 360} 90% 55%)`,
+              },
+              n,
+            );
+          }),
+        );
+      };
+      shuffle();
+      timers.push(window.setInterval(shuffle, reduceMotion ? 900 : 110));
+    };
+
     const showTask = (i: number) => {
       const task = tasks[i] as GeometryTask;
       const feedback = el('p', { class: 'quiz-feedback', role: 'status', 'aria-live': 'polite' });
@@ -98,6 +123,13 @@ export const geometryQuiz: EpisodeDefinition = {
       let input: HTMLInputElement | null = null;
       let wrongCount = 0;
       const extra = el('div', { class: 'quiz-extra row' });
+      // How to solve it: on request, and opened by itself after the second wrong answer.
+      const hintText = el('p', { class: 'quiz-hint', hidden: true }, task.hint ?? '');
+      const showHint = () => {
+        hintText.hidden = false;
+        hintButton.disabled = true;
+      };
+      const hintButton = el('button', { class: 'btn quiz-hint-button', type: 'button', onclick: showHint }, 'Подсказка');
 
       const submit = () => {
         const value = input ? input.value : selected;
@@ -118,6 +150,7 @@ export const geometryQuiz: EpisodeDefinition = {
         wrongCount++;
         feedback.textContent = 'Неверно. Попробуйте ещё раз.';
         feedback.dataset.state = 'wrong';
+        if (task.hint && wrongCount >= 2) showHint();
         if (task.impossible && wrongCount === 1) {
           extra.replaceChildren(
             el(
@@ -146,6 +179,7 @@ export const geometryQuiz: EpisodeDefinition = {
           type: 'text',
           inputmode: 'decimal',
           'aria-label': 'Ответ',
+          placeholder: task.answer.tolerance ? '4/3, √3, 1,5' : '',
           autocomplete: 'off',
           onkeydown: (e: KeyboardEvent) => {
             if (e.key === 'Enter') submit();
@@ -172,12 +206,14 @@ export const geometryQuiz: EpisodeDefinition = {
       }
       const checkButton = el('button', { class: 'btn btn-primary', type: 'button', onclick: submit }, 'Проверить');
 
+      if (task.impossible) noise(root.querySelector('.quiz-room') as HTMLElement);
       sheet.replaceChildren(
         el('div', { class: 'quiz-progress pixel' }, `${set.title} · Задача ${i + 1} / ${tasks.length}`),
         el('p', { class: 'quiz-prompt' }, task.prompt),
         ...(task.figure ? [renderFigure(task.figure)] : []),
         answerArea,
-        checkButton,
+        el('div', { class: 'row quiz-actions' }, checkButton, task.hint && !task.impossible ? hintButton : null),
+        hintText,
         feedback,
         extra,
       );
@@ -210,7 +246,7 @@ export const geometryQuiz: EpisodeDefinition = {
         }),
       destroy: () => {
         finish = null;
-        timers.forEach((t) => window.clearTimeout(t));
+        timers.forEach((t) => (window.clearTimeout(t), window.clearInterval(t)));
         root.replaceChildren();
       },
     };

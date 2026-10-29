@@ -5,7 +5,7 @@ import { characters } from './characters';
 import { endings } from './endings';
 import { flags, relationships, traits } from './variables';
 import { cutscenes } from './cutscenes';
-import { TRACK_IDS } from '../audio/tracks';
+import { TRACK_ALIASES, TRACK_IDS } from '../audio/tracks';
 import { RECORDED_IDS } from '../audio/recorded';
 import { SOUND_IDS } from '../audio/sfx';
 
@@ -21,6 +21,7 @@ export const contentIndex: ContentIndex = {
   relationships: Object.keys(relationships),
   traits: Object.keys(traits),
   cutscenes: Object.keys(cutscenes),
-  tracks: [...TRACK_IDS, ...RECORDED_IDS],
+  // themes, the old ids they replace (aliases) and the recorded tracks
+  tracks: [...TRACK_IDS, ...Object.keys(TRACK_ALIASES), ...RECORDED_IDS],
   sounds: SOUND_IDS,
 };

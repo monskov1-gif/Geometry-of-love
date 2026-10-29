@@ -1,15 +1,21 @@
 // Chiptune audio engine on the Web Audio API. Most music and every sound are
-// synthesised in the browser (pulse waves with 12.5/25/50% duty, triangle,
-// noise); a few story themes are recorded files (audio/recorded.ts), mixed on
-// the same music bus with the same crossfades.
+// synthesised in the browser (voice.ts); a few story themes are recorded files
+// (audio/recorded.ts), mixed on the same music bus.
+//
+// Changing the theme always crossfades: the old theme keeps playing while it
+// fades out and the new one fades in. Asking for the theme that already plays
+// changes nothing (it is never restarted).
 //
 // Browsers block audio until the player interacts with the page: the engine
 // creates its AudioContext on the first pointer/key event and then starts the
 // music that was requested meanwhile.
-import type { Track } from './tracks';
-import { TRACKS } from './tracks';
+import { TRACKS, resolveTrackId, type Track } from './tracks';
 import { SOUNDS, type SoundId } from './sfx';
 import { RECORDED } from './recorded';
+import { createVoices, type Voice } from './voice';
+
+export { noteFreq } from './voice';
+export type { NoiseOptions, ToneOptions, Voice } from './voice';
 
 export interface AudioSettings {
   musicVolume: number;
@@ -17,14 +23,20 @@ export interface AudioSettings {
   muted: boolean;
 }
 
-const NOTE_INDEX: Record<string, number> = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
+/** Crossfade timing (seconds). */
+const FADE_IN = 1.8;
+const FADE_OUT_TC = 0.6; // time constant: about 1% left after 2.8 s
+const FADE_OUT_END = 3.2;
 
-/** "A4" → 440 Hz. Accepts sharps ("C#5") and flats written as sharps. */
-export function noteFreq(note: string): number {
-  const m = /^([A-G]#?)(-?\d)$/.exec(note);
-  if (!m) throw new Error(`Bad note "${note}"`);
-  const midi = (Number(m[2]) + 1) * 12 + NOTE_INDEX[m[1]!]!;
-  return 440 * 2 ** ((midi - 69) / 12);
+interface Player {
+  id: string;
+  track: Track;
+  gain: GainNode;
+  step: number;
+  bar: number;
+  nextTime: number;
+  /** Set while fading out: scheduling stops at this context time. */
+  endsAt?: number;
 }
 
 export class AudioEngine {
@@ -32,9 +44,10 @@ export class AudioEngine {
   private master!: GainNode;
   private musicBus!: GainNode;
   private sfxBus!: GainNode;
-  private waves = new Map<string, PeriodicWave>();
-  private noise!: AudioBuffer;
-  private current: { id: string; track: Track; gain: GainNode; step: number; nextTime: number; bar: number } | null = null;
+  private voices!: (dest: AudioNode) => Voice;
+  private current: Player | null = null;
+  /** Themes still sounding while they fade out under the new one. */
+  private fading: Player[] = [];
   private requested: string | null = null;
   /** The recorded theme playing now (null while a synthesised track or silence plays). */
   private recorded: { id: string; url: string; src: AudioBufferSourceNode; gain: GainNode } | null = null;
@@ -62,6 +75,7 @@ export class AudioEngine {
     return this.ctx !== null;
   }
 
+  /** The theme asked for last (aliases resolved), or null for silence. */
   get currentTrack(): string | null {
     return this.requested;
   }
@@ -75,8 +89,9 @@ export class AudioEngine {
     this.sfxBus.gain.setTargetAtTime(settings.sfxVolume * 0.6, t, 0.05);
   }
 
-  /** Switches the music with a short crossfade; null fades to silence. */
-  music(id: string | null): void {
+  /** Crossfades to a theme (aliases accepted); null fades to silence; the playing theme is kept. */
+  music(requestedId: string | null): void {
+    const id = requestedId === null ? null : resolveTrackId(requestedId);
     if (id === this.requested && (this.current?.id === id || this.recorded?.id === id || !this.ctx)) return;
     this.requested = id;
     if (!this.ctx) return; // will start on unlock
@@ -100,7 +115,7 @@ export class AudioEngine {
       if (now - this.lastText < 45) return;
       this.lastText = now;
     }
-    sound(this.voice(), this.ctx.currentTime + 0.005);
+    sound(this.voices(this.sfxBus), this.ctx.currentTime + 0.005);
   }
 
   private ensure(): void {
@@ -123,16 +138,7 @@ export class AudioEngine {
     this.musicBus.connect(tone);
     this.sfxBus.connect(tone);
     tone.connect(this.master);
-    for (const duty of [0.125, 0.25, 0.5]) this.waves.set(`pulse${duty}`, pulseWave(ctx, duty));
-    this.noise = ctx.createBuffer(1, ctx.sampleRate * 1, ctx.sampleRate);
-    const data = this.noise.getChannelData(0);
-    let lfsr = 1;
-    for (let i = 0; i < data.length; i++) {
-      // NES-style LFSR noise for a "hardware" texture.
-      const bit = (lfsr ^ (lfsr >> 1)) & 1;
-      lfsr = (lfsr >> 1) | (bit << 14);
-      data[i] = bit ? 0.8 : -0.8;
-    }
+    this.voices = createVoices(ctx);
     this.apply(this.settings);
     window.setInterval(() => this.schedule(), 25);
     if (this.requested) this.startTrack(this.requested);
@@ -160,12 +166,12 @@ export class AudioEngine {
   private stopRecorded(): void {
     const r = this.recorded;
     if (!r || !this.ctx) return;
-    r.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.4);
+    r.gain.gain.setTargetAtTime(0, this.ctx.currentTime, FADE_OUT_TC);
     // looping sources never end by themselves, so stop() is always valid here
     window.setTimeout(() => {
       r.src.stop();
       r.gain.disconnect();
-    }, 2500);
+    }, (FADE_OUT_END + 0.5) * 1000);
     this.recorded = null;
   }
 
@@ -192,7 +198,7 @@ export class AudioEngine {
         const gain = ctx.createGain();
         const t = ctx.currentTime;
         gain.gain.setValueAtTime(0.0001, t);
-        gain.gain.exponentialRampToValueAtTime(spec.gain, t + 1.2);
+        gain.gain.exponentialRampToValueAtTime(spec.gain, t + FADE_IN * 0.7);
         src.connect(gain).connect(this.musicBus);
         src.start(t, spec.start);
         this.recorded = { id, url: spec.url, src, gain };
@@ -201,152 +207,76 @@ export class AudioEngine {
     );
   }
 
+  /** Moves the synthesised theme to the fading list; it keeps playing while it fades. */
+  private fadeOutCurrent(): void {
+    const cur = this.current;
+    if (!cur || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    cur.gain.gain.cancelScheduledValues(t);
+    cur.gain.gain.setValueAtTime(Math.max(0.0001, cur.gain.gain.value), t);
+    cur.gain.gain.setTargetAtTime(0, t, FADE_OUT_TC);
+    cur.endsAt = t + FADE_OUT_END;
+    this.fading.push(cur);
+    this.current = null;
+  }
+
   private startTrack(id: string | null): void {
     const ctx = this.ctx!;
-    const t = ctx.currentTime;
     if (!id || !RECORDED[id]) this.stopRecorded();
-    if (id && RECORDED[id]) {
-      if (this.current) {
-        const old = this.current.gain;
-        old.gain.setTargetAtTime(0, t, 0.25);
-        window.setTimeout(() => old.disconnect(), 1500);
-        this.current = null;
-      }
+    this.fadeOutCurrent();
+    if (!id) return;
+    if (RECORDED[id]) {
       this.startRecorded(id);
       return;
     }
-    if (this.current) {
-      const old = this.current.gain;
-      old.gain.setTargetAtTime(0, t, 0.25);
-      window.setTimeout(() => old.disconnect(), 1500);
-      this.current = null;
-    }
-    if (!id) return;
     const track = TRACKS[id];
     if (!track) {
       console.error(`[audio] unknown track "${id}"`);
       return;
     }
+    const t = ctx.currentTime;
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(1, t + 0.6);
-    gain.connect(this.musicBus);
-    this.current = { id, track, gain, step: 0, nextTime: t + 0.08, bar: 0 };
+    gain.gain.exponentialRampToValueAtTime(1, t + FADE_IN);
+    if (track.cutoff) {
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = track.cutoff;
+      gain.connect(filter).connect(this.musicBus);
+    } else gain.connect(this.musicBus);
+    this.current = { id, track, gain, step: 0, bar: 0, nextTime: t + 0.08 };
   }
 
-  /** Lookahead scheduler: queues notes up to 120 ms ahead. */
+  /** Lookahead scheduler: queues notes up to 120 ms ahead for the current and fading themes. */
   private schedule(): void {
     const ctx = this.ctx;
-    const cur = this.current;
-    if (!ctx || !cur) return;
-    const stepDur = 60 / cur.track.bpm / 4;
-    while (cur.nextTime < ctx.currentTime + 0.12) {
-      const bars = cur.track.bars;
-      const barIndex = cur.bar % bars.length;
-      const swing = cur.step % 2 === 1 ? (cur.track.swing ?? 0) * stepDur : 0;
-      cur.track.play(this.voice(cur.gain), barIndex, cur.step, cur.nextTime + swing, stepDur);
-      // Instability: sometimes the step repeats instead of advancing.
-      const stuck = this.instability > 0 && Math.random() < this.instability * 0.35;
-      if (!stuck) cur.step++;
-      if (cur.step >= 16) {
-        cur.step = 0;
-        cur.bar++;
+    if (!ctx) return;
+    if (this.current) this.advance(this.current, ctx, this.instability);
+    this.fading = this.fading.filter((p) => {
+      if (ctx.currentTime < p.endsAt!) {
+        this.advance(p, ctx, 0);
+        return true;
       }
-      cur.nextTime += stepDur;
+      p.gain.disconnect();
+      return false;
+    });
+  }
+
+  private advance(p: Player, ctx: AudioContext, instability: number): void {
+    const { track } = p;
+    const stepDur = 60 / track.bpm / track.stepsPerBeat;
+    const horizon = Math.min(ctx.currentTime + 0.12, p.endsAt ?? Infinity);
+    while (p.nextTime < horizon) {
+      const swing = p.step % 2 === 1 ? (track.swing ?? 0) * stepDur : 0;
+      track.play(this.voices(p.gain), p.bar % track.bars.length, p.step, p.nextTime + swing, stepDur);
+      // Instability: sometimes the step repeats instead of advancing.
+      const stuck = instability > 0 && Math.random() < instability * 0.35;
+      if (!stuck) p.step++;
+      if (p.step >= track.stepsPerBar) {
+        p.step = 0;
+        p.bar++;
+      }
+      p.nextTime += stepDur;
     }
   }
-
-  /** Low-level voice API handed to tracks and sounds. */
-  private voice(dest: AudioNode = this.sfxBus): Voice {
-    const ctx = this.ctx!;
-    return {
-      ctx,
-      tone: (o) => {
-        const osc = ctx.createOscillator();
-        if (o.wave === 'triangle' || o.wave === 'sine' || o.wave === 'sawtooth') osc.type = o.wave;
-        else osc.setPeriodicWave(this.waves.get(o.wave)!);
-        osc.frequency.setValueAtTime(o.freq, o.at);
-        if (o.slideTo) osc.frequency.exponentialRampToValueAtTime(o.slideTo, o.at + o.dur);
-        if (o.vibrato) {
-          const lfo = ctx.createOscillator();
-          const depth = ctx.createGain();
-          lfo.frequency.value = 5.5;
-          depth.gain.value = o.freq * o.vibrato;
-          lfo.connect(depth).connect(osc.frequency);
-          lfo.start(o.at + 0.08);
-          lfo.stop(o.at + o.dur + 0.05);
-        }
-        if (o.detune) osc.detune.value = o.detune;
-        const g = ctx.createGain();
-        envelope(g.gain, o.at, o.dur, o.vol, o.attack ?? 0.004, o.release ?? 0.04);
-        osc.connect(g).connect(dest);
-        osc.start(o.at);
-        osc.stop(o.at + o.dur + (o.release ?? 0.04) + 0.02);
-      },
-      noise: (o) => {
-        const src = ctx.createBufferSource();
-        src.buffer = this.noise;
-        src.loop = true;
-        src.playbackRate.value = o.rate ?? 1;
-        const f = ctx.createBiquadFilter();
-        f.type = o.filter ?? 'highpass';
-        f.frequency.setValueAtTime(o.cutoff ?? 1000, o.at);
-        if (o.sweepTo) f.frequency.exponentialRampToValueAtTime(o.sweepTo, o.at + o.dur);
-        const g = ctx.createGain();
-        envelope(g.gain, o.at, o.dur, o.vol, 0.002, o.release ?? 0.03);
-        src.connect(f).connect(g).connect(dest);
-        src.start(o.at, Math.random() * 0.5);
-        src.stop(o.at + o.dur + 0.1);
-      },
-    };
-  }
-}
-
-export interface ToneOptions {
-  wave: 'pulse0.125' | 'pulse0.25' | 'pulse0.5' | 'triangle' | 'sine' | 'sawtooth';
-  freq: number;
-  at: number;
-  dur: number;
-  vol: number;
-  attack?: number;
-  release?: number;
-  slideTo?: number;
-  vibrato?: number;
-  detune?: number;
-}
-
-export interface NoiseOptions {
-  at: number;
-  dur: number;
-  vol: number;
-  cutoff?: number;
-  sweepTo?: number;
-  filter?: BiquadFilterType;
-  rate?: number;
-  release?: number;
-}
-
-export interface Voice {
-  ctx: AudioContext;
-  tone(o: ToneOptions): void;
-  noise(o: NoiseOptions): void;
-}
-
-function envelope(p: AudioParam, at: number, dur: number, vol: number, attack: number, release: number): void {
-  p.setValueAtTime(0.0001, at);
-  p.exponentialRampToValueAtTime(Math.max(0.0002, vol), at + attack);
-  p.setValueAtTime(Math.max(0.0002, vol), at + Math.max(attack, dur - 0.01));
-  p.exponentialRampToValueAtTime(0.0001, at + dur + release);
-}
-
-/** Band-limited pulse wave from its Fourier series. */
-function pulseWave(ctx: AudioContext, duty: number): PeriodicWave {
-  const n = 64;
-  const real = new Float32Array(n);
-  const imag = new Float32Array(n);
-  for (let k = 1; k < n; k++) {
-    real[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty) * Math.cos(k * Math.PI * duty);
-    imag[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty) * Math.sin(k * Math.PI * duty);
-  }
-  return ctx.createPeriodicWave(real, imag);
 }
