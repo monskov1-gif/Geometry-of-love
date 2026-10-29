@@ -96,6 +96,13 @@ describe('migrate', () => {
     expect(steps[at(53).state.position.index]).toMatchObject({ type: 'say', text: 'Мелоди: Ты здесь?' });
     expect(steps[at(78).state.position.index]).toMatchObject({ type: 'say', text: 'Закрыть «メロディのまほう»? [Да] [Нет]' });
     expect(steps[at(79).state.position.index]).toMatchObject({ type: 'say', text: 'Дамео тянется к мышке.' });
+    // ch02: the blackboard shot and the university lecture lesson
+    const in2 = (scene: string, index: number) =>
+      story.scenes[scene]!.steps[migrate({ ...current, schema: 3, state: { ...current.state, position: { scene, index }, stage: stage3 as typeof current.state.stage } }).state.position.index];
+    expect(in2('ch02-day2', 4)).toMatchObject({ type: 'say', kind: 'narration' });
+    expect((in2('ch02-day2', 4) as { text: string }).text).toMatch(/^Задача простая/);
+    expect(in2('ch02-day2', 6)).toMatchObject({ type: 'show', character: 'dameo', pose: 'angry' });
+    expect(in2('ch02-day4', 4)).toMatchObject({ type: 'show', character: 'melody', pose: 'neutral' });
     // other scenes keep their indices
     const other = migrate({ ...current, schema: 3, state: { ...current.state, position: { scene: 'ch02', index: 60 }, stage: stage3 as typeof current.state.stage } });
     expect(other.state.position.index).toBe(60);

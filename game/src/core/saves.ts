@@ -71,7 +71,12 @@ export function checkSaveShape(v: unknown): string | null {
  */
 const INSERTED_STEPS: Record<number, { scene: string; before: number[] }[]> = {
   // 4: ch03 shows the closed program, Melody's pop-ups and the exit dialog on the monitor.
-  4: [{ scene: 'ch03', before: [51, 52, 53, 55, 57, 58, 61, 78] }],
+  // ch02-day2 frames the blackboard; ch02-day4 got the university lecture lesson.
+  4: [
+    { scene: 'ch03', before: [51, 52, 53, 55, 57, 58, 61, 78] },
+    { scene: 'ch02-day2', before: [4, 6] },
+    { scene: 'ch02-day4', before: [4, 4, 4] },
+  ],
 };
 
 /** Moves a saved step index past the steps inserted in front of it. */

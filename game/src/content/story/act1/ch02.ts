@@ -9,7 +9,7 @@
 // программой»; переписка через окно чата; провал у доски; вечер, когда Мелоди
 // поддакивает его обидам — так она и привязывает его. Всё приложение мы видим
 // на экране ЭЛТ-монитора в его комнате (указание автора).
-import { background, branch, card, choice, defineScene, episode, goto, hide, label, music, narrate, say, sfx, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, defineScene, episode, goto, hide, label, music, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter2 = defineScene({
   id: 'ch02',
@@ -80,11 +80,14 @@ export const chapter2Day2 = defineScene({
   chapter: 2,
   steps: [
     space('reality', 'A'),
-    background('university-hall', 'day'),
+    background('university-classroom', 'day'),
     music('reality'),
     narrate('На семинаре по математике преподаватель вызывает к доске «кого-нибудь, кто ещё ни разу не выходил». Все смотрят на Дамео.'),
+    // the board: the seminar's problems (task set 'university-board'), chalked in full
+    shot('board'),
     narrate('Задача простая: найти угол в равнобедренном треугольнике. Он стоит с мелом в руке и не может вспомнить, какие углы там равны.'),
     narrate('Кто-то с задней парты подсказывает шёпотом — неправильно, нарочно. Он повторяет вслух. Группа смеётся.'),
+    shot(null),
     show('dameo', 'angry', 'center'),
     think('dameo', 'Смешно им. Половина из них не смогла бы доказать, что у треугольника три угла.'),
     think('dameo', 'Сацуки тоже смеялась? Нет. Кажется, нет. Она смотрела в телефон. Это хуже.'),
@@ -212,6 +215,10 @@ export const chapter2Day4 = defineScene({
     background('app-notebook', 'night'),
     music('app'),
     narrate('Дни идут. Задания становятся сложнее. Мелоди запоминает его ошибки и подбадривает, когда что-то не получается. Он больше не говорит «программа». Он говорит «Мелоди».'),
+    // one of the harder evening lessons: the university material the seminar did not explain
+    background('app-notebook', 'night', 'quiz'),
+    episode('geometry-quiz', { taskSet: 'university-lecture' }),
+    background('app-notebook', 'night'),
     show('melody', 'neutral', 'center'),
     say('melody', 'Слушай… а зачем тебе вообще геометрия? Ты так стараешься. Каждый вечер. Даже когда устал.'),
     say('dameo', 'Одной девушке нужен репетитор. Сацуки. Хочу ей помочь.'),

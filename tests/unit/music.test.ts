@@ -14,7 +14,7 @@ const BLOCKING = new Set<Step['type']>(['say', 'choice', 'episode', 'card', 'cut
 /** Theme heard at each blocking step, walking every scene in reading order (gotos ignored). */
 function walk(): Map<string, { theme: string | null; explicitNull: boolean }[]> {
   const out = new Map<string, { theme: string | null; explicitNull: boolean }[]>();
-  const stage: StageState = { background: null, lighting: null, variant: null, music: null, shot: null, space: 'app', phase: 'A', characters: [] };
+  const stage: StageState = { background: null, lighting: null, variant: null, music: null, shot: null, screen: { view: null, notices: [] }, space: 'app', phase: 'A', characters: [] };
   for (const scene of Object.values(story.scenes)) {
     const heard: { theme: string | null; explicitNull: boolean }[] = [];
     let explicitNull = false;
@@ -110,7 +110,7 @@ describe('music map', () => {
 
 describe('music resolution', () => {
   const stage = (over: Partial<StageState>): StageState => ({
-    background: null, lighting: null, variant: null, music: null, shot: null, space: 'reality', phase: 'A', characters: [], ...over,
+    background: null, lighting: null, variant: null, music: null, shot: null, screen: { view: null, notices: [] }, space: 'reality', phase: 'A', characters: [], ...over,
   });
   const at = (scene: string, index: number, over: Partial<StageState>) => musicFor(story, { position: { scene, index }, stage: stage(over) });
   const firstMusic = (scene: string) => story.scenes[scene]!.steps.findIndex((s) => s.type === 'music');
