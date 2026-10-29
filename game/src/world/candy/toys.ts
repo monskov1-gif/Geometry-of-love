@@ -190,8 +190,9 @@ export const puffyGeometry = (kind: 'star' | 'heart', R: number) => puffy(kind, 
 
 /** A glossy geometric solid (the math-app toys): cube with stripes, cone, cylinder, polyhedra, torus. */
 export function solid(ck: CandyKit, kind: number, x: number, y: number, z: number, s: number, color: number, rot: { rx?: number; ry?: number; rz?: number } = {}): void {
+  kind = ((Math.round(kind) % 7) + 7) % 7;
   const alt = PASTEL[(kind + 2) % PASTEL.length]!;
-  switch (kind % 7) {
+  switch (kind) {
     case 0:
       ck.gloss.add(new THREE.IcosahedronGeometry(s * 0.55, 0), color, x, y, z, rot);
       break;

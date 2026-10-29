@@ -192,7 +192,7 @@ export function cabinet(ck: CandyKit, x: number, z: number, color: number, drawe
   ck.gloss.add(roundedBox(0.55, h, 0.6, 0.03, 2), color, x, h / 2, z + 0.3);
   for (let i = 0; i < drawers; i++) {
     const y = ((i + 0.5) * h) / drawers;
-    ck.vc.add(roundedBox(0.48, h / drawers - 0.05, 0.02, 0.01, 1), PASTEL[(i + Math.round(x * 3)) % PASTEL.length]!, x, y, z + 0.605);
+    ck.vc.add(roundedBox(0.48, h / drawers - 0.05, 0.02, 0.01, 1), PASTEL[(((i + Math.round(x * 3)) % PASTEL.length) + PASTEL.length) % PASTEL.length]!, x, y, z + 0.605);
     ck.vc.add(roundedBox(0.16, 0.07, 0.01, 0.004, 1), CANDY.paper, x, y + 0.06, z + 0.618);
     ck.gloss.add(roundedBox(0.14, 0.025, 0.03, 0.01, 1), 0x8a7a9a, x, y - 0.04, z + 0.625);
   }
