@@ -10,6 +10,7 @@ import './styles/effects.css';
 
 import { AudioEngine } from './audio/engine';
 import { SaveStore } from './core/saves';
+import { preventZoom } from './platform/fullscreen';
 import { InputManager } from './platform/input';
 import { MetaStore } from './platform/meta';
 import { SettingsStore } from './platform/settings';
@@ -19,6 +20,7 @@ import { App } from './ui/app';
 const root = document.getElementById('app');
 if (!root) throw new Error('#app element missing from index.html');
 
+preventZoom();
 const { store, persistent } = createStore();
 const app = new App(root, {
   audio: new AudioEngine(),

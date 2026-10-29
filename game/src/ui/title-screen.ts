@@ -3,6 +3,7 @@
 // intro, gated by one key press or tap so the browser lets the sound start.
 import type { AudioEngine } from '../audio/engine';
 import { el } from './dom';
+import { enterFullscreen } from '../platform/fullscreen';
 import { LogoIntro } from './logo-intro';
 import { SceneView } from './scene-view';
 
@@ -94,6 +95,7 @@ export class TitleScreen {
       if (e instanceof KeyboardEvent) e.preventDefault();
       if (!started) {
         started = true;
+        enterFullscreen();
         gate.remove();
         this.root.classList.add('is-playing');
         this.logo.play(() => this.finish(true));

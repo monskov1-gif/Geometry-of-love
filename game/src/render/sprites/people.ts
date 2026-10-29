@@ -204,16 +204,17 @@ function hairFront(put: Put, s: PersonSpec, hx: number, hy: number, layer: 'back
     span(put, hx - 4, hx - 1, hy, hi);
   }
   if (s.ribbons) {
+    // one bow on top of the head: the left loop blue, the right loop green, a knot between
     const [a, b] = s.ribbons;
-    for (const [dx, c] of [
-      [-7, a],
-      [4, b],
-    ] as const) {
-      span(put, hx + dx, hx + dx + 3, hy - 3, c);
-      span(put, hx + dx - 1, hx + dx + 4, hy - 2, c);
-      span(put, hx + dx, hx + dx + 3, hy - 1, c);
-      put(hx + dx + 1, hy - 2, '#ffffff');
-    }
+    span(put, hx - 6, hx - 2, hy - 4, a);
+    span(put, hx - 7, hx - 1, hy - 3, a);
+    span(put, hx - 6, hx - 2, hy - 2, a);
+    span(put, hx + 1, hx + 5, hy - 4, b);
+    span(put, hx, hx + 6, hy - 3, b);
+    span(put, hx + 1, hx + 5, hy - 2, b);
+    span(put, hx - 1, hx, hy - 3, s.line);
+    put(hx - 5, hy - 3, '#ffffff');
+    put(hx + 2, hy - 3, '#ffffff');
   }
   if (s.hairclip) {
     put(hx + 3, hy + 2, '#e8303a');
@@ -384,8 +385,11 @@ function drawSide(put: Put, s: PersonSpec, f: Frame, bob: number): void {
     for (const y of range(hy + 2, hy + 12)) span(put, hx - 6, hx - 3, y, hbase);
   }
   if (s.ribbons) {
-    span(put, hx - 5, hx - 2, hy - 4, s.ribbons[0]);
-    span(put, hx - 6, hx - 1, hy - 3, s.ribbons[0]);
+    // the same single bow seen from the side: blue loop behind, green loop in front
+    span(put, hx - 6, hx - 3, hy - 4, s.ribbons[0]);
+    span(put, hx - 7, hx - 3, hy - 3, s.ribbons[0]);
+    span(put, hx - 2, hx + 1, hy - 4, s.ribbons[1]);
+    span(put, hx - 2, hx + 2, hy - 3, s.ribbons[1]);
   }
   // walk: legs and arms swing in opposite phase; 0 and 2 are contact poses
   const phase = f.walk < 0 ? -1 : f.walk;
@@ -468,8 +472,11 @@ function drawBack(put: Put, s: PersonSpec, cx: number, hy: number, y0: number): 
   if (s.hairStyle === 'low-tail') for (let y = hy + 10; y < hy + 22; y++) span(put, cx - 2, cx + 1, y, y > hy + 18 ? sh : base);
   if (s.hairStyle === 'messy') for (const x of [cx - 5, cx - 2, cx + 1, cx + 4]) put(x, hy + 11, base);
   if (s.ribbons) {
-    span(put, cx - 7, cx - 4, hy - 2, s.ribbons[0]);
-    span(put, cx + 3, cx + 6, hy - 2, s.ribbons[1]);
+    // from behind the loops swap sides: green on the left, blue on the right
+    span(put, cx - 6, cx - 1, hy - 3, s.ribbons[1]);
+    span(put, cx - 7, cx - 1, hy - 2, s.ribbons[1]);
+    span(put, cx, cx + 5, hy - 3, s.ribbons[0]);
+    span(put, cx, cx + 6, hy - 2, s.ribbons[0]);
   }
 }
 

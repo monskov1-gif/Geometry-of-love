@@ -10,6 +10,7 @@ body {
   height: 100%;
   background: var(--terminal-black);
   overscroll-behavior: none;
+  touch-action: manipulation; /* no double-tap zoom */
 }
 
 .app {

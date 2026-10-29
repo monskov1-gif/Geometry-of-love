@@ -580,6 +580,8 @@
   inset: 0;
   display: grid;
   place-items: center;
+  /* one row no taller than the screen: a long panel scrolls inside instead of pushing its × off screen */
+  grid-template-rows: minmax(0, 1fr);
   padding: var(--space-4);
   background: rgba(21, 19, 27, 0.55);
   z-index: 10;
@@ -655,6 +657,7 @@
 }
 
 .panel-body {
+  min-height: 0;
   padding: var(--space-2) var(--space-6) var(--space-6);
   overflow-y: auto;
 }
@@ -1142,4 +1145,28 @@
   background: #fff4fb;
   color: #050408;
   outline: none;
+}
+
+/* Change of place: the new location opens out of black (stage.ts). */
+.stage-veil {
+  position: absolute;
+  inset: 0;
+  background: #050408;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.stage-veil.is-on {
+  animation: stage-veil 900ms ease-out;
+}
+
+@keyframes stage-veil {
+  0%,
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

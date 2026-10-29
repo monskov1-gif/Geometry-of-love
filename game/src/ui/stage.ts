@@ -95,10 +95,13 @@ export class Stage {
   private readonly ticker: number;
   private speaker: string | null = null;
   private readonly resize: ResizeObserver;
+  /** Black veil over a change of place, so locations never cut hard. */
+  private readonly veil = el('div', { class: 'stage-veil', 'aria-hidden': 'true' });
+  private place: string | null = null;
 
   constructor() {
     this.cast = el('div', { class: 'stage-cast' });
-    this.root = el('div', { class: 'stage' }, this.scene.root, this.cast);
+    this.root = el('div', { class: 'stage' }, this.scene.root, this.cast, this.veil);
     this.ticker = window.setInterval(() => {
       this.beat++;
       for (const { actor } of this.nodes.values()) actor?.tick(this.beat);
@@ -150,6 +153,13 @@ export class Stage {
     const onScreen = stage.space === 'app' && !!stage.background?.startsWith('app-');
     const use3D = onScreen || (!!stage.background && stage.background in locations3D);
     this.root.dataset.mode = onScreen ? 'crt' : use3D ? '3d' : '2d';
+    const place = onScreen ? 'crt' : (stage.background ?? 'none');
+    if (this.place !== null && place !== this.place && !reduceMotion) {
+      this.veil.classList.remove('is-on');
+      void this.veil.offsetWidth; // restart the fade if places change in quick succession
+      this.veil.classList.add('is-on');
+    }
+    this.place = place;
     if (use3D) {
       const world = getWorld();
       if (world.root.parentElement !== this.root) this.scene.root.after(world.root);

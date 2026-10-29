@@ -7,9 +7,12 @@
 // Animated: code rain, falling tiles behind the runner, flickering wireframes.
 import * as THREE from 'three';
 import { LocationKit, rgb, rng, TX } from '../kit/location-kit';
-import type { LocationDef3D } from '../types';
+import type { LocationBuild, LocationDef3D, Mark, Shot } from '../types';
 
 export const RUN_LENGTH = 200;
+/** Where the run and the car ride end (chase-logic CONFIGS lengths, a little short of them). */
+const END_RUN = 162;
+const END_CAR = 186;
 const Z0 = -2.2;
 const Z1 = 1.4;
 
@@ -185,19 +188,34 @@ export const collapse3D: LocationDef3D = {
     kit.fog = new THREE.Fog(0x0a0812, 18, 46);
 
     let runnerX = 0;
+    // After a chase the talk happens where the run ended, not back at the start:
+    // variant 'end' / 'end-car' moves every shot and mark to the finish.
+    const baseShots: Record<string, Shot> = {
+      wide: { pos: [4, 1.8, 7.5], look: [4, 1.5, 0], fov: 46 },
+      start: { pos: [1.5, 1.6, 5.2], look: [0.5, 1.4, -0.2], fov: 44 },
+      rise: { pos: [-1.5, 2.6, 9.5], look: [-1.0, 2.4, -0.5], fov: 52 },
+    };
+    const baseMarks: Record<string, Mark> = {
+      left: { x: -1.2, z: -0.4 },
+      center: { x: 0.4, z: -0.2 },
+      right: { x: 2.0, z: -0.4 },
+      start: { x: 1.2, z: -0.1, facing: 'right' },
+      melody: { x: -1.2, z: -0.2, facing: 'right' },
+    };
+    const shots = structuredClone(baseShots) as LocationBuild['shots'];
+    const marks = structuredClone(baseMarks) as LocationBuild['marks'];
+    const placeAt = (dx: number) => {
+      for (const [k, b] of Object.entries(baseShots)) {
+        shots[k] = { ...b, pos: [b.pos[0] + dx, b.pos[1], b.pos[2]], look: [b.look[0] + dx, b.look[1], b.look[2]] };
+      }
+      for (const [k, b] of Object.entries(baseMarks)) marks[k] = { ...b, x: b.x + dx };
+    };
     return {
       kit,
-      shots: {
-        wide: { pos: [4, 1.8, 7.5], look: [4, 1.5, 0], fov: 46 },
-        start: { pos: [1.5, 1.6, 5.2], look: [0.5, 1.4, -0.2], fov: 44 },
-        rise: { pos: [-1.5, 2.6, 9.5], look: [-1.0, 2.4, -0.5], fov: 52 },
-      },
-      marks: {
-        left: { x: -1.2, z: -0.4 },
-        center: { x: 0.4, z: -0.2 },
-        right: { x: 2.0, z: -0.4 },
-        start: { x: 1.2, z: -0.1, facing: 'right' },
-        melody: { x: -1.2, z: -0.2, facing: 'right' },
+      shots,
+      marks,
+      setVariant(v) {
+        placeAt(v === 'end' ? END_RUN : v === 'end-car' ? END_CAR : 0);
       },
       walk: { minX: -8, maxX: RUN_LENGTH + 2, z: -0.1 },
       update(dt, t) {

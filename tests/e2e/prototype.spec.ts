@@ -315,6 +315,21 @@ test('opening the backlog or menu does not advance the story', async ({ page }) 
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
 });
 
+test('a long backlog keeps its close button on screen and closes with it', async ({ page }) => {
+  await page.getByTestId('new-game').click();
+  await passCards(page);
+  const dialogue = page.getByTestId('dialogue');
+  for (let i = 0; i < 14; i++) await dialogue.click();
+  await page.getByRole('button', { name: 'Журнал' }).click();
+  const close = page.getByRole('dialog', { name: 'Журнал' }).getByRole('button', { name: 'Закрыть' });
+  const box = await close.boundingBox();
+  // regression: a long backlog grew past the screen and pushed its × above the top edge
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await close.click();
+  await expect(page.getByRole('dialog', { name: 'Журнал' })).toBeHidden();
+});
+
 test('manual save survives a page reload and loads the same line', async ({ page }) => {
   await page.getByTestId('new-game').click();
   await expect(page.getByTestId('chapter-card')).toBeVisible();
