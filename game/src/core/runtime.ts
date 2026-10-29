@@ -7,6 +7,8 @@ export class StoryError extends Error {
 
 /** Safety net against `goto` loops that never reach a blocking step. */
 const MAX_STEPS_PER_SETTLE = 10_000;
+/** The monitor holds a column of pop-ups; older ones scroll off its top. */
+export const MAX_NOTICES = 12;
 
 export function initialState(story: Story): StoryState {
   return {
@@ -15,7 +17,7 @@ export function initialState(story: Story): StoryState {
     relationships: {},
     traits: {},
     decisions: [],
-    stage: { background: null, lighting: null, variant: null, music: null, shot: null, space: 'app', phase: 'A', characters: [] },
+    stage: { background: null, lighting: null, variant: null, music: null, shot: null, screen: { view: null, notices: [] }, space: 'app', phase: 'A', characters: [] },
     ending: null,
   };
 }
@@ -197,6 +199,12 @@ export class StoryRuntime {
           stage.lighting = step.lighting ?? null;
           stage.variant = step.variant ?? null;
           stage.shot = null; // a new place starts with the automatic framing
+          stage.screen = { view: null, notices: [] };
+          break;
+        case 'screen':
+          if (step.clear) stage.screen.notices = [];
+          if (step.view !== undefined) stage.screen.view = step.view;
+          if (step.notify) stage.screen.notices = [...stage.screen.notices, ...step.notify].slice(-MAX_NOTICES);
           break;
         case 'shot':
           stage.shot = step.shot;

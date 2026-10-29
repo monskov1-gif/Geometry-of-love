@@ -86,6 +86,12 @@ export type Step =
   | { type: 'card'; card: ChapterCard }
   /** A staged scene run by the Cutscene Director (world/director); the story waits for it. */
   | { type: 'cutscene'; cutscene: string }
+  /**
+   * What Dameo's monitor shows (CRT close-up and his room): a cover view over
+   * the app page (null = back to what the background implies), pop-up
+   * notifications appended to the stack, or the stack cleared.
+   */
+  | { type: 'screen'; view?: ScreenView | null; notify?: string[]; clear?: boolean }
   | { type: 'ending'; ending: string };
 
 export interface ChapterCard {
@@ -120,6 +126,16 @@ export interface StagedCharacter {
   fx?: CharacterFx;
 }
 
+/** A view of the monitor that covers the app page: the program closed (desktop) or the exit dialog. */
+export type ScreenView = 'desktop' | 'close-dialog';
+
+/** The physical monitor in Dameo's room. Reset by every `background` step. */
+export interface ScreenState {
+  view: ScreenView | null;
+  /** Pop-up notifications on the monitor, oldest first. */
+  notices: string[];
+}
+
 export interface StageState {
   background: string | null;
   /** Lighting of the painted location (null = the location's default). */
@@ -130,6 +146,8 @@ export interface StageState {
   music: string | null;
   /** Named camera shot (3D locations); null = automatic framing of the cast. */
   shot: string | null;
+  /** The monitor's cover view and notifications. */
+  screen: ScreenState;
   space: SpaceId;
   phase: VisualPhase;
   characters: StagedCharacter[];

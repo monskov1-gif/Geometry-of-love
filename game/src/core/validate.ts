@@ -142,6 +142,10 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
           if (!step.card.title.trim()) problems.push(`${where}: chapter card without a title`);
           if (step.card.backdrop && !has(index.backgrounds, step.card.backdrop)) problems.push(`${where}: unknown card backdrop "${step.card.backdrop}"`);
           break;
+        case 'screen':
+          if (step.notify?.some((t) => !t.trim())) problems.push(`${where}: empty notification text`);
+          if (step.view === undefined && !step.notify?.length && !step.clear) problems.push(`${where}: screen step changes nothing`);
+          break;
         case 'space':
         case 'effect':
         case 'shot':

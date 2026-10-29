@@ -94,6 +94,10 @@
   --sprite-height: 96cqh;
   --sprite-max-width: 96cqw;
   --dialog-opacity: 0.86;
+  /* The app on Dameo's CRT: episodes shown on the monitor sit inside its glass (styles/crt.css). */
+  --crt-glass-radius: 10px;
+  --crt-glass-shadow: inset 0 0 18px rgba(8, 4, 12, 0.55), 0 0 22px rgba(255, 184, 240, 0.18);
+  --crt-sheet-pad: var(--space-3);
   /* dialogue band (integrated, translucent) — overridden per space below */
   --dlg-bg: #241c2e;
   --dlg-line: #ffc9f6;

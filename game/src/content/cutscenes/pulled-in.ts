@@ -1,70 +1,102 @@
 // Глава 3: «Дамео собирается закрыть приложение, но из монитора внезапно
 // появляется рука, хватает его и затягивает внутрь экрана» (синопсис).
-// Direction: the close-up of the CRT, the cursor on «Закрыть», the screen
-// breaking up, then the room from behind him as the arm comes out of the glass,
-// stretches across the room, catches his wrist and drags him into the picture;
-// the camera follows him into the tube and the screen burns to white.
+// Direction (author's notes): the room at night from behind his shoulder, the
+// exit dialog that will not take a «Да». Then his own eyes: Melody stares out
+// of the screen, flickers and is gone — the picture tears, snow, a dark empty
+// tube, silence. The glass bulges from inside like a membrane, fingertips
+// pressing through; a real arm breaks out with a ripple, reaches for HIM (the
+// camera), closes on him and pulls: the camera is dragged into the glass, the
+// screen fills the frame and burns out white-pink. Only then the story shows
+// the inside. Skipping lands on the same end state (white, hand gone, Dameo off
+// the stage, the lesson back on the monitor).
 import type { Cutscene } from '../../world/director';
+import { VANISH_TIME } from '../../world/app-screen';
 
 export const pulledIn: Cutscene = {
   id: 'pulled-in',
   title: 'Рука из монитора',
   cues: [
     { do: 'location', id: 'dameo-room', state: 'night' },
-    { do: 'cast', actors: [{ id: 'dameo', at: 'chair', facing: 'front', emotion: 'tired' }] },
-    { do: 'screen', state: { view: 'close-dialog', melody: 'neutral', unease: 0.5 } },
-    { do: 'shot', shot: 'crt', dur: 0 },
+    { do: 'cast', actors: [{ id: 'dameo', at: 'chair', facing: 'back', emotion: 'tired' }] },
+    { do: 'screen', state: { view: 'close-dialog', melody: 'angry', unease: 0.5, notices: [] } },
+    { do: 'shot', shot: 'over-shoulder', dur: 0 },
     { do: 'letterbox', on: true },
     { do: 'music', track: null },
-    { do: 'wait', dur: 1.2 },
+    { do: 'wait', dur: 1.0 },
     { do: 'line', speaker: 'dameo', text: 'Всё. Хватит.' },
     { do: 'sfx', sound: 'click' },
     { do: 'wait', dur: 0.5 },
     // the program refuses to close
-    { do: 'screen', state: { view: 'close-dialog', melody: 'neutral', unease: 0.9 } },
+    { do: 'screen', state: { view: 'close-dialog', melody: 'angry', unease: 0.9 } },
     { do: 'sfx', sound: 'glitch' },
-    { do: 'flash', color: '#ff315a', dur: 0.2 },
     { do: 'sfx', sound: 'click' },
     { do: 'wait', dur: 0.3 },
     { do: 'sfx', sound: 'click' },
+    { do: 'wait', dur: 0.4 },
+    // his eyes: she fills the screen and looks at him
+    { do: 'remove', actor: 'dameo' },
+    { do: 'shot', shot: 'pov', dur: 0 },
     { do: 'screen', state: { view: 'stare', melody: 'neutral', unease: 1 } },
     { do: 'sfx', sound: 'heartbeat' },
-    { do: 'wait', dur: 1.4 },
-    // the room from behind his shoulder: the glass bulges
-    { do: 'shot', shot: 'over-shoulder', dur: 0 },
-    { do: 'sfx', sound: 'rumble' },
-    { do: 'shake', strength: 0.6, dur: 0.6 },
-    { do: 'prop', name: 'monitor-hand', action: 'emerge', dur: 1.1 },
-    { do: 'emote', actor: 'dameo', emotion: 'scared' },
-    { do: 'line', speaker: 'dameo', text: 'Что за…' },
-    // he backs away; the arm keeps coming
+    { do: 'wait', dur: 1.6 },
+    // …and she is gone: the picture tears, snow, an empty dark tube
+    { do: 'screen', state: { view: 'vanish' } },
+    { do: 'sfx', sound: 'glitch' },
+    { do: 'wait', dur: VANISH_TIME },
+    { do: 'screen', state: { view: 'static' } },
+    { do: 'sfx', sound: 'erase' },
+    { do: 'wait', dur: 0.9 },
+    { do: 'screen', state: { view: 'void' } },
+    // silence
+    { do: 'wait', dur: 2.6 },
+    // the glass bulges from inside: a hand pressing against it
+    { do: 'sfx', sound: 'heartbeat' },
+    { do: 'prop', name: 'monitor-hand', action: 'press', dur: 1.8 },
+    { do: 'sfx', sound: 'creak' },
+    { do: 'wait', dur: 0.5 },
+    // it breaks through
+    { do: 'sfx', sound: 'hand' },
     {
       do: 'par',
       cues: [
-        { do: 'shot', shot: 'wide', dur: 1.4 },
-        { do: 'move', actor: 'dameo', to: 'backed-off', speed: 1.1 },
-        { do: 'prop', name: 'monitor-hand', action: 'reach', dur: 1.6, target: 'dameo' },
+        { do: 'prop', name: 'monitor-hand', action: 'emerge', dur: 0.8, target: 'camera' },
+        { do: 'shake', strength: 0.5, dur: 0.5 },
       ],
     },
-    { do: 'sfx', sound: 'hand' },
-    { do: 'prop', name: 'monitor-hand', action: 'grab', dur: 0.2, target: 'dameo' },
-    { do: 'shake', strength: 1.2, dur: 0.4 },
-    { do: 'sfx', sound: 'slam' },
-    { do: 'line', speaker: 'dameo', text: 'Пусти! ПУСТИ!', dur: 1.6 },
-    // dragged across the room into the picture
+    { do: 'line', speaker: 'dameo', text: 'Что за…', dur: 1.2 },
+    // it reaches for him; he jerks back in the chair
     {
       do: 'par',
       cues: [
-        { do: 'prop', name: 'monitor-hand', action: 'pull', dur: 1.5, target: 'dameo' },
+        { do: 'prop', name: 'monitor-hand', action: 'reach', dur: 1.5, target: 'camera' },
+        { do: 'shot', shot: 'pov-recoil', dur: 1.2 },
+        { do: 'sfx', sound: 'rumble' },
+      ],
+    },
+    // grabbed
+    { do: 'sfx', sound: 'slam' },
+    {
+      do: 'par',
+      cues: [
+        { do: 'prop', name: 'monitor-hand', action: 'grab', dur: 0.3, target: 'camera' },
+        { do: 'shake', strength: 1.2, dur: 0.4 },
+      ],
+    },
+    { do: 'line', speaker: 'dameo', text: 'Пусти! ПУСТИ!', dur: 1.4 },
+    // dragged into the glass: the screen fills the frame and burns out
+    {
+      do: 'par',
+      cues: [
+        { do: 'prop', name: 'monitor-hand', action: 'pull', dur: 1.7, target: 'camera' },
         { do: 'shot', shot: 'into-screen', dur: 1.7 },
         { do: 'sfx', sound: 'erase' },
       ],
     },
-    { do: 'prop', name: 'monitor-hand', action: 'hide', dur: 0 },
-    { do: 'remove', actor: 'dameo' },
-    { do: 'screen', state: { view: 'lesson', melody: 'cheerful', unease: 0 } },
+    { do: 'flash', color: '#ff6cc5', dur: 0.25 },
     { do: 'sfx', sound: 'sparkle' },
-    { do: 'fade', to: 'white', dur: 0.5 },
+    { do: 'fade', to: 'white', dur: 0.4 },
+    { do: 'prop', name: 'monitor-hand', action: 'hide', dur: 0 },
+    { do: 'screen', state: { view: 'lesson', melody: 'cheerful', unease: 0 } },
     { do: 'wait', dur: 0.8 },
     { do: 'letterbox', on: false },
   ],

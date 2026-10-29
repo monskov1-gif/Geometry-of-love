@@ -11,6 +11,15 @@ export interface Shot {
   pos: Vec3;
   look: Vec3;
   fov?: number;
+  /**
+   * Width and height (metres) of a box around `look` that must stay in frame on
+   * any screen shape: the camera keeps the direction from `look` to `pos` and
+   * moves to the distance at which the box just fits (phones get the whole
+   * monitor instead of a crop of it).
+   */
+  fit?: [number, number];
+  /** No idle camera sway (a picture the player reads, e.g. the app on the CRT). */
+  still?: boolean;
 }
 
 /** A place a character stands: floor point and which way they face by default. */

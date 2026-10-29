@@ -8,8 +8,8 @@
 // она улыбается: теперь они наконец могут проводить время вместе по-настоящему.
 // Развитие: уведомления от программы при закрытом окне; Дамео сначала польщён
 // ревностью («кто-то ревнует из-за меня»), потом пугается; попытка не включать
-// компьютер; кат-сцена «Рука из монитора» (content/cutscenes/pulled-in.ts).
-import { background, branch, card, choice, cutscene, defineScene, goto, hide, label, music, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
+// компьютер (её всплывающие окна видны на самом мониторе: шаги `screen`/`notify`); кат-сцена «Рука из монитора» (content/cutscenes/pulled-in.ts).
+import { background, branch, card, choice, cutscene, defineScene, goto, hide, label, music, narrate, notify, say, screen, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter3 = defineScene({
   id: 'ch03',
@@ -78,16 +78,25 @@ export const chapter3 = defineScene({
     think('dameo', 'Нам. Она говорит «нам».'),
     label('night'),
     hide('melody'),
+    // the program is closed: the CRT shows the desktop, and her pop-ups land on it
+    screen('desktop'),
     narrate('Он закрывает программу. Через минуту в углу экрана появляется уведомление.'),
+    shot('crt-notice'),
     sfx('notify'),
+    notify('Ты здесь?'),
     system('Мелоди: Ты здесь?'),
     sfx('notify'),
+    notify('Ты здесь?'),
     system('Мелоди: Ты здесь?'),
     sfx('notify'),
+    notify('Я вижу, что курсор двигается.'),
     system('Мелоди: Я вижу, что курсор двигается.'),
+    // silent now: the same lines pile up the right edge of the screen
+    notify('Ты здесь?', 'Ты здесь?', 'Ты здесь?', 'Я вижу, что курсор двигается.', 'Ты здесь?', 'Ты здесь?'),
     narrate('Он отключает звук. Уведомления продолжают появляться беззвучно — одно над другим, пока не заполняют весь правый край экрана.'),
     think('dameo', 'Удалить. Просто удалить её. Панель управления, «Установка и удаление программ»…'),
     narrate('В списке установленных программ «Мелоди но Махо» нет. Есть «Microsoft Office», «WinRAR», драйвер принтера, которого у него нет. Её — нет.'),
+    shot(null),
     narrate('Он смотрит на ярлык на рабочем столе. Девочка с бантами. Он не двигает к нему курсор. Он смотрит минут десять.'),
     think('dameo', 'Завтра. Удалю завтра. Найду, где она лежит, и удалю.'),
     think('dameo', 'А сегодня ещё один урок. Один. Последний. Она же расстроится.'),
@@ -107,6 +116,7 @@ export const chapter3 = defineScene({
     say('dameo', 'Мне надо идти. Завтра пара.'),
     show('melody', 'angry', 'center'),
     say('melody', 'Завтра пара. Завтра Сацуки. Завтра опять все будут смеяться. А ты опять придёшь ко мне. Зачем уходить, если всё равно вернёшься?'),
+    screen('close-dialog'),
     system('Закрыть «メロディのまほう»? [Да] [Нет]'),
     narrate('Дамео тянется к мышке.'),
     space('reality', 'C'),

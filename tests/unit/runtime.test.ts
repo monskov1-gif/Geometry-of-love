@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { StoryError, StoryRuntime } from '../../game/src/core/runtime';
-import { branch, choice, effects, ending, episode, goto, label, say, show, space } from '../../game/src/core/script';
+import { MAX_NOTICES, StoryError, StoryRuntime } from '../../game/src/core/runtime';
+import { background, branch, choice, clearNotices, effects, ending, episode, goto, label, notify, say, screen, show, space } from '../../game/src/core/script';
 import type { Story } from '../../game/src/core/types';
 
 const story: Story = {
@@ -170,5 +170,46 @@ describe('StoryRuntime presentation extras', () => {
     expect(rt.state.stage.characters[0]).toMatchObject({ pose: 'cheerful', fx: 'distorted' });
     rt.advance();
     expect(rt.state.stage.characters[0]).toEqual({ id: 'melody', pose: 'neutral', position: 'center' });
+  });
+});
+
+describe('StoryRuntime monitor state', () => {
+  const screenStory: Story = {
+    startScene: 's',
+    scenes: {
+      s: {
+        id: 's',
+        title: 's',
+        chapter: null,
+        steps: [
+          background('app-notebook'),
+          screen('desktop'),
+          notify('Ты здесь?'),
+          say('', 'one'),
+          notify(...Array.from({ length: MAX_NOTICES + 3 }, (_, i) => `n${i}`)),
+          say('', 'two'),
+          screen(null),
+          clearNotices(),
+          say('', 'three'),
+          notify('again'),
+          background('dameo-room'),
+          say('', 'four'),
+          ending('x'),
+        ],
+      },
+    },
+  };
+
+  it('keeps the cover view and the notifications on the stage (saved), capped, cleared and reset by a new background', () => {
+    const rt = new StoryRuntime(screenStory);
+    expect(rt.state.stage.screen).toEqual({ view: 'desktop', notices: ['Ты здесь?'] });
+    rt.advance();
+    expect(rt.state.stage.screen.notices).toHaveLength(MAX_NOTICES);
+    expect(rt.state.stage.screen.notices.at(-1)).toBe(`n${MAX_NOTICES + 2}`);
+    expect(rt.snapshot().stage.screen.view).toBe('desktop');
+    rt.advance();
+    expect(rt.state.stage.screen).toEqual({ view: null, notices: [] });
+    rt.advance();
+    expect(rt.state.stage.screen).toEqual({ view: null, notices: [] });
   });
 });

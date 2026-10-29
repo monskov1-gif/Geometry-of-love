@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { initialState } from '../../game/src/core/runtime';
 import { migrate, SAVE_SCHEMA, SaveStore, type KeyValueStore, type SaveData } from '../../game/src/core/saves';
+import { story } from '../../game/src/content';
 
 function memoryStore(): KeyValueStore & { map: Map<string, string> } {
   const map = new Map<string, string>();
@@ -66,12 +67,12 @@ describe('SaveStore', () => {
 describe('migrate', () => {
   it('upgrades a schema-1 save through every step to the current stage shape', () => {
     const current = save('2026-01-01T00:00:00.000Z');
-    const { lighting, variant, music, shot, ...stage1 } = current.state.stage;
-    void lighting, void variant, void music, void shot;
+    const { lighting, variant, music, shot, screen, ...stage1 } = current.state.stage;
+    void lighting, void variant, void music, void shot, void screen;
     const old = { ...current, schema: 1, state: { ...current.state, stage: stage1 } } as unknown as SaveData;
     const up = migrate(old);
     expect(up.schema).toBe(SAVE_SCHEMA);
-    expect(up.state.stage).toEqual({ ...stage1, lighting: null, variant: null, music: null, shot: null });
+    expect(up.state.stage).toEqual({ ...stage1, lighting: null, variant: null, music: null, shot: null, screen: { view: null, notices: [] } });
   });
 
   it('adds the camera shot to schema-2 saves', () => {
@@ -80,5 +81,23 @@ describe('migrate', () => {
     void shot;
     const up = migrate({ ...current, schema: 2, state: { ...current.state, stage: stage2 as typeof current.state.stage } });
     expect(up.state.stage.shot).toBeNull();
+  });
+
+  it('adds the monitor state to schema-3 saves and keeps ch03 positions on the same line', () => {
+    const current = save('x');
+    const { screen, ...stage3 } = current.state.stage;
+    void screen;
+    const at = (index: number) => migrate({ ...current, schema: 3, state: { ...current.state, position: { scene: 'ch03', index }, stage: stage3 as typeof current.state.stage } });
+    const steps = story.scenes.ch03!.steps;
+    expect(at(10).state.stage.screen).toEqual({ view: null, notices: [] });
+    // before the inserted steps nothing moves
+    expect(at(49).state.position.index).toBe(49);
+    // old 53 = the first «Ты здесь?» line, old 78 = the exit dialog line
+    expect(steps[at(53).state.position.index]).toMatchObject({ type: 'say', text: 'Мелоди: Ты здесь?' });
+    expect(steps[at(78).state.position.index]).toMatchObject({ type: 'say', text: 'Закрыть «メロディのまほう»? [Да] [Нет]' });
+    expect(steps[at(79).state.position.index]).toMatchObject({ type: 'say', text: 'Дамео тянется к мышке.' });
+    // other scenes keep their indices
+    const other = migrate({ ...current, schema: 3, state: { ...current.state, position: { scene: 'ch02', index: 60 }, stage: stage3 as typeof current.state.stage } });
+    expect(other.state.position.index).toBe(60);
   });
 });

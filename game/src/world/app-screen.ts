@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { characters, type SheetPose } from '../content/characters';
 import { loadImage } from '../platform/assets';
+import { NoticeColumn } from './app-notices';
 
 export const APP_W = 320;
 export const APP_H = 240;
@@ -19,7 +20,16 @@ export interface AppScreenState {
   unease: number;
   /** Small caption in the app's title bar. */
   title?: string;
+  /** The story's view over the app ('desktop' = program closed, 'close-dialog'); null = `view`. */
+  cover?: string | null;
+  /** Melody's pop-up notifications, oldest first. */
+  notices?: readonly string[];
+  /** Reduced motion: no slides, blinks or flicker. */
+  calm?: boolean;
 }
+
+/** Seconds Melody takes to flicker out of the picture ('vanish'). */
+export const VANISH_TIME = 1.6;
 
 const PINK = '#ffc9f6';
 const PINK_DOT = '#ffe6fb';
@@ -36,6 +46,11 @@ export class AppScreen {
   private readonly ctx: CanvasRenderingContext2D;
   private state: AppScreenState = { view: 'desktop', melody: null, unease: 0 };
   private readonly images = new Map<string, HTMLImageElement>();
+  private readonly notices = new NoticeColumn();
+  private snowCanvas: HTMLCanvasElement | undefined;
+  /** Screen time of the last draw, and when the shown view last changed. */
+  private now = 0;
+  private since = 0;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -54,14 +69,27 @@ export class AppScreen {
         loadImage(pose.src)
           .then((img) => {
             this.images.set(pose.src, img);
-            this.draw(0);
+            this.draw(this.now);
           })
           .catch(() => {}); // loadImage already reports the failure to the player and the console
   }
 
   set(state: Partial<AppScreenState>): void {
+    const before = this.shown;
     this.state = { ...this.state, ...state };
-    this.draw(0);
+    if (this.shown !== before) this.since = this.now;
+    if (state.notices) this.notices.set(state.notices, !!this.state.calm);
+    this.draw(this.now);
+  }
+
+  /** The view actually on the screen: the story's cover wins over the app page. */
+  get shown(): string {
+    return this.state.cover ?? this.state.view;
+  }
+
+  /** Frames per second the room should redraw the screen at. */
+  get fps(): number {
+    return this.notices.animating || this.shown === 'vanish' || this.shown === 'static' ? 12 : 8;
   }
 
   get current(): Readonly<AppScreenState> {
@@ -69,21 +97,132 @@ export class AppScreen {
   }
 
   draw(t: number): void {
+    this.now = t;
     const c = this.ctx;
-    const s = this.state;
-    if (s.view === 'off') {
-      c.fillStyle = '#060708';
+    const view = this.shown;
+    if (view === 'off' || view === 'void') {
+      c.fillStyle = view === 'off' ? '#060708' : '#0c0610';
       c.fillRect(0, 0, APP_W, APP_H);
-      this.glass(t);
-      return;
-    }
-    if (s.view === 'desktop') this.desktop(t);
-    else if (s.view === 'stare') this.stare(t);
+    } else if (view === 'desktop') {
+      if (this.state.cover === 'desktop') this.closedDesktop();
+      else this.desktop(t);
+    } else if (view === 'stare') this.stare(t);
+    else if (view === 'vanish') this.vanish(t);
+    else if (view === 'static') this.snow();
     else {
       this.app(t);
-      if (s.view === 'close-dialog') this.closeDialog(t);
+      if (view === 'close-dialog') this.closeDialog(t);
     }
+    if (view !== 'off') this.notices.draw({ ctx: c, icon: (x, y, size) => this.icon(x, y, size) }, t, !!this.state.calm);
     this.glass(t);
+  }
+
+  /** Melody's portrait, whole frame, proportions kept, fitted into a square. */
+  private icon(x: number, y: number, size: number): void {
+    const pose = characters.melody?.poses['cheerful'];
+    if (!pose || pose.kind !== 'sheet') return;
+    const img = this.images.get(pose.src);
+    if (!img) return;
+    const f = (pose as SheetPose).frame;
+    const k = size / Math.max(f.w, f.h);
+    const w = Math.round(f.w * k);
+    const h = Math.round(f.h * k);
+    const c = this.ctx;
+    c.imageSmoothingEnabled = true; // averaging a 1200px portrait down to a few pixels
+    c.drawImage(img, f.x, f.y, f.w, f.h, x + Math.floor((size - w) / 2), y + (size - h), w, h);
+    c.imageSmoothingEnabled = false;
+  }
+
+  /** The program is closed: a plain desktop with her shortcut among the icons. */
+  private closedDesktop(): void {
+    const c = this.ctx;
+    c.fillStyle = '#2a6a6a';
+    c.fillRect(0, 0, APP_W, APP_H);
+    c.font = '8px Tiny5, monospace';
+    c.textBaseline = 'middle';
+    const icons: [string, string][] = [
+      ['Мой компьютер', '#d8dce4'],
+      ['Корзина', '#9aa0a8'],
+      ['Документы', '#e8c040'],
+      ['Мелоди', ''],
+    ];
+    icons.forEach(([label, color], i) => {
+      const y = 10 + i * 40;
+      if (color) {
+        c.fillStyle = color;
+        c.fillRect(16, y, 20, 18);
+        c.fillStyle = '#1a3a3a';
+        c.fillRect(16, y + 18, 20, 2);
+      } else {
+        c.fillStyle = PINK;
+        c.fillRect(14, y - 2, 24, 24);
+        this.icon(15, y - 1, 22);
+        // the shortcut arrow
+        c.fillStyle = '#ffffff';
+        c.fillRect(14, y + 15, 7, 7);
+        c.fillStyle = '#1a1a1a';
+        c.fillRect(16, y + 17, 3, 1);
+        c.fillRect(18, y + 17, 1, 3);
+      }
+      c.fillStyle = '#ffffff';
+      const w = c.measureText(label).width;
+      c.fillText(label, Math.round(26 - w / 2), y + 28);
+    });
+    c.fillStyle = '#c8c4bc';
+    c.fillRect(0, APP_H - 16, APP_W, 16);
+    c.fillStyle = '#3a8a3a';
+    c.fillRect(2, APP_H - 14, 34, 12);
+    c.fillStyle = '#ffffff';
+    c.fillText('Пуск', 6, APP_H - 8);
+    c.fillStyle = '#1a1a1a';
+    c.fillText('23:47', APP_W - 32, APP_H - 8);
+  }
+
+  /** She flickers out of the picture and does not come back. */
+  private vanish(t: number): void {
+    const c = this.ctx;
+    const k = Math.min(1, (t - this.since) / VANISH_TIME);
+    const calm = !!this.state.calm;
+    const showHer = calm ? k < 1 : k < 1 && Math.random() > k * k * 1.1;
+    if (showHer) {
+      this.stare(t);
+      if (calm) {
+        c.fillStyle = `rgba(12,6,16,${k.toFixed(3)})`;
+        c.fillRect(0, 0, APP_W, APP_H);
+      } else {
+        // the picture tears sideways as she goes
+        for (let i = 0; i < 6; i++) {
+          const y = Math.floor(Math.random() * APP_H);
+          const h = 4 + Math.floor(Math.random() * 18);
+          c.drawImage(this.canvas, 0, y, APP_W, h, Math.round((Math.random() - 0.5) * 60 * (0.3 + k)), y, APP_W, h);
+        }
+      }
+    } else {
+      c.fillStyle = '#0c0610';
+      c.fillRect(0, 0, APP_W, APP_H);
+      if (!calm && k < 1) this.snow(0.35);
+    }
+  }
+
+  /** Snow of a tube with no signal. */
+  private snow(alpha = 0.85): void {
+    const c = this.ctx;
+    const img = c.createImageData(APP_W / 2, APP_H / 2);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = Math.random() * 200;
+      img.data[i] = v;
+      img.data[i + 1] = v * 0.95;
+      img.data[i + 2] = v;
+      img.data[i + 3] = 255 * alpha;
+    }
+    // drawn at half resolution and doubled: chunky like the rest of the picture
+    const tmp = (this.snowCanvas ??= Object.assign(document.createElement('canvas'), { width: APP_W / 2, height: APP_H / 2 }));
+    tmp.getContext('2d')!.putImageData(img, 0, 0);
+    if (alpha >= 0.85) {
+      c.fillStyle = '#0c0610';
+      c.fillRect(0, 0, APP_W, APP_H);
+    }
+    c.drawImage(tmp, 0, 0, APP_W, APP_H);
   }
 
   /** Windows-98-ish desktop: the abandoned site with the installer. */

@@ -1,7 +1,7 @@
 import type { StoryState, TextKind } from './types';
 
 /** Bump when the save format changes incompatibly; add a migration in `migrate`. */
-export const SAVE_SCHEMA = 3;
+export const SAVE_SCHEMA = 4;
 export const MANUAL_SLOT_COUNT = 6;
 
 export type SlotId = 'auto' | 'quick' | `slot-${number}`;
@@ -64,6 +64,23 @@ export function checkSaveShape(v: unknown): string | null {
   return null;
 }
 
+/**
+ * Steps inserted into released scenes, by the schema that introduced them:
+ * `before` lists old step indices that got one new step in front of them, so a
+ * saved position keeps pointing at the same line.
+ */
+const INSERTED_STEPS: Record<number, { scene: string; before: number[] }[]> = {
+  // 4: ch03 shows the closed program, Melody's pop-ups and the exit dialog on the monitor.
+  4: [{ scene: 'ch03', before: [51, 52, 53, 55, 57, 58, 61, 78] }],
+};
+
+/** Moves a saved step index past the steps inserted in front of it. */
+export function shiftIndex(schema: number, scene: string, index: number): number {
+  let shifted = index;
+  for (const entry of INSERTED_STEPS[schema] ?? []) if (entry.scene === scene) shifted += entry.before.filter((b) => b <= index).length;
+  return shifted;
+}
+
 /** Upgrades older saves step by step to the current schema. */
 export function migrate(data: SaveData): SaveData {
   let d = data;
@@ -76,6 +93,21 @@ export function migrate(data: SaveData): SaveData {
     // 3: the stage remembers the camera shot of 3D locations.
     const old = d.state.stage as Partial<StoryState['stage']>;
     d = { ...d, schema: 3, state: { ...d.state, stage: { ...d.state.stage, shot: old.shot ?? null } } };
+  }
+  if (d.schema === 3) {
+    // 4: the stage remembers what the monitor shows; ch03 got new steps.
+    const old = d.state.stage as Partial<StoryState['stage']>;
+    const { scene, index } = d.state.position;
+    d = {
+      ...d,
+      schema: 4,
+      state: {
+        ...d.state,
+        position: { scene, index: shiftIndex(4, scene, index) },
+        decisions: d.state.decisions.map((x) => ({ ...x, index: shiftIndex(4, x.scene, x.index) })),
+        stage: { ...d.state.stage, screen: old.screen ?? { view: null, notices: [] } },
+      },
+    };
   }
   return d;
 }

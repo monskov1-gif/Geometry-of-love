@@ -1,0 +1,55 @@
+/* ======================================================================
+   The app on Dameo's CRT. While the story plays the app (stage mode 'crt'),
+   Stage publishes the screen's rectangle on the view as --crt-x/y/w/h and
+   sets data-crt="on" on the theme root. Episodes then appear on the monitor's
+   glass: the bezel, the desk and the dark room stay visible around them.
+   ====================================================================== */
+[data-crt='on'] .episode-layer {
+  display: block;
+  padding: 0;
+  background: transparent;
+  backdrop-filter: none;
+  overflow: visible;
+}
+
+[data-crt='on'] .episode-layer > * {
+  position: absolute;
+  left: var(--crt-x);
+  top: var(--crt-y);
+  width: var(--crt-w);
+  height: var(--crt-h);
+  max-width: none;
+  margin: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--crt-glass-radius);
+  box-shadow: var(--crt-glass-shadow);
+  background: var(--notebook-paper);
+}
+
+[data-crt='on'] .episode-layer > .episode {
+  display: block;
+}
+
+/* The sheet is the screen itself: no card frame, compact padding. */
+[data-crt='on'] .episode-layer .notebook-sheet {
+  width: 100%;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--crt-sheet-pad) var(--crt-sheet-pad) var(--crt-sheet-pad) 48px;
+}
+
+[data-crt='on'] .episode-layer .quiz-room {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+[data-crt='on'] .episode-layer .quiz-side {
+  border-radius: 0;
+}
+
+[data-crt='on'] .episode-layer .quiz-figure {
+  max-height: 34vh;
+}
