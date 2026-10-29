@@ -189,9 +189,9 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
   // The second and third evenings with Melody: isosceles triangles, areas.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }]);
+  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7']);
+  await solveQuiz(page, ['18', '20', '7', '32', '84']);
   await choose(page, /честно/);
   await shot(page, '03-choice');
   await choose(page, /Ты права/);
@@ -282,9 +282,9 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }]);
+  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7']);
+  await solveQuiz(page, ['18', '20', '7', '32', '84']);
   await choose(page, /Отшутиться/);
   await choose(page, /Ревнуешь/);
   await winByHook(page, 'Выход');

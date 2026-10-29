@@ -4,7 +4,11 @@
 //   correct-answer — Mini-game No. 2 «Правильный ответ» (chapter 5): three
 //                    ordinary tasks (angles, area, construction) and a fourth
 //                    one that cannot be solved in Euclidean geometry.
+//   app-lessons-2/3 — later lessons (chapter 2): the difficulty climbs.
+//   university-*   — hard university sets, see geometry-university.ts.
 // Task wording is drafted from the synopsis; the author may replace it.
+import { universitySets } from './geometry-university';
+import { parseNumber } from './math-input';
 
 export interface FigureSpec {
   /** Polygon vertices in a 0..100 × 0..70 coordinate box. */
@@ -21,6 +25,8 @@ export interface GeometryTask {
   prompt: string;
   figure?: FigureSpec;
   answer: Answer;
+  /** How to solve it (Russian), shown on request and after a wrong answer. */
+  hint?: string;
   /** The condition contradicts itself: every answer is "wrong" (chapter 5). */
   impossible?: boolean;
 }
@@ -60,10 +66,11 @@ export const taskSets: Record<string, TaskSet> = {
       },
     ],
     tasks: [
-      { id: 'right-angle', prompt: 'Сколько градусов в прямом угле?', answer: { type: 'number', value: 90, unit: '°' } },
+      { id: 'right-angle', prompt: 'Сколько градусов в прямом угле?', hint: 'Это в статье «Урок 01»: прямой угол — как уголок тетрадного листа.', answer: { type: 'number', value: 90, unit: '°' } },
       {
         id: 'triangle-sides',
         prompt: 'Сколько сторон у треугольника?',
+        hint: '«Три» — в самом названии.',
         figure: { points: triangle },
         answer: {
           type: 'choice',
@@ -78,6 +85,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'square-perimeter',
         prompt: 'Сторона квадрата равна 2. Чему равен его периметр?',
+        hint: 'Периметр — сумма всех сторон. У квадрата 4 равные стороны: 4 · 2.',
         figure: {
           points: [
             [30, 10],
@@ -103,6 +111,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'iso-base-angle',
         prompt: 'В равнобедренном треугольнике угол при вершине равен 40°. Чему равен угол при основании?',
+        hint: 'Углы при основании равны: (180° − 40°) / 2.',
         figure: {
           points: [
             [50, 6],
@@ -120,11 +129,13 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'iso-apex',
         prompt: 'Углы при основании равнобедренного треугольника равны 65°. Найдите угол при вершине.',
+        hint: '180° − 2 · 65°.',
         answer: { type: 'number', value: 50, unit: '°' },
       },
       {
         id: 'iso-which',
         prompt: 'Какие углы равны в равнобедренном треугольнике?',
+        hint: 'Перечитайте статью «Урок 03» — про близнецов.',
         answer: {
           type: 'choice',
           options: [
@@ -134,6 +145,25 @@ export const taskSets: Record<string, TaskSet> = {
           ],
           correct: 'base',
         },
+      },
+      {
+        id: 'iso-height',
+        prompt: 'Боковые стороны равнобедренного треугольника равны 13, основание равно 10. Найдите высоту, проведённую к основанию.',
+        hint: 'Высота к основанию делит его пополам и образует прямоугольный треугольник с катетом 5 и гипотенузой 13. По теореме Пифагора h = √(13² − 5²).',
+        figure: {
+          points: [
+            [50, 6],
+            [80, 64],
+            [20, 64],
+          ],
+          labels: [
+            { at: [24, 34], text: '13' },
+            { at: [70, 34], text: '13' },
+            { at: [46, 70], text: '10' },
+            { at: [52, 40], text: 'h' },
+          ],
+        },
+        answer: { type: 'number', value: 12 },
       },
     ],
   },
@@ -149,6 +179,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'rect-6x3',
         prompt: 'Прямоугольник 6 × 3. Найдите площадь.',
+        hint: 'Длина × ширина.',
         figure: {
           points: [
             [15, 20],
@@ -166,12 +197,51 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'tri-area',
         prompt: 'Основание треугольника 8, высота 5. Найдите площадь.',
+        hint: 'Основание × высота ÷ 2.',
         answer: { type: 'number', value: 20 },
       },
       {
         id: 'square-area',
         prompt: 'Площадь квадрата 49. Чему равна его сторона?',
+        hint: 'Площадь квадрата — сторона, умноженная на себя. Какое число в квадрате даёт 49?',
         answer: { type: 'number', value: 7 },
+      },
+      {
+        id: 'trapezoid-area',
+        prompt: 'Основания трапеции равны 5 и 11, высота равна 4. Найдите площадь.',
+        hint: 'Площадь трапеции — полусумма оснований, умноженная на высоту: (5 + 11) / 2 · 4.',
+        figure: {
+          points: [
+            [34, 18],
+            [62, 18],
+            [84, 56],
+            [16, 56],
+          ],
+          labels: [
+            { at: [46, 14], text: '5' },
+            { at: [46, 66], text: '11' },
+            { at: [8, 40], text: 'h = 4' },
+          ],
+        },
+        answer: { type: 'number', value: 32 },
+      },
+      {
+        id: 'heron',
+        prompt: 'Стороны треугольника равны 13, 14 и 15. Найдите его площадь.',
+        hint: 'Формула Герона: p = (13 + 14 + 15) / 2 = 21, S = √(p(p − a)(p − b)(p − c)) = √(21 · 8 · 7 · 6).',
+        figure: {
+          points: [
+            [10, 62],
+            [86, 62],
+            [40, 8],
+          ],
+          labels: [
+            { at: [16, 32], text: '13' },
+            { at: [66, 32], text: '15' },
+            { at: [44, 70], text: '14' },
+          ],
+        },
+        answer: { type: 'number', value: 84 },
       },
     ],
   },
@@ -181,6 +251,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'third-angle',
         prompt: '∠A = 50°, ∠B = 60°. Найдите ∠C.',
+        hint: 'Сумма углов треугольника 180°.',
         figure: {
           points: triangle,
           labels: [
@@ -202,6 +273,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'rectangle-area',
         prompt: 'Стороны прямоугольника равны 4 и 5. Найдите его площадь.',
+        hint: 'Площадь прямоугольника — произведение сторон.',
         figure: {
           points: [
             [20, 15],
@@ -219,6 +291,7 @@ export const taskSets: Record<string, TaskSet> = {
       {
         id: 'construct-345',
         prompt: 'Можно ли построить треугольник со сторонами 3, 4 и 5?',
+        hint: 'Неравенство треугольника: каждая сторона меньше суммы двух других.',
         answer: {
           type: 'choice',
           options: [
@@ -244,11 +317,12 @@ export const taskSets: Record<string, TaskSet> = {
       },
     ],
   },
+  ...universitySets,
 };
 
 export function checkAnswer(answer: Answer, input: string): boolean {
   if (answer.type === 'choice') return input === answer.correct;
-  const value = Number(input.replace(',', '.').replace(/[°\s]/g, ''));
-  if (!Number.isFinite(value) || input.trim() === '') return false;
+  const value = parseNumber(input);
+  if (!Number.isFinite(value)) return false;
   return Math.abs(value - answer.value) <= (answer.tolerance ?? 0);
 }
