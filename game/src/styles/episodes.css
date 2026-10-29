@@ -515,3 +515,27 @@
   background: rgba(196, 30, 42, 0.35);
   pointer-events: none;
 }
+
+/* geometry quiz: long university tasks (multi-line prompts, formulas, hints) */
+.quiz-prompt,
+.quiz-hint {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.quiz-hint {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 4px solid var(--geometry-line);
+  background: color-mix(in srgb, var(--notebook-blue) 35%, transparent);
+  font-size: var(--fs-small);
+}
+
+.quiz .quiz-input {
+  width: min(18ch, 100%);
+}
+
+.quiz {
+  max-height: calc(100dvh - 8 * var(--space-4));
+  overflow-y: auto;
+}

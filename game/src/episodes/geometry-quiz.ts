@@ -98,6 +98,13 @@ export const geometryQuiz: EpisodeDefinition = {
       let input: HTMLInputElement | null = null;
       let wrongCount = 0;
       const extra = el('div', { class: 'quiz-extra row' });
+      // How to solve it: on request, and opened by itself after the second wrong answer.
+      const hintText = el('p', { class: 'quiz-hint', hidden: true }, task.hint ?? '');
+      const showHint = () => {
+        hintText.hidden = false;
+        hintButton.disabled = true;
+      };
+      const hintButton = el('button', { class: 'btn quiz-hint-button', type: 'button', onclick: showHint }, 'Подсказка');
 
       const submit = () => {
         const value = input ? input.value : selected;
@@ -118,6 +125,7 @@ export const geometryQuiz: EpisodeDefinition = {
         wrongCount++;
         feedback.textContent = 'Неверно. Попробуйте ещё раз.';
         feedback.dataset.state = 'wrong';
+        if (task.hint && wrongCount >= 2) showHint();
         if (task.impossible && wrongCount === 1) {
           extra.replaceChildren(
             el(
@@ -146,6 +154,7 @@ export const geometryQuiz: EpisodeDefinition = {
           type: 'text',
           inputmode: 'decimal',
           'aria-label': 'Ответ',
+          placeholder: task.answer.tolerance ? '4/3, √3, 1,5' : '',
           autocomplete: 'off',
           onkeydown: (e: KeyboardEvent) => {
             if (e.key === 'Enter') submit();
@@ -177,7 +186,8 @@ export const geometryQuiz: EpisodeDefinition = {
         el('p', { class: 'quiz-prompt' }, task.prompt),
         ...(task.figure ? [renderFigure(task.figure)] : []),
         answerArea,
-        checkButton,
+        el('div', { class: 'row quiz-actions' }, checkButton, task.hint && !task.impossible ? hintButton : null),
+        hintText,
         feedback,
         extra,
       );
