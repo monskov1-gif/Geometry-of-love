@@ -1,7 +1,7 @@
 import type { StoryState, TextKind } from './types';
 
 /** Bump when the save format changes incompatibly; add a migration in `migrate`. */
-export const SAVE_SCHEMA = 1;
+export const SAVE_SCHEMA = 2;
 export const MANUAL_SLOT_COUNT = 6;
 
 export type SlotId = 'auto' | 'quick' | `slot-${number}`;
@@ -64,10 +64,15 @@ export function checkSaveShape(v: unknown): string | null {
   return null;
 }
 
-function migrate(data: SaveData): SaveData {
-  // schema 1 is the first format; future migrations go here, e.g.
-  // if (data.schema === 1) data = { ...data, schema: 2, newField: default };
-  return data;
+/** Upgrades older saves step by step to the current schema. */
+export function migrate(data: SaveData): SaveData {
+  let d = data;
+  if (d.schema === 1) {
+    // 2: the stage remembers lighting, location variant and music.
+    const old = d.state.stage as Partial<StoryState['stage']>;
+    d = { ...d, schema: 2, state: { ...d.state, stage: { ...d.state.stage, lighting: old.lighting ?? null, variant: old.variant ?? null, music: old.music ?? null } } };
+  }
+  return d;
 }
 
 export class SaveStore {

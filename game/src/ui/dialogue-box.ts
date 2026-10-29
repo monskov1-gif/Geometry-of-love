@@ -38,7 +38,7 @@ export class DialogueBox {
   }
 
   /** Shows a line; `charsPerSecond` 0 = instant. `onDone` fires when fully visible. */
-  show(line: DialogueLine, charsPerSecond: number, onDone: () => void): void {
+  show(line: DialogueLine, charsPerSecond: number, onDone: () => void, onType?: () => void): void {
     this.stop();
     this.root.classList.remove('rewritten');
     this.root.dataset.kind = line.kind;
@@ -55,7 +55,9 @@ export class DialogueBox {
     this.root.classList.remove('done');
     const started = performance.now();
     const tick = () => {
-      this.shown = Math.min(this.full.length, Math.floor(((performance.now() - started) / 1000) * charsPerSecond) + 1);
+      const next = Math.min(this.full.length, Math.floor(((performance.now() - started) / 1000) * charsPerSecond) + 1);
+      if (next > this.shown && /\S/.test(this.full[next - 1] ?? '')) onType?.();
+      this.shown = next;
       this.textNode.textContent = this.full.slice(0, this.shown);
       if (this.typing) this.timer = window.setTimeout(tick, 16);
       else this.finish();

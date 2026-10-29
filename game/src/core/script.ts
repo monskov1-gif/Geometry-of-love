@@ -5,6 +5,7 @@ import type {
   ChoiceOption,
   Condition,
   Effect,
+  LightingId,
   Scene,
   ScreenEffect,
   SpaceId,
@@ -40,7 +41,15 @@ export const show = (character: string, pose: string, position?: StagePosition, 
 });
 export const fx = (effect: ScreenEffect): Step => ({ type: 'effect', effect });
 export const hide = (character: string): Step => ({ type: 'hide', character });
-export const background = (id: string): Step => ({ type: 'background', background: id });
+export const background = (id: string, lighting?: LightingId, variant?: string): Step => ({
+  type: 'background',
+  background: id,
+  ...(lighting ? { lighting } : {}),
+  ...(variant ? { variant } : {}),
+});
+export const light = (lighting: LightingId): Step => ({ type: 'light', lighting });
+export const music = (track: string | null): Step => ({ type: 'music', track });
+export const sfx = (sound: string): Step => ({ type: 'sfx', sound });
 export const space = (id: SpaceId, phase?: VisualPhase): Step =>
   phase ? { type: 'space', space: id, phase } : { type: 'space', space: id };
 export const label = (name: string): Step => ({ type: 'label', name });

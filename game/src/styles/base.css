@@ -17,15 +17,19 @@ body {
   inset: 0;
   overflow: hidden;
   font-family: var(--font-text);
+  font-weight: 600;
   font-size: var(--fs-body);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--text);
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 
 .pixel {
   font-family: var(--font-pixel);
-  letter-spacing: 0.02em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  -webkit-font-smoothing: none;
 }
 
 .muted {
@@ -39,80 +43,89 @@ h3 {
   line-height: 1.15;
 }
 
-/* Notebook paper: warm white, thin low-contrast blue rules, optional margin line. */
+/* Notebook paper: warm white, low-contrast blue rules, red margin line. */
 .notebook-sheet {
+  position: relative;
   background-color: var(--notebook-paper);
   background-image:
     linear-gradient(90deg, transparent 38px, var(--notebook-margin) 38px, var(--notebook-margin) 40px, transparent 40px),
     repeating-linear-gradient(180deg, transparent 0 27px, var(--notebook-blue) 27px 28px);
   color: var(--geometry-ink);
-  border: var(--border) solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: var(--pixel-shadow) var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
   padding: var(--space-6) var(--space-6) var(--space-6) 56px;
 }
 
 [data-space='reality'] .notebook-sheet {
   background-color: var(--reality-paper);
-  background-image: repeating-linear-gradient(180deg, transparent 0 27px, #b7b2a8 27px 28px);
+  background-image:
+    radial-gradient(rgba(57, 43, 39, 0.08) 1px, transparent 1px),
+    repeating-linear-gradient(180deg, transparent 0 27px, #bdb6a9 27px 28px);
+  background-size: 5px 5px, auto;
   color: var(--reality-shadow);
   border-color: var(--reality-walnut);
-  box-shadow: none;
 }
 
 [data-space='code'] .notebook-sheet {
   background: var(--code-panel);
   color: var(--code-green);
   border: 1px solid var(--code-green-muted);
-  box-shadow: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--code-grid), 0 0 24px rgba(57, 255, 136, 0.08);
+  font-family: var(--font-code);
 }
 
-/* Buttons: rounded, thick outline, simple pixel shadow (state A of the brief). */
+/* ---------- Buttons: chunky keys with a pixel shadow -------------------- */
 .btn {
-  font: inherit;
   font-family: var(--font-pixel);
-  font-size: var(--fs-small);
+  font-size: var(--fs-ui);
+  letter-spacing: 0.04em;
   color: var(--ink);
   background: var(--surface-alt);
-  border: var(--border) solid var(--panel-border);
-  border-radius: 999px;
-  padding: 6px 16px;
-  box-shadow: 3px 3px 0 0 var(--panel-border);
+  border: 2px solid var(--panel-border);
+  border-radius: 7px;
+  padding: 7px 16px 6px;
+  box-shadow: 0 3px 0 0 var(--panel-border);
   cursor: pointer;
   transition:
-    transform var(--dur-fast),
-    box-shadow var(--dur-fast),
-    background var(--dur-fast);
+    transform var(--dur-fast) ease-out,
+    box-shadow var(--dur-fast) ease-out,
+    background-color var(--dur-fast),
+    color var(--dur-fast);
   touch-action: manipulation;
+  -webkit-font-smoothing: none;
 }
 
 .btn:hover:not(:disabled) {
   background: var(--accent-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 var(--panel-border);
 }
 
 .btn:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 0 var(--panel-border);
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 var(--panel-border);
 }
 
 .btn:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  outline: 3px dashed var(--focus);
+  outline-offset: 3px;
 }
 
 .btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   box-shadow: none;
+  transform: none;
 }
 
 .btn-primary {
   background: var(--accent);
-  color: var(--ink);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--accent-soft);
+  background: color-mix(in srgb, var(--accent) 75%, white);
 }
 
 .btn-danger {
@@ -121,26 +134,42 @@ h3 {
 
 .btn[aria-pressed='true'] {
   background: var(--accent);
-  box-shadow: inset 2px 2px 0 0 var(--panel-border);
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.25);
+  transform: translateY(2px);
 }
 
 .btn-icon {
-  padding: 0 12px;
-  font-size: 1.3em;
-  line-height: 1.4;
+  padding: 2px 10px;
+  font-size: 1.2em;
+  line-height: 1.3;
 }
 
-[data-space='reality'] .btn,
-[data-space='code'] .btn {
-  color: var(--text);
-  border-radius: 4px;
+[data-space='reality'] .btn {
+  color: var(--reality-shadow);
+  background: #e3ddd0;
+  border-radius: 3px;
 }
 
 [data-space='reality'] .btn-primary {
+  background: var(--reality-olive);
   color: var(--reality-paper);
 }
 
+[data-space='code'] .btn {
+  color: var(--code-green);
+  background: var(--code-black);
+  border: 1px solid var(--code-green-muted);
+  border-radius: 0;
+  box-shadow: 0 2px 0 var(--code-grid);
+  font-family: var(--font-code);
+}
+
+[data-space='code'] .btn:hover:not(:disabled) {
+  background: var(--code-grid);
+}
+
 [data-space='code'] .btn-primary {
+  background: var(--code-green);
   color: var(--code-black);
 }
 
@@ -149,4 +178,10 @@ h3 {
   gap: var(--space-3);
   justify-content: flex-end;
   flex-wrap: wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
 }

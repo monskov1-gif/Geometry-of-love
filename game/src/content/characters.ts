@@ -1,6 +1,7 @@
 // Character registry. Names come from the synopsis (materials/docs).
-// Every pose is either a region of a real sprite sheet or an explicit
-// placeholder, which the UI renders as a labelled silhouette.
+// Melody's VN poses are regions of her real sprite sheets; everyone else is a
+// generated pixel character (render/sprites) with emotions as poses.
+import { EMOTIONS, type Emotion } from '../render/sprites';
 import melodySheet01 from '../assets/characters/melody/melody-sheet-01.png';
 import melodySheet02 from '../assets/characters/melody/melody-sheet-02.png';
 
@@ -15,13 +16,13 @@ export interface SheetPose {
   baseline: number;
 }
 
-export interface PlaceholderPose {
-  kind: 'placeholder';
-  /** Shown on the silhouette so nobody mistakes it for final art. */
-  note: string;
+/** A pose of a generated pixel character (render/sprites): one emotion of the shared sprite. */
+export interface PixelPose {
+  kind: 'pixel';
+  emotion: Emotion;
 }
 
-export type Pose = SheetPose | PlaceholderPose;
+export type Pose = SheetPose | PixelPose;
 
 export interface CharacterDef {
   id: string;
@@ -36,8 +37,10 @@ export interface CharacterDef {
 const MELODY_SHEET_01 = { w: 2364, h: 1576 };
 const MELODY_SHEET_02 = { w: 2436, h: 1624 };
 
-const placeholder = (note = 'ВРЕМЕННАЯ ЗАГЛУШКА — спрайт ещё не нарисован'): Record<string, Pose> => ({
-  default: { kind: 'placeholder', note },
+/** Pixel characters: `default` = neutral plus every emotion of the generator. */
+const pixel = (): Record<string, Pose> => ({
+  default: { kind: 'pixel', emotion: 'neutral' },
+  ...Object.fromEntries(EMOTIONS.map((emotion) => [emotion, { kind: 'pixel', emotion } satisfies PixelPose])),
 });
 
 export const characters: Record<string, CharacterDef> = {
@@ -79,14 +82,14 @@ export const characters: Record<string, CharacterDef> = {
       },
     },
   },
-  dameo: { id: 'dameo', name: 'Дамео', accent: 'var(--rainbow-blue)', poses: placeholder() },
-  satsuki: { id: 'satsuki', name: 'Сацуки', accent: 'var(--reality-olive)', poses: placeholder() },
-  calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: placeholder() },
-  ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: placeholder() },
-  compass: { id: 'compass', name: 'Циркулёнок', accent: 'var(--lavender)', poses: placeholder() },
+  dameo: { id: 'dameo', name: 'Дамео', accent: 'var(--rainbow-blue)', poses: pixel() },
+  satsuki: { id: 'satsuki', name: 'Сацуки', accent: 'var(--reality-olive)', poses: pixel() },
+  calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: pixel() },
+  ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: pixel() },
+  compass: { id: 'compass', name: 'Циркулёнок', accent: 'var(--lavender)', poses: pixel() },
   // The synopsis never names the three eraser twins: the numbers are technical
   // labels, not names. Melody's use of a name in chapter 9 is shown erased.
-  'eraser-1': { id: 'eraser-1', name: 'Ластик №1', accent: 'var(--baby-pink)', poses: placeholder() },
-  'eraser-2': { id: 'eraser-2', name: 'Ластик №2', accent: 'var(--baby-pink)', poses: placeholder() },
-  'eraser-3': { id: 'eraser-3', name: 'Ластик №3', accent: 'var(--baby-pink)', poses: placeholder() },
+  'eraser-1': { id: 'eraser-1', name: 'Ластик №1', accent: 'var(--baby-pink)', poses: pixel() },
+  'eraser-2': { id: 'eraser-2', name: 'Ластик №2', accent: 'var(--baby-pink)', poses: pixel() },
+  'eraser-3': { id: 'eraser-3', name: 'Ластик №3', accent: 'var(--baby-pink)', poses: pixel() },
 };
