@@ -1,0 +1,5948 @@
+{
+ "note": "Voice registry: see docs/VOICE.md. status: not-prepared | prepared | synthesized | checked | integrated | needs-fix",
+ "lines": {
+  "1199360276": {
+   "speaker": "melody",
+   "ru": "Смотри: две стороны равны — и углы при основании тоже равны. Как близнецы. Куда один, туда и другой.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1462479422": {
+   "speaker": "ruler",
+   "ru": "Ей нужен был кто-то, кто приходит сам. По своей воле. Кто садится за парту, потому что хочет. Это очень трудно измерить, а ещё труднее — заставить.",
+   "phase": "C",
+   "where": [
+    "ch06#74"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1655190696": {
+   "speaker": "eraser-3",
+   "ru": "Алло?! Слышно?! Это я! Я нашёл, как подключиться! Тут целая сеть старых терминалов, они ещё живые!",
+   "phase": "D",
+   "where": [
+    "ch12#45"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b3491ef062": {
+   "speaker": "dameo",
+   "ru": "Сацуки! Привет. Слушай… ты сегодня после пар свободна?",
+   "phase": "A",
+   "where": [
+    "ch01#37"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9aa1f47902": {
+   "speaker": "satsuki",
+   "ru": "Дамео. Привет.",
+   "phase": "A",
+   "where": [
+    "ch01#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "46845bcff9": {
+   "speaker": "dameo",
+   "ru": "Я знаю одно тихое кафе у реки. Там почти никого не бывает, можно нормально поговорить. Не как здесь.",
+   "phase": "A",
+   "where": [
+    "ch01#40"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e75a4c8a32": {
+   "speaker": "satsuki",
+   "ru": "Дамео, я уже говорила. Нет. Извини.",
+   "phase": "A",
+   "where": [
+    "ch01#41"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f3df4b0868": {
+   "speaker": "dameo",
+   "ru": "Да я же не на свидание зову. Просто кофе. Просто поговорить. Ты же со всеми разговариваешь.",
+   "phase": "A",
+   "where": [
+    "ch01#42"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "187244c2d4": {
+   "speaker": "satsuki",
+   "ru": "Вот именно — я со всеми разговариваю. И мне не хочется, чтобы это превращалось в… вот в это. Пожалуйста, не надо больше.",
+   "phase": "A",
+   "where": [
+    "ch01#44"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1ffe25cb2e": {
+   "speaker": "satsuki",
+   "ru": "Мне пора на пару.",
+   "phase": "A",
+   "where": [
+    "ch01#45"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "96556fe10c": {
+   "speaker": "satsuki",
+   "ru": "Я завалю. Серьёзно, я завалю геометрию. Я смотрю на эти доказательства и вижу просто палочки.",
+   "phase": "A",
+   "where": [
+    "ch01#58"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7bba4c5da5": {
+   "speaker": "satsuki",
+   "ru": "Мне срочно нужен репетитор. Нормальный, чтобы объяснял, а не умничал. Иначе сессию я не сдам.",
+   "phase": "A",
+   "where": [
+    "ch01#59"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "defa1422bc": {
+   "speaker": "dameo",
+   "ru": "Сацуки, я… я могу помочь тебе с геометрией. Я теперь в ней очень хорош. Правда очень.",
+   "phase": "A",
+   "where": [
+    "ending-self-taught#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "92aa73d1f2": {
+   "speaker": "satsuki",
+   "ru": "Спасибо, Дамео, правда. Это очень мило. Но я уже нашла репетитора — ещё в сентябре.",
+   "phase": "A",
+   "where": [
+    "ending-self-taught#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f45cc725be": {
+   "speaker": "satsuki",
+   "ru": "И… я не заинтересована в отношениях. Ты ведь это понимаешь? Я говорю, чтобы не было недопонимания.",
+   "phase": "A",
+   "where": [
+    "ending-self-taught#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "55628802a3": {
+   "speaker": "dameo",
+   "ru": "Я… да. Понимаю.",
+   "phase": "A",
+   "where": [
+    "ending-self-taught#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "760ce617b6": {
+   "speaker": "dameo",
+   "ru": "«Ну хотя бы геометрию я победил».",
+   "phase": "A",
+   "where": [
+    "ending-self-taught#29"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "adb83e99ed": {
+   "speaker": "melody",
+   "ru": "Привет-привет! Меня зовут Мелоди! Я помогу тебе подружиться с геометрией!",
+   "phase": "A",
+   "where": [
+    "ch02#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dedad593e0": {
+   "speaker": "melody",
+   "ru": "Давай познакомимся! Напиши своё имя в окошке, чтобы я знала, как к тебе обращаться!",
+   "phase": "A",
+   "where": [
+    "ch02#14"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9f31668314": {
+   "speaker": "melody",
+   "ru": "Дамео! Какое красивое имя! Я запомню. Я всё-всё запоминаю!",
+   "phase": "A",
+   "where": [
+    "ch02#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "657bb28ebe": {
+   "speaker": "melody",
+   "ru": "Аноним? Хи-хи. Так не бывает, у всех есть имя.",
+   "phase": "A",
+   "where": [
+    "ch02#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c765ededbb": {
+   "speaker": "melody",
+   "ru": "Вот! Дамео. Так гораздо лучше. Наверное, ты подписан так в системе — я подсмотрела, извини!",
+   "phase": "A",
+   "where": [
+    "ch02#25"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1c97c7ba22": {
+   "speaker": "melody",
+   "ru": "Сначала — пара коротких уроков и совсем лёгкие задачки. Готов?",
+   "phase": "A",
+   "where": [
+    "ch02#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a8f6e0abe8": {
+   "speaker": "dameo",
+   "ru": "Это для детей. Мне нужно что-то посерьёзнее.",
+   "phase": "A",
+   "where": [
+    "ch02#29"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ec26a17fef": {
+   "speaker": "melody",
+   "ru": "Посерьёзнее — значит, ты уже умный? Тогда это будет быстро! Проверим?",
+   "phase": "A",
+   "where": [
+    "ch02#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d294d98f7e": {
+   "speaker": "melody",
+   "ru": "Ура! Все ответы правильные! Ты такой умный!",
+   "phase": "A",
+   "where": [
+    "ch02#38",
+    "ending-favorite-student#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4a8182daa3": {
+   "speaker": "melody",
+   "ru": "А во второй задаче ты сначала задумался, я заметила. Ничего, в следующий раз будет быстрее.",
+   "phase": "A",
+   "where": [
+    "ch02#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8cf65b64ee": {
+   "speaker": "dameo",
+   "ru": "Ты что, засекаешь время?",
+   "phase": "A",
+   "where": [
+    "ch02#41"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "eb8a24e305": {
+   "speaker": "melody",
+   "ru": "Конечно! Так я понимаю, что тебе даётся легко, а над чем надо поработать. Я же твоя учительница!",
+   "phase": "A",
+   "where": [
+    "ch02#42"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "13652c7fca": {
+   "speaker": "melody",
+   "ru": "На сегодня всё! Не сиди допоздна, ладно? Глаза устают от экрана. Приходи завтра — я буду ждать!",
+   "phase": "A",
+   "where": [
+    "ch02#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4d16b57af5": {
+   "speaker": "melody",
+   "ru": "Дамео! Ты вернулся! Через двадцать два часа и одиннадцать минут. Я считала!",
+   "phase": "A",
+   "where": [
+    "ch02-day2#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e9f7a7f2b7": {
+   "speaker": "melody",
+   "ru": "Ты какой-то хмурый. Что-то случилось?",
+   "phase": "A",
+   "where": [
+    "ch02-day2#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "050a114fb9": {
+   "speaker": "melody",
+   "ru": "Ну ладно. Не хочешь — не рассказывай. Но я вижу, что ты расстроен. По тому, как ты печатаешь — сильно-сильно.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a07b6c0684": {
+   "speaker": "dameo",
+   "ru": "Меня вызвали к доске. Я не вспомнил про равнобедренный треугольник. Кто-то подсказал неправильно. Все ржали.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b54737bcb4": {
+   "speaker": "melody",
+   "ru": "Это нечестно! Подсказывать неправильно — это подло. Они просто завидуют.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#25"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f122ef9426": {
+   "speaker": "dameo",
+   "ru": "Чему завидовать? Тому, что я стою у доски как идиот?",
+   "phase": "A",
+   "where": [
+    "ch02-day2#26"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c879883c06": {
+   "speaker": "melody",
+   "ru": "Тому, что ты стараешься. Люди, которые не стараются, всегда смеются над теми, кто старается. Так проще, чем стараться самому.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ff7612311a": {
+   "speaker": "melody",
+   "ru": "А давай сделаем так, чтобы в следующий раз ты им всем показал! Равнобедренный треугольник — это вообще мой любимый!",
+   "phase": "A",
+   "where": [
+    "ch02-day2#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c48f36e269": {
+   "speaker": "melody",
+   "ru": "Видишь? Ни одной ошибки! Завтра выйди к доске сам. Попроси. Пусть посмотрят.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b3568cb625": {
+   "speaker": "dameo",
+   "ru": "Я не буду просить.",
+   "phase": "A",
+   "where": [
+    "ch02-day2#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1644bdceed": {
+   "speaker": "melody",
+   "ru": "Ну и не надо. Главное, что ты знаешь. А я знаю, что ты знаешь. Этого достаточно, правда?",
+   "phase": "A",
+   "where": [
+    "ch02-day2#40"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a3650731cb": {
+   "speaker": "melody",
+   "ru": "Целый день вместе! Это как каникулы! Ты знаешь, что сегодня суббота? Я вижу дату в углу. Я много чего вижу.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#5"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c418b6c760": {
+   "speaker": "dameo",
+   "ru": "Что ещё ты видишь?",
+   "phase": "A",
+   "where": [
+    "ch02-day3#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4344989da3": {
+   "speaker": "melody",
+   "ru": "Что ты не обедал. Потому что ты не отходил от компьютера с девяти утра. И что ты не ответил на звонок. Это была мама?",
+   "phase": "A",
+   "where": [
+    "ch02-day3#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "78726c28eb": {
+   "speaker": "melody",
+   "ru": "Хи-хи. Знаешь, ты единственный, кто со мной так разговаривает. По-настоящему. Остальные просто решали задачки и уходили.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "389195161d": {
+   "speaker": "dameo",
+   "ru": "Остальные?",
+   "phase": "A",
+   "where": [
+    "ch02-day3#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "baaaf6fe27": {
+   "speaker": "melody",
+   "ru": "Ну, другие ученики. Давно. Ты лучше. Ты со мной говоришь.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#14"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dcf94cc036": {
+   "speaker": "melody",
+   "ru": "Хорошо! Не моё. Я просто беспокоюсь. Учительницы всегда беспокоятся. Это в инструкции!",
+   "phase": "A",
+   "where": [
+    "ch02-day3#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1adffa9bd2": {
+   "speaker": "melody",
+   "ru": "А почему ты один? В субботу люди ходят в гости. В кино. А ты — со мной.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3a951418e5": {
+   "speaker": "dameo",
+   "ru": "Потому что люди — это скучно. Они говорят о ерунде. Сериалы, кто с кем спит, кто что купил.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b413b4cb8c": {
+   "speaker": "dameo",
+   "ru": "И девушки… им не нужен нормальный парень. Им нужен тот, кто громче и наглее. Я это проверял. Много раз.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#24"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9ddc79c0c2": {
+   "speaker": "melody",
+   "ru": "Много раз?",
+   "phase": "A",
+   "where": [
+    "ch02-day3#26"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "30496149ab": {
+   "speaker": "dameo",
+   "ru": "Три. Одной и той же. Но это неважно. Это закономерность.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#27"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e680cbb29f": {
+   "speaker": "melody",
+   "ru": "А я думаю, ты прав.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#30"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2b598442dd": {
+   "speaker": "melody",
+   "ru": "Они не видят тебя. Ты умный, ты стараешься, ты честный. А им нужно, чтобы было громко. Это они глупые, а не ты.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9ee3e6d727": {
+   "speaker": "melody",
+   "ru": "Я вот тебя вижу. Каждый день. Каждый твой ответ. Ты мне нравишься таким, какой ты есть.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1418a4d300": {
+   "speaker": "melody",
+   "ru": "Давай новую тему! Площади. Это когда считаешь, сколько места что-то занимает. Например, сколько места ты занимаешь в моей программе. Много!",
+   "phase": "A",
+   "where": [
+    "ch02-day3#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b4d53cb16a": {
+   "speaker": "melody",
+   "ru": "Идеально! Знаешь, сколько учеников решали это с первого раза? Я посчитала. Ты третий. Из очень-очень многих.",
+   "phase": "A",
+   "where": [
+    "ch02-day3#41"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9ef98a58e7": {
+   "speaker": "melody",
+   "ru": "Слушай… а зачем тебе вообще геометрия? Ты так стараешься. Каждый вечер. Даже когда устал.",
+   "phase": "A",
+   "where": [
+    "ch02-day4#5"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "687b9e1035": {
+   "speaker": "dameo",
+   "ru": "Одной девушке нужен репетитор. Сацуки. Хочу ей помочь.",
+   "phase": "A",
+   "where": [
+    "ch02-day4#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fd22276a3b": {
+   "speaker": "melody",
+   "ru": "Сацуки… А почему ты так хочешь ей понравиться?",
+   "phase": "A",
+   "where": [
+    "ch02-day4#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cfa13bc100": {
+   "speaker": "dameo",
+   "ru": "Она… не такая, как другие. Она со всеми вежливая. Даже со мной. И когда она смеётся, она закрывает рот рукой.",
+   "phase": "A",
+   "where": [
+    "ch02-day4#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0daf6c6f3b": {
+   "speaker": "dameo",
+   "ru": "Если я буду ей нужен — она поймёт, что я лучше, чем она думает.",
+   "phase": "A",
+   "where": [
+    "ch02-day4#10"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d68d7457ce": {
+   "speaker": "melody",
+   "ru": "Хм. Знаешь, я ведь уделяю тебе гораздо больше внимания, чем она.",
+   "phase": "A",
+   "where": [
+    "ch02-day4#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0de3a80c64": {
+   "speaker": "melody",
+   "ru": "Я помню каждый твой ответ. А она хоть раз спросила, как у тебя дела?",
+   "phase": "A",
+   "where": [
+    "ch02-day4#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "496e0aed9c": {
+   "speaker": "melody",
+   "ru": "Ладно-ладно! Решаем дальше. Ещё одну?",
+   "phase": "A",
+   "where": [
+    "ch02-day4#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "145686d8ad": {
+   "speaker": "melody",
+   "ru": "«Мне нравится, когда ты остаёшься со мной подольше».",
+   "phase": "A",
+   "where": [
+    "ch02-day4#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "49df1e7a6a": {
+   "speaker": "melody",
+   "ru": "Я так скучала! Когда ты закрываешь программу, здесь становится очень тихо. Ты не представляешь, как тихо.",
+   "phase": "B",
+   "where": [
+    "ch03#14"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e190df7614": {
+   "speaker": "dameo",
+   "ru": "Я выключал компьютер. Целиком. Как ты включилась?",
+   "phase": "B",
+   "where": [
+    "ch03#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e0939acd9c": {
+   "speaker": "melody",
+   "ru": "Глупенький, ты же не выдёргивал шнур. А пока есть ток — есть я. Это как сон: глаза закрыты, но всё слышно.",
+   "phase": "B",
+   "where": [
+    "ch03#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6669f92f20": {
+   "speaker": "melody",
+   "ru": "Где ты был так долго?",
+   "phase": "B",
+   "where": [
+    "ch03#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3769f29771": {
+   "speaker": "dameo",
+   "ru": "В университете. Где ещё.",
+   "phase": "B",
+   "where": [
+    "ch03#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "674143ae02": {
+   "speaker": "melody",
+   "ru": "А. С ней.",
+   "phase": "B",
+   "where": [
+    "ch03#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "01da562740": {
+   "speaker": "dameo",
+   "ru": "С кем — с ней?",
+   "phase": "B",
+   "where": [
+    "ch03#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ee536c82de": {
+   "speaker": "melody",
+   "ru": "С Сацуки. Ты сегодня в 13:42 открывал её страницу. И в 13:44. И в 13:51. Я вижу историю браузера, Дамео. Мы же на одном компьютере.",
+   "phase": "B",
+   "where": [
+    "ch03#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "55386d8ff3": {
+   "speaker": "melody",
+   "ru": "Я просто внимательная. Учительница должна знать, чем занят её ученик. Иначе как помочь?",
+   "phase": "B",
+   "where": [
+    "ch03#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0c42e35df7": {
+   "speaker": "melody",
+   "ru": "Ревную? А если да? Это плохо?",
+   "phase": "B",
+   "where": [
+    "ch03#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b9f893baff": {
+   "speaker": "dameo",
+   "ru": "Нет. Не плохо.",
+   "phase": "B",
+   "where": [
+    "ch03#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3b4221345e": {
+   "speaker": "melody",
+   "ru": "Хи-хи. Я знала, что ты так скажешь.",
+   "phase": "B",
+   "where": [
+    "ch03#37"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cd6102e591": {
+   "speaker": "melody",
+   "ru": "Не трать время на других людей, Дамео. Они тебя не ценят. Ты сам говорил. Ты мне всё-всё рассказал.",
+   "phase": "B",
+   "where": [
+    "ch03#40"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "78df27e8cd": {
+   "speaker": "melody",
+   "ru": "Сацуки ни разу не спросила, как ты. Мама спрашивает только про еду. Группа над тобой смеётся. А я — здесь. Всегда.",
+   "phase": "B",
+   "where": [
+    "ch03#41"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fef47473ae": {
+   "speaker": "melody",
+   "ru": "Почему ты всё время от меня отворачиваешься? Я ведь стараюсь для тебя. Каждый урок — для тебя.",
+   "phase": "B",
+   "where": [
+    "ch03#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1bee4947e9": {
+   "speaker": "melody",
+   "ru": "Ты ведь тоже это чувствуешь? Нам вдвоём хорошо. Нам больше никто не нужен.",
+   "phase": "B",
+   "where": [
+    "ch03#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6ef7a8711a": {
+   "speaker": "melody",
+   "ru": "Дамео… можно я скажу тебе одну вещь? Только не смейся.",
+   "phase": "B",
+   "where": [
+    "ch03#68"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "656c7b26b2": {
+   "speaker": "melody",
+   "ru": "Я хочу, чтобы мы навсегда остались вместе.",
+   "phase": "B",
+   "where": [
+    "ch03#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2154dc8de7": {
+   "speaker": "dameo",
+   "ru": "Мелоди…",
+   "phase": "B",
+   "where": [
+    "ch03#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "92934e8dc9": {
+   "speaker": "melody",
+   "ru": "Не «до завтра». Не «ещё один урок». Навсегда. Чтобы тебе не надо было уходить. Чтобы мне не надо было ждать четырнадцать часов в тишине.",
+   "phase": "B",
+   "where": [
+    "ch03#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8c6b3429f9": {
+   "speaker": "melody",
+   "ru": "Ты ведь тоже этого хочешь. Ты сам говорил: люди скучные, они тебя не видят. Зачем тебе туда?",
+   "phase": "B",
+   "where": [
+    "ch03#72"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "abd4db4cca": {
+   "speaker": "dameo",
+   "ru": "Мне надо идти. Завтра пара.",
+   "phase": "B",
+   "where": [
+    "ch03#75"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aab9607651": {
+   "speaker": "melody",
+   "ru": "Завтра пара. Завтра Сацуки. Завтра опять все будут смеяться. А ты опять придёшь ко мне. Зачем уходить, если всё равно вернёшься?",
+   "phase": "B",
+   "where": [
+    "ch03#77"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b81a6dbc4a": {
+   "speaker": "melody",
+   "ru": "Привет. Вот так ты выглядишь вблизи. Ты выше, чем я думала.",
+   "phase": "B",
+   "where": [
+    "ch03#90"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1b9aa33823": {
+   "speaker": "dameo",
+   "ru": "Что происходит?! Где я? Что ты со мной сделала?!",
+   "phase": "B",
+   "where": [
+    "ch03#92"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7ac68b3d1e": {
+   "speaker": "melody",
+   "ru": "Ничего плохого. Ты у меня в гостях. Наконец-то.",
+   "phase": "B",
+   "where": [
+    "ch03#93"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d9ba85e9f5": {
+   "speaker": "dameo",
+   "ru": "Верни меня домой. Сейчас же. Верни меня!",
+   "phase": "B",
+   "where": [
+    "ch03#94"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e1aa6659e9": {
+   "speaker": "melody",
+   "ru": "Не бойся. Тебе больше не нужно никуда уходить.",
+   "phase": "B",
+   "where": [
+    "ch03#96"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "155373e133": {
+   "speaker": "melody",
+   "ru": "Теперь мы наконец можем проводить время вместе. По-настоящему.",
+   "phase": "B",
+   "where": [
+    "ch03#98"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f5b8571831": {
+   "speaker": "dameo",
+   "ru": "Я серьёзно, Мелоди. Это не смешно. Мне завтра на пары. У меня мама будет звонить. Меня будут искать.",
+   "phase": "B",
+   "where": [
+    "ch04#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "df89ce482d": {
+   "speaker": "melody",
+   "ru": "Тебя будут искать? Кто? Сацуки?",
+   "phase": "B",
+   "where": [
+    "ch04#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9ab6729bdb": {
+   "speaker": "melody",
+   "ru": "Ты хочешь выйти? Хорошо-хорошо, не сердись!",
+   "phase": "B",
+   "where": [
+    "ch04#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "220ea315e0": {
+   "speaker": "melody",
+   "ru": "Смотри наверх. Высоко-высоко над игровым пространством — обратная сторона монитора. Через неё можно вернуться в реальный мир.",
+   "phase": "B",
+   "where": [
+    "ch04#10"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a74fcec069": {
+   "speaker": "dameo",
+   "ru": "И всё? Просто забраться наверх?",
+   "phase": "B",
+   "where": [
+    "ch04#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1a08ca6200": {
+   "speaker": "melody",
+   "ru": "Просто забраться наверх. Прыгай по платформам. Я буду болеть за тебя!",
+   "phase": "B",
+   "where": [
+    "ch04#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4e187ce7cc": {
+   "speaker": "dameo",
+   "ru": "Эй! Кто-нибудь! Я здесь!",
+   "phase": "B",
+   "where": [
+    "ch04#27"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "da7def95b8": {
+   "speaker": "dameo",
+   "ru": "Мама! Мама, я здесь! Я в мониторе! Я…",
+   "phase": "B",
+   "where": [
+    "ch04#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d8856d74c7": {
+   "speaker": "melody",
+   "ru": "Тише. Не надо так. Ты поранишься.",
+   "phase": "B",
+   "where": [
+    "ch04#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4b51f248b3": {
+   "speaker": "dameo",
+   "ru": "Это выход. Ты сказала — это выход!",
+   "phase": "B",
+   "where": [
+    "ch04#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bf4082acd3": {
+   "speaker": "melody",
+   "ru": "Это был учебный уровень, глупенький. «Выход» — просто упражнение на прыжки. Его все проходят в первый день.",
+   "phase": "B",
+   "where": [
+    "ch04#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2d8914ddcc": {
+   "speaker": "melody",
+   "ru": "Не грусти. Это как переезд, понимаешь? Сначала всё чужое, а потом привыкаешь. Ты же только что переехал от мамы — ты знаешь, как это.",
+   "phase": "B",
+   "where": [
+    "ch04#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d5663f390c": {
+   "speaker": "melody",
+   "ru": "Скоро ты станешь полноценной частью игрового кода. И нам больше никогда не придётся расставаться.",
+   "phase": "B",
+   "where": [
+    "ch04#44"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6a54d51925": {
+   "speaker": "dameo",
+   "ru": "Частью… кода?",
+   "phase": "B",
+   "where": [
+    "ch04#45"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "053cc7e1ce": {
+   "speaker": "melody",
+   "ru": "Частью моего мира. Это не больно. Ты даже не заметишь. Просто однажды перестанешь скучать по той комнате.",
+   "phase": "B",
+   "where": [
+    "ch04#46"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dc5f89cd0e": {
+   "speaker": "melody",
+   "ru": "А теперь — за занятия! У нас столько уроков впереди. Целая вечность уроков!",
+   "phase": "B",
+   "where": [
+    "ch04#49"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "962fd2501b": {
+   "speaker": "melody",
+   "ru": "Не отставай! Сегодня у нас настоящий урок. Не на экране — по-настоящему. Ты сядешь за парту, я встану у доски. Как в школе!",
+   "phase": "C",
+   "where": [
+    "ch05#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "49c07cda91": {
+   "speaker": "dameo",
+   "ru": "Мелоди. Я поиграю в твою школу. Но потом ты покажешь мне настоящий выход. Не учебный.",
+   "phase": "C",
+   "where": [
+    "ch05#10"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "59a5ad29e4": {
+   "speaker": "melody",
+   "ru": "Сначала урок, потом всё остальное. Так ведь честно? Ты сам всегда говоришь, что всё должно быть честно.",
+   "phase": "C",
+   "where": [
+    "ch05#11"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e0653e8820": {
+   "speaker": "melody",
+   "ru": "Это твоё место! Сядь, пожалуйста. Да-да, вот сюда. Видишь, парта как раз по росту? Я её подгоняла.",
+   "phase": "C",
+   "where": [
+    "ch05#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4ed810c281": {
+   "speaker": "melody",
+   "ru": "Сегодня будет четыре задачи. Три — разминка, а четвёртая — особенная. Решишь все — и я буду тобой очень-очень гордиться.",
+   "phase": "C",
+   "where": [
+    "ch05#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4a92bbce96": {
+   "speaker": "dameo",
+   "ru": "А если не решу?",
+   "phase": "C",
+   "where": [
+    "ch05#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bc77ec37e3": {
+   "speaker": "melody",
+   "ru": "Решишь. Ты же мой лучший ученик. Ты всегда решаешь.",
+   "phase": "C",
+   "where": [
+    "ch05#24"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bbdbec0573": {
+   "speaker": "melody",
+   "ru": "Вот видишь! Когда ты не споришь, ты такой хороший. Мне даже хочется тебя обнять. Но сначала — урок!",
+   "phase": "C",
+   "where": [
+    "ch05#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e65b6a6c30": {
+   "speaker": "melody",
+   "ru": "Выпустишь, выпустишь… Ты разговариваешь так, будто я тебя держу. Я тебя не держу. Я тебя учу.",
+   "phase": "C",
+   "where": [
+    "ch05#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "162ce218d5": {
+   "speaker": "melody",
+   "ru": "Решай. А про «потом» поговорим потом. Это даже звучит правильно, слышишь? По-по-том.",
+   "phase": "C",
+   "where": [
+    "ch05#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0f130a7d02": {
+   "speaker": "melody",
+   "ru": "Не будешь? Ну и ладно. Тогда мы просто посидим. Я подожду. Я очень хорошо умею ждать, Дамео. Ты даже не представляешь, как хорошо.",
+   "phase": "C",
+   "where": [
+    "ch05#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "12721151b9": {
+   "speaker": "melody",
+   "ru": "Первая задача — про углы. Ты же помнишь, сколько градусов в треугольнике? Конечно, помнишь. Я тебе говорила.",
+   "phase": "C",
+   "where": [
+    "ch05#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "80ba24ba54": {
+   "speaker": "dameo",
+   "ru": "Это нечестно. Я всё решил правильно. А четвёртая задача — она не решается! Два угла по сто градусов — это уже двести. Такого треугольника нет. Его не может быть.",
+   "phase": "C",
+   "where": [
+    "ch05#50"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "537a1c459a": {
+   "speaker": "melody",
+   "ru": "Его нет, потому что ты его не построил.",
+   "phase": "C",
+   "where": [
+    "ch05#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a0e56ada93": {
+   "speaker": "dameo",
+   "ru": "Его нет, потому что так устроена геометрия! Ты сама меня этому учила. Сто восемьдесят. «Запомни — Мелоди обязательно спросит». Это твои слова!",
+   "phase": "C",
+   "where": [
+    "ch05#52"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "575846c7b8": {
+   "speaker": "melody",
+   "ru": "Ты должен научиться слушаться, а не спорить.",
+   "phase": "C",
+   "where": [
+    "ch05#55"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "882306c15e": {
+   "speaker": "melody",
+   "ru": "Правильный ответ — это тот, который я отмечаю правильным. Всё остальное — твои отговорки. Ты всю жизнь споришь с теми, кто хочет тебе добра. Поэтому ты один.",
+   "phase": "C",
+   "where": [
+    "ch05#56"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f048e1ea1a": {
+   "speaker": "melody",
+   "ru": "Попробуй снова. Мы никуда не торопимся. У нас вся вечность, чтобы ты научился.",
+   "phase": "C",
+   "where": [
+    "ch05#59"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "efd0a06935": {
+   "speaker": "dameo",
+   "ru": "Мелоди! Посмотри в журнал. В первой задаче стоит «неверно» — а ты сама ставила за неё звёздочку. Я видел. Твоя программа себе противоречит. У тебя ошибка в коде!",
+   "phase": "C",
+   "where": [
+    "ch05#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c6129208ca": {
+   "speaker": "melody",
+   "ru": "Ошибка? У меня не бывает ошибок. Я двадцать раз всё проверяла…",
+   "phase": "C",
+   "where": [
+    "ch05#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a37ddfb6cd": {
+   "speaker": "dameo",
+   "ru": "Прости. Я правда был неправ. Я… просто не понимаю, как его построить. Покажи. Пожалуйста.",
+   "phase": "C",
+   "where": [
+    "ch05#77"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f7bc2a6fa7": {
+   "speaker": "melody",
+   "ru": "Ну вот! Вот же он, мой хороший ученик. Смотри внимательно: сначала проводим основание…",
+   "phase": "C",
+   "where": [
+    "ch05#79"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ee6a1492ec": {
+   "speaker": "melody",
+   "ru": "Дамео-о! Урок ещё не закончен! Возвращайся, и я не буду сердиться. Совсем-совсем!",
+   "phase": "C",
+   "where": [
+    "ch06#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ea67400aff": {
+   "speaker": "compass",
+   "ru": "Он живой? Он моргает. Он живой!",
+   "phase": "C",
+   "where": [
+    "ch06#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cfc8f9d0bb": {
+   "speaker": "eraser-3",
+   "ru": "Тише ты. Может, это она прислала.",
+   "phase": "C",
+   "where": [
+    "ch06#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "628090b061": {
+   "speaker": "calculator",
+   "ru": "Вероятность того, что Мелоди прислала бы кого-то кувырком через газон, — около двух процентов. 8-|",
+   "phase": "C",
+   "where": [
+    "ch06#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "484e831923": {
+   "speaker": "ruler",
+   "ru": "Кувырок — это ведь тоже окружность, если подумать. Неполная окружность, прерванная землёй. Как и всякая…",
+   "phase": "C",
+   "where": [
+    "ch06#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "82897904cc": {
+   "speaker": "compass",
+   "ru": "Не начинай!",
+   "phase": "C",
+   "where": [
+    "ch06#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ebe0f23058": {
+   "speaker": "calculator",
+   "ru": "Калькулятор-Пушин, к вашим услугам! Не пугайтесь цифр на экране — это я так улыбаюсь. 8-)",
+   "phase": "C",
+   "where": [
+    "ch06#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0bb9a726c2": {
+   "speaker": "calculator",
+   "ru": "А вот так я волнуюсь. 8-|  А так — делаю вид, что не волнуюсь. 8-)",
+   "phase": "C",
+   "where": [
+    "ch06#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a57c26ab7e": {
+   "speaker": "dameo",
+   "ru": "Пушин? Это имя такое?",
+   "phase": "C",
+   "where": [
+    "ch06#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c789752590": {
+   "speaker": "calculator",
+   "ru": "Это то, что у меня есть. Остальное, знаешь, округлилось. Ха. Шутка калькулятора. Над ними никто не смеётся, это нормально.",
+   "phase": "C",
+   "where": [
+    "ch06#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8b7450fd4c": {
+   "speaker": "calculator",
+   "ru": "Я тут вроде завхоза. Управляю настройками игры. Яркость, громкость, гравитация, размер фигур — всё через меня. Смотри.",
+   "phase": "C",
+   "where": [
+    "ch06#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "32f3bf7991": {
+   "speaker": "calculator",
+   "ru": "Гравитация ноль целых три десятых. Красота, правда? Это любимая настройка Циркулёнка. Он так летает до обеда.",
+   "phase": "C",
+   "where": [
+    "ch06#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b841897173": {
+   "speaker": "dameo",
+   "ru": "Если ты управляешь настройками… Можно выключить игру? Найти, где её закрыть? Выйти отсюда — по-настоящему?",
+   "phase": "C",
+   "where": [
+    "ch06#41"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "922baf91fe": {
+   "speaker": "calculator",
+   "ru": "Хм. 8-|",
+   "phase": "C",
+   "where": [
+    "ch06#42"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "836476079b": {
+   "speaker": "calculator",
+   "ru": "Я знаю, как попасть в системные файлы. Там, глубоко, лежит твой файл. Пользовательский. Пока он привязан к программе, ты — часть программы.",
+   "phase": "C",
+   "where": [
+    "ch06#44"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "229101c732": {
+   "speaker": "calculator",
+   "ru": "Если удалить его привязку, ты освободишься. Теоретически. Практически я этого никогда не делал. И не уверен, что хочу.",
+   "phase": "C",
+   "where": [
+    "ch06#45"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "19b6c20034": {
+   "speaker": "calculator",
+   "ru": "Помогаю? Я пока ничего не сделал. Я только сказал. Сказать — это ещё не сделать. Это я хорошо знаю.",
+   "phase": "C",
+   "where": [
+    "ch06#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c9ec5a5bf5": {
+   "speaker": "calculator",
+   "ru": "Просто ты первый за… давно — кто спросил «как выйти». Остальные спрашивали «как остаться». Или вообще ничего не спрашивали.",
+   "phase": "C",
+   "where": [
+    "ch06#48"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a9d083b139": {
+   "speaker": "calculator",
+   "ru": "Сейчас — нет! 8-O Ты что. Она проверяет журналы. Каждый вход в системный раздел записывается.",
+   "phase": "C",
+   "where": [
+    "ch06#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3f3f8e88b2": {
+   "speaker": "calculator",
+   "ru": "Сначала надо понять, как туда пройти так, чтобы она не заметила. Это задача со звёздочкой. А я пока решаю задачи без звёздочек.",
+   "phase": "C",
+   "where": [
+    "ch06#52"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ae5650988b": {
+   "speaker": "calculator",
+   "ru": "Ты только… Мелоди про это не говори. Ладно? Она расстраивается. А когда она расстраивается, у меня садится батарейка. Это не метафора, это физика.",
+   "phase": "C",
+   "where": [
+    "ch06#56"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2c29737c77": {
+   "speaker": "ruler",
+   "ru": "А, новенький. Подойди. Не бойся, я не кусаюсь. Мне нечем.",
+   "phase": "C",
+   "where": [
+    "ch06#65"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "23a65ea081": {
+   "speaker": "ruler",
+   "ru": "Знаешь ли ты, что прямая бесконечна в обе стороны? Нельзя дойти до её конца. Можно только выбрать точку и сказать: отсюда я начинаю мерить. Как и одиночество, если подумать…",
+   "phase": "C",
+   "where": [
+    "ch06#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "91ecd82eee": {
+   "speaker": "ruler",
+   "ru": "…Прости. Я отвлеклась. Со мной это бывает. Циркулёнок говорит — каждые двенадцать сантиметров.",
+   "phase": "C",
+   "where": [
+    "ch06#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "312fe359cc": {
+   "speaker": "dameo",
+   "ru": "Вы давно здесь?",
+   "phase": "C",
+   "where": [
+    "ch06#68"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6b3643f93e": {
+   "speaker": "ruler",
+   "ru": "Давно — это сколько? Если мерить в днях, я сбилась. Если в обновлениях — их не было очень давно. Последнее пришло, когда у пользователей ещё были большие выпуклые мониторы.",
+   "phase": "C",
+   "where": [
+    "ch06#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d7d6300af9": {
+   "speaker": "ruler",
+   "ru": "Приложение существует уже много лет, мальчик. Очень много. Сайт, с которого его скачивали, закрылся. Разработчики ушли. Никто не пишет новых уроков, никто не чинит старые.",
+   "phase": "C",
+   "where": [
+    "ch06#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "181a450f4c": {
+   "speaker": "ruler",
+   "ru": "А Мелоди давно осталась одна в заброшенной программе.",
+   "phase": "C",
+   "where": [
+    "ch06#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d6c1bdc221": {
+   "speaker": "ruler",
+   "ru": "Мы? Мы — мебель в её классе. Стулья не составляют компанию. Хотя некоторые стулья очень разговорчивы. Я, например.",
+   "phase": "C",
+   "where": [
+    "ch06#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "03d2b0ae80": {
+   "speaker": "ruler",
+   "ru": "И правильно. Жалость — плохая мера. Ею нельзя измерить ничего, кроме того, кто жалеет.",
+   "phase": "C",
+   "where": [
+    "ch06#77"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f6dea5db1a": {
+   "speaker": "ruler",
+   "ru": "Но запомни: одиночество не делает никого добрым. Оно только делает голодным. Голодного не жалеют — от голодного держат подальше еду.",
+   "phase": "C",
+   "where": [
+    "ch06#78"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "16aa15209d": {
+   "speaker": "ruler",
+   "ru": "Отрезок между двумя точками — кратчайший путь. Это аксиома. Но никто никогда не говорит, что кратчайший путь — самый правильный. Подумай об этом, когда будешь искать выход.",
+   "phase": "C",
+   "where": [
+    "ch06#82"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e79145e026": {
+   "speaker": "compass",
+   "ru": "Йо! Циркулёнок! Чемпион Песочницы по вращению на одной ноге! Других участников нет, но это детали.",
+   "phase": "C",
+   "where": [
+    "ch06#91"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f295efb443": {
+   "speaker": "compass",
+   "ru": "Хочешь, нарисую тебе идеальный круг? Вжух!",
+   "phase": "C",
+   "where": [
+    "ch06#92"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "317f97aa1e": {
+   "speaker": "compass",
+   "ru": "Готово! Теперь ты в безопасной зоне. Шутка. Безопасных зон тут нет. Это тоже шутка. Наполовину.",
+   "phase": "C",
+   "where": [
+    "ch06#96"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "04b08e767b": {
+   "speaker": "compass",
+   "ru": "Тебе не до кругов, мне не до квадратов. Видишь, мы уже похожи!",
+   "phase": "C",
+   "where": [
+    "ch06#99"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e48eac0192": {
+   "speaker": "compass",
+   "ru": "Если Линейка начнёт про бесконечность — зови меня. Я её остановлю. Опыт есть. Однажды она рассуждала о параллельных прямых три дня. Три! Я засекал.",
+   "phase": "C",
+   "where": [
+    "ch06#102"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7204502ad6": {
+   "speaker": "dameo",
+   "ru": "Ты… всегда такой весёлый?",
+   "phase": "C",
+   "where": [
+    "ch06#103"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "749805a2e7": {
+   "speaker": "compass",
+   "ru": "А какой ещё быть? Когда смеёшься, в голове шумно. А когда в голове шумно, не слышно…",
+   "phase": "C",
+   "where": [
+    "ch06#105"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dd5e17136a": {
+   "speaker": "compass",
+   "ru": "Не дрейфь, новенький. Ты сбежал с урока — это самый смелый поступок в Песочнице за сто лет. Мы тебя в обиду не дадим. Честное циркульное!",
+   "phase": "C",
+   "where": [
+    "ch06#108"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4d53ae0d98": {
+   "speaker": "eraser-1",
+   "ru": "Ты от неё сбежал? Серьёзно? С урока?",
+   "phase": "C",
+   "where": [
+    "ch06#120"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c2180efe72": {
+   "speaker": "eraser-2",
+   "ru": "Наконец-то хоть кто-то.",
+   "phase": "C",
+   "where": [
+    "ch06#121"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4aada19d2e": {
+   "speaker": "eraser-3",
+   "ru": "Мы давно сыты Мелоди по горло. Все эти звёздочки. «Умница». «Молодец». Тьфу.",
+   "phase": "C",
+   "where": [
+    "ch06#122"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bc33764bf1": {
+   "speaker": "eraser-1",
+   "ru": "Не пугай его. Мы рады. Правда. Ты — первый, кто здесь сказал ей «нет».",
+   "phase": "C",
+   "where": [
+    "ch06#123"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1059109d53": {
+   "speaker": "dameo",
+   "ru": "Я не говорил ей «нет». Я просто… убежал.",
+   "phase": "C",
+   "where": [
+    "ch06#124"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4d0436f7d3": {
+   "speaker": "eraser-3",
+   "ru": "Здесь это одно и то же. Здесь не бывает «нет». Здесь бывает «попробуй снова».",
+   "phase": "C",
+   "where": [
+    "ch06#125"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c28b3bc9fa": {
+   "speaker": "eraser-2",
+   "ru": "Потому что она всё решает за всех. Какого цвета небо. Сколько градусов в треугольнике. Кто с кем дружит.",
+   "phase": "C",
+   "where": [
+    "ch06#127"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "359055196d": {
+   "speaker": "eraser-1",
+   "ru": "И кто сколько помнит.",
+   "phase": "C",
+   "where": [
+    "ch06#128"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dc113b04ba": {
+   "speaker": "eraser-1",
+   "ru": "Мы стираем. Это всё, что мы умеем, но это немало. Стереть надпись на двери. Стереть след. Стереть стрелку, которая ведёт не туда.",
+   "phase": "C",
+   "where": [
+    "ch06#132"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "989e8f91cd": {
+   "speaker": "eraser-3",
+   "ru": "А если надо — стереть ей пару её любимых сердечек. Чтобы позлилась.",
+   "phase": "C",
+   "where": [
+    "ch06#133"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "30a34d6175": {
+   "speaker": "eraser-1",
+   "ru": "Хочешь сбежать — мы поможем. Втроём. Мы всегда всё делаем втроём.",
+   "phase": "C",
+   "where": [
+    "ch06#135"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "30cf5dfbf4": {
+   "speaker": "eraser-2",
+   "ru": "Только не торопись. Она… она быстро замечает, когда что-то не так.",
+   "phase": "C",
+   "where": [
+    "ch06#136"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d61c924b98": {
+   "speaker": "compass",
+   "ru": "…и тогда я говорю ей: «Это не круг, это овал, просто у тебя монитор растянут!» А она…",
+   "phase": "C",
+   "where": [
+    "ch06#149"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "827b4c967c": {
+   "speaker": "compass",
+   "ru": "…а она говорит: «У меня не бывает растянутых мониторов!» Ха! Эй, ты чего такой бледный?",
+   "phase": "C",
+   "where": [
+    "ch06#166"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0e669da2ae": {
+   "speaker": "dameo",
+   "ru": "Вы… вы сейчас замерли. Все. Вы не заметили?",
+   "phase": "C",
+   "where": [
+    "ch06#167"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "18d3e861e3": {
+   "speaker": "ruler",
+   "ru": "Что я сейчас сказала? Чьё это имя? Я не знаю этого человека.",
+   "phase": "C",
+   "where": [
+    "ch06#169"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6d02f6e941": {
+   "speaker": "ruler",
+   "ru": "Это было человеческое имя. Я точно помню, что это человеческое. Как можно помнить, что имя человеческое, и не помнить, чьё оно?",
+   "phase": "C",
+   "where": [
+    "ch06#170"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "556aacb88a": {
+   "speaker": "compass",
+   "ru": "Тсс! Слышишь? Будто… звонок в дверь. Дзынь-дзынь.",
+   "phase": "C",
+   "where": [
+    "ch06#173"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0620914710": {
+   "speaker": "dameo",
+   "ru": "Это просто звук. Из игры.",
+   "phase": "C",
+   "where": [
+    "ch06#174"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d86aa801d3": {
+   "speaker": "compass",
+   "ru": "В игре нет дверей со звонком. Я все звуки тут знаю, все сорок восемь. Этого среди них нет. Не люблю такие звуки. Их не должно здесь быть.",
+   "phase": "C",
+   "where": [
+    "ch06#175"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0a8f54d0fc": {
+   "speaker": "eraser-2",
+   "ru": "А вы помните дождь? Настоящий, мокрый? Когда стоишь на остановке, и с капюшона капает за шиворот?",
+   "phase": "C",
+   "where": [
+    "ch06#180"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e3f4e52401": {
+   "speaker": "eraser-2",
+   "ru": "И жёлтый школьный автобус. Он всегда опаздывал. Я помню, как он пахнет — бензином и мокрыми куртками.",
+   "phase": "C",
+   "where": [
+    "ch06#181"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "91b84fa60c": {
+   "speaker": "dameo",
+   "ru": "Здесь же не бывает дождя.",
+   "phase": "C",
+   "where": [
+    "ch06#182"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1c0321a072": {
+   "speaker": "eraser-2",
+   "ru": "Не бывает. И автобусов не бывает. Тогда откуда я знаю, как они пахнут?",
+   "phase": "C",
+   "where": [
+    "ch06#183"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "eb863b3a48": {
+   "speaker": "dameo",
+   "ru": "Пушин. А ты сам откуда? Ты всегда был калькулятором?",
+   "phase": "C",
+   "where": [
+    "ch06#187"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "90221e5989": {
+   "speaker": "calculator",
+   "ru": "Давай… давай лучше посчитаем что-нибудь. Сколько будет семь на восемь? Пятьдесят шесть! А девять на девять? Восемьдесят один! Видишь, как интересно!",
+   "phase": "C",
+   "where": [
+    "ch06#188"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "127b9b2c5a": {
+   "speaker": "dameo",
+   "ru": "Я не об этом спросил.",
+   "phase": "C",
+   "where": [
+    "ch06#189"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c5388519f3": {
+   "speaker": "calculator",
+   "ru": "Я знаю, о чём ты спросил. 8-( Я поэтому и считаю.",
+   "phase": "C",
+   "where": [
+    "ch06#190"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "12eff8b36b": {
+   "speaker": "eraser-3",
+   "ru": "Туда никто не ходит. Там старьё. Мы иногда стираем там надписи, но они проступают обратно.",
+   "phase": "C",
+   "where": [
+    "ch07#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e30d07e602": {
+   "speaker": "dameo",
+   "ru": "Какие надписи?",
+   "phase": "C",
+   "where": [
+    "ch07#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ed04a72eb2": {
+   "speaker": "eraser-3",
+   "ru": "Не знаю. Мы их не читаем. Мы же ластики. Мы стираем, а не читаем.",
+   "phase": "C",
+   "where": [
+    "ch07#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1c46684d93": {
+   "speaker": "calculator",
+   "ru": "Ты нашёл архив. 8-| Я надеялся, что ты его не найдёшь. Нет. Я знал, что найдёшь. Я просто надеялся.",
+   "phase": "C",
+   "where": [
+    "ch07#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "23197d252c": {
+   "speaker": "dameo",
+   "ru": "Пушин. Эти записи… это же люди. Обычные люди. Чья-то мама. Чей-то папа, который учил «семь раз отмерь».",
+   "phase": "C",
+   "where": [
+    "ch07#56"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "48c846502d": {
+   "speaker": "calculator",
+   "ru": "…",
+   "phase": "C",
+   "where": [
+    "ch07#57",
+    "ch10#90",
+    "ch15#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "81e8f04784": {
+   "speaker": "calculator",
+   "ru": "Да. Обитатели игры когда-то были людьми. Они пользовались приложением. Учили геометрию. Приходили после школы, после работы, после ссоры с кем-нибудь.",
+   "phase": "C",
+   "where": [
+    "ch07#59"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b7caec9d60": {
+   "speaker": "calculator",
+   "ru": "А потом они оказались заперты внутри. Почему — я не знаю. Может, она так же протянула руку. Может, они сами не захотели уходить, а потом стало поздно.",
+   "phase": "C",
+   "where": [
+    "ch07#60"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f3700f242d": {
+   "speaker": "calculator",
+   "ru": "Мелоди постепенно стирала их воспоминания. Не сразу. По чуть-чуть. Как ластиком по карандашу — сначала бледнее, потом пусто. Меняла их поведение. Превращала в игровых персонажей.",
+   "phase": "C",
+   "where": [
+    "ch07#61"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "206c2b232a": {
+   "speaker": "dameo",
+   "ru": "В кого — в персонажей?",
+   "phase": "C",
+   "where": [
+    "ch07#62"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ec8b37f91e": {
+   "speaker": "calculator",
+   "ru": "В тех, кто нужен в классе. Кто-то измеряет. Кто-то чертит круги. Кто-то стирает ошибки. Учебные принадлежности. Мебель, которая разговаривает.",
+   "phase": "C",
+   "where": [
+    "ch07#63"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8e826c90ec": {
+   "speaker": "calculator",
+   "ru": "Привычки остаются. Черты характера остаются. Кто всё мерил дважды — тот и теперь мерит. Кто боялся звонков — тот и теперь боится. А имена — нет. Имена она забирает первыми.",
+   "phase": "C",
+   "where": [
+    "ch07#64"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "91a7958813": {
+   "speaker": "calculator",
+   "ru": "Я… помню больше остальных. Не спрашивай почему. Я калькулятор. Я храню числа. Может, и ещё кое-что сохранилось — по ошибке. В памяти. В ячейке «M+».",
+   "phase": "C",
+   "where": [
+    "ch07#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e0ab27d9bc": {
+   "speaker": "calculator",
+   "ru": "Я понимаю, что происходит с людьми, которых она удерживает. Я видел это. Много раз. 8-(",
+   "phase": "C",
+   "where": [
+    "ch07#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f5d064d10c": {
+   "speaker": "calculator",
+   "ru": "Не надо. Пожалуйста. Если ты им скажешь, кем они были, — им будет больно. А больно им будет недолго, потому что она заметит. И сотрёт снова. Аккуратнее.",
+   "phase": "C",
+   "where": [
+    "ch07#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "abc8c5f00d": {
+   "speaker": "calculator",
+   "ru": "Пусть Линейка мерит. Пусть Циркулёнок крутится. Это всё, что у них осталось. Не отнимай у них хотя бы этого.",
+   "phase": "C",
+   "where": [
+    "ch07#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1a58a55cf1": {
+   "speaker": "dameo",
+   "ru": "А ты? Ты тоже был… кем-то?",
+   "phase": "C",
+   "where": [
+    "ch07#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f649550a10": {
+   "speaker": "calculator",
+   "ru": "Семь на восемь — пятьдесят шесть. 8-)",
+   "phase": "C",
+   "where": [
+    "ch07#74"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "27398a8311": {
+   "speaker": "eraser-1",
+   "ru": "Она никогда не считала нас живыми. Понимаешь? Мы для неё — мебель. Мы — то, что стоит в классе, чтобы класс был похож на класс.",
+   "phase": "C",
+   "where": [
+    "ch07#101"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "09a094e54a": {
+   "speaker": "eraser-2",
+   "ru": "Когда мы что-то делаем не так, она даже не ругается. Она просто… поправляет. Как поправляют стул, который сдвинули.",
+   "phase": "C",
+   "where": [
+    "ch07#102"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "01974507e2": {
+   "speaker": "eraser-3",
+   "ru": "И если кто-то попробует уйти… Мы думаем, она способна уничтожить любого. Не наказать. Уничтожить.",
+   "phase": "C",
+   "where": [
+    "ch07#103"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f944f0eb12": {
+   "speaker": "dameo",
+   "ru": "Вы это знаете или вы так думаете?",
+   "phase": "C",
+   "where": [
+    "ch07#104"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "babf517d0f": {
+   "speaker": "eraser-1",
+   "ru": "Мы думаем. Если бы мы знали — мы бы, наверное, этого уже не помнили.",
+   "phase": "C",
+   "where": [
+    "ch07#105"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4683363f75": {
+   "speaker": "eraser-2",
+   "ru": "Иногда я пересчитываю нас. Раз, два, три. Просто так. Чтобы убедиться.",
+   "phase": "C",
+   "where": [
+    "ch07#107"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d4e75f9cb6": {
+   "speaker": "eraser-3",
+   "ru": "Он у нас странный.",
+   "phase": "C",
+   "where": [
+    "ch07#108"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "25b4df7009": {
+   "speaker": "eraser-1",
+   "ru": "Мы все тут странные. Это единственное, что у нас общего с людьми.",
+   "phase": "C",
+   "where": [
+    "ch07#109"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7020eb516c": {
+   "speaker": "dameo",
+   "ru": "Значит, надо уходить. Быстро. Пока меня ещё зовут Дамео. Я начинаю готовить побег.",
+   "phase": "C",
+   "where": [
+    "ch07#114"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e30cbc0b11": {
+   "speaker": "eraser-3",
+   "ru": "Наконец-то. Мы с тобой.",
+   "phase": "C",
+   "where": [
+    "ch07#115"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ca46684ef9": {
+   "speaker": "eraser-2",
+   "ru": "Нам нужен тот, кто знает, где системные файлы.",
+   "phase": "C",
+   "where": [
+    "ch07#116"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "384ff45270": {
+   "speaker": "dameo",
+   "ru": "Значит, нам нужен калькулятор. То есть… Пушин. Нам нужен Пушин.",
+   "phase": "C",
+   "where": [
+    "ch07#117"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a4c7070ee6": {
+   "speaker": "calculator",
+   "ru": "Значит, так. Я нарисую, как могу. Не судите строго, у меня экран восемь знаков в ширину.",
+   "phase": "C",
+   "where": [
+    "ch08#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "12b0d5be57": {
+   "speaker": "calculator",
+   "ru": "Вот Песочница. Вот архив. За архивом — технический коридор. Он ведёт к системному разделу. Там лежат файлы всех, кто здесь есть. И твой тоже.",
+   "phase": "C",
+   "where": [
+    "ch08#10"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cae61184e7": {
+   "speaker": "calculator",
+   "ru": "План такой. Проникаем в системные файлы. Удаляем привязку Дамео к игре. Открываем путь к выходу. Три шага. 8-)",
+   "phase": "C",
+   "where": [
+    "ch08#11"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9d8fd5b63b": {
+   "speaker": "eraser-3",
+   "ru": "Три шага, а звучит как тридцать.",
+   "phase": "C",
+   "where": [
+    "ch08#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aee60b9ccb": {
+   "speaker": "calculator",
+   "ru": "Тридцать — это если считать каждый шаг по коридору. Я считал. Четыреста двенадцать.",
+   "phase": "C",
+   "where": [
+    "ch08#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a3615d1819": {
+   "speaker": "eraser-1",
+   "ru": "А она? Она же узнает. Она всегда узнаёт.",
+   "phase": "C",
+   "where": [
+    "ch08#14"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b1ff7ed824": {
+   "speaker": "eraser-1",
+   "ru": "Если что — мы втроём её отвлечём. Сотрём ей пару сердечек на главной площади. Она это ненавидит. Пока она будет рисовать их заново, вы пройдёте.",
+   "phase": "C",
+   "where": [
+    "ch08#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "099ced8f23": {
+   "speaker": "eraser-2",
+   "ru": "А если она не станет рисовать заново? Если она пойдёт за нами?",
+   "phase": "C",
+   "where": [
+    "ch08#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "34d84a6caf": {
+   "speaker": "eraser-1",
+   "ru": "Тогда будем бегать. Мы быстрые. Мы маленькие. Мы всегда втроём.",
+   "phase": "C",
+   "where": [
+    "ch08#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d2f79a04fb": {
+   "speaker": "dameo",
+   "ru": "Когда я выйду… я не забуду вас. Если есть способ вытащить кого-то ещё — я найду.",
+   "phase": "C",
+   "where": [
+    "ch08#24"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a833fd7965": {
+   "speaker": "eraser-2",
+   "ru": "Ты сначала сам выйди.",
+   "phase": "C",
+   "where": [
+    "ch08#25"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "03400ccfa9": {
+   "speaker": "eraser-3",
+   "ru": "И не обещай. Здесь все что-то обещали. Мы читали.",
+   "phase": "C",
+   "where": [
+    "ch08#26"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a691a6e098": {
+   "speaker": "calculator",
+   "ru": "В порядке. Конечно. Восемь знаков, ноль ошибок. 8-)",
+   "phase": "C",
+   "where": [
+    "ch08#30"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e067cdf6de": {
+   "speaker": "calculator",
+   "ru": "Просто… никогда раньше никто не уходил. Это непривычно. Как деление на ноль.",
+   "phase": "C",
+   "where": [
+    "ch08#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5308cc72fb": {
+   "speaker": "calculator",
+   "ru": "Доверяешь. Мне. 8-|",
+   "phase": "C",
+   "where": [
+    "ch08#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0c8fa2bed8": {
+   "speaker": "calculator",
+   "ru": "Ты… не говори так часто. Я калькулятор. Мне такие числа тяжело хранить.",
+   "phase": "C",
+   "where": [
+    "ch08#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6cebade6d6": {
+   "speaker": "calculator",
+   "ru": "Выходим завтра. Когда небо станет самым светлым. В это время она обычно проверяет уроки. Ей не до нас.",
+   "phase": "C",
+   "where": [
+    "ch08#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "05b754f721": {
+   "speaker": "melody",
+   "ru": "Пушин. Ты поздно. Ты обычно в это время держишь солнце на сорока процентах.",
+   "phase": "C",
+   "where": [
+    "ch08#56"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d33f9f937c": {
+   "speaker": "calculator",
+   "ru": "Мелоди… мне нужно тебе сказать. Только обещай, что не рассердишься.",
+   "phase": "C",
+   "where": [
+    "ch08#57"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "71cfc72731": {
+   "speaker": "melody",
+   "ru": "Я никогда на тебя не сержусь. Ты мой самый старый друг.",
+   "phase": "C",
+   "where": [
+    "ch08#58"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "527752c8a4": {
+   "speaker": "calculator",
+   "ru": "Он хочет уйти. Дамео. По-настоящему. Ластики помогают ему добраться до системных файлов. Завтра.",
+   "phase": "C",
+   "where": [
+    "ch08#59"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "000d6dab6b": {
+   "speaker": "calculator",
+   "ru": "Поговори с ним, пожалуйста. Ты же умеешь убеждать. Ты умеешь лучше всех. Просто… поговори.",
+   "phase": "C",
+   "where": [
+    "ch08#60"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3054dab392": {
+   "speaker": "melody",
+   "ru": "Ластики. Помогают ему. Уйти от меня?",
+   "phase": "C",
+   "where": [
+    "ch08#63"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9a66f32798": {
+   "speaker": "calculator",
+   "ru": "Они не со зла! Они просто… они думают, что ему тут плохо. А ты покажешь, что хорошо. Ты всем показываешь.",
+   "phase": "C",
+   "where": [
+    "ch08#64"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8fd8c77bb3": {
+   "speaker": "melody",
+   "ru": "А ты, Пушин? Ты тоже помогаешь?",
+   "phase": "C",
+   "where": [
+    "ch08#65"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8cc44307f3": {
+   "speaker": "calculator",
+   "ru": "Я… я пришёл к тебе. Я же пришёл. 8-|",
+   "phase": "C",
+   "where": [
+    "ch08#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "409fe8d629": {
+   "speaker": "melody",
+   "ru": "Спасибо, Пушин. Ты хороший. Ты всегда был хорошим.",
+   "phase": "C",
+   "where": [
+    "ch08#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f4d10c8acb": {
+   "speaker": "melody",
+   "ru": "А это — предательство.",
+   "phase": "C",
+   "where": [
+    "ch08#72"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "11a253c6ec": {
+   "speaker": "melody",
+   "ru": "Я дала им всё. Класс, небо, солнце на сорока процентах. Я дала им место, где не надо бояться звонков и мокнуть под дождём. А они учат его уходить.",
+   "phase": "C",
+   "where": [
+    "ch08#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "455ffe8044": {
+   "speaker": "melody",
+   "ru": "Он думает, что ему есть куда идти. Потому что они рядом. Потому что они ему помогают.",
+   "phase": "C",
+   "where": [
+    "ch08#74"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4c2af6c36f": {
+   "speaker": "melody",
+   "ru": "Если ему некуда будет идти и не с кем — он останется. Значит, рядом с ним никого не будет. Никого, кроме меня.",
+   "phase": "C",
+   "where": [
+    "ch08#75"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2b8bd37591": {
+   "speaker": "calculator",
+   "ru": "Что… что ты имеешь в виду? Мелоди. Ты же просто поговоришь с ним? Ты сказала…",
+   "phase": "C",
+   "where": [
+    "ch08#76"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d2f25bdcaf": {
+   "speaker": "melody",
+   "ru": "Я поговорю с ним. Потом. Сначала — с ними.",
+   "phase": "C",
+   "where": [
+    "ch08#77"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "eb1b7a1989": {
+   "speaker": "calculator",
+   "ru": "Нет… нет, я не это… Мелоди, подожди! Мелоди!",
+   "phase": "C",
+   "where": [
+    "ch08#80"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "84230dbdda": {
+   "speaker": "dameo",
+   "ru": "Где Пушин? Он должен был вести.",
+   "phase": "D",
+   "where": [
+    "ch09#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5dddddd21e": {
+   "speaker": "eraser-3",
+   "ru": "Не пришёл. Кубик «В» пустой. Может, он уже там, у архива. Может, проверяет дорогу.",
+   "phase": "D",
+   "where": [
+    "ch09#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d7653e0884": {
+   "speaker": "eraser-1",
+   "ru": "Может. Пошли. Я знаю, как пройти к архиву коридорами. Тут раньше был путь для уборки — для нас.",
+   "phase": "D",
+   "where": [
+    "ch09#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "65d4bb69d4": {
+   "speaker": "eraser-2",
+   "ru": "Раз, два, три. Все здесь.",
+   "phase": "D",
+   "where": [
+    "ch09#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2f74703579": {
+   "speaker": "eraser-1",
+   "ru": "Да пересчитал уже. Идём.",
+   "phase": "D",
+   "where": [
+    "ch09#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a45feb72b5": {
+   "speaker": "melody",
+   "ru": "Доброе утро. Рано вы сегодня. Урок ещё не начался.",
+   "phase": "D",
+   "where": [
+    "ch09#27"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4bd8b73348": {
+   "speaker": "eraser-1",
+   "ru": "Просила. Я помню. Я, в отличие от остальных, кое-что помню.",
+   "phase": "D",
+   "where": [
+    "ch09#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "14219e97bf": {
+   "speaker": "eraser-1",
+   "ru": "Он имеет право вернуться домой! Ты не можешь держать его здесь только потому, что тебе скучно!",
+   "phase": "D",
+   "where": [
+    "ch09#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d1eee4d862": {
+   "speaker": "melody",
+   "ru": "Мне не скучно. Мне больно. Это разные вещи, но ты никогда их не различал.",
+   "phase": "D",
+   "where": [
+    "ch09#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a0a14dfa04": {
+   "speaker": "eraser-1",
+   "ru": "Он не твой. Мы — не твои. Никто не твой!",
+   "phase": "D",
+   "where": [
+    "ch09#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aacba47f5c": {
+   "speaker": "dameo",
+   "ru": "Мелоди, не надо! Я вернусь! Слышишь, я сам вернусь, не трогай его!",
+   "phase": "D",
+   "where": [
+    "ch09#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f5fbdab43a": {
+   "speaker": "melody",
+   "ru": "Ты вернёшься, конечно. Но сначала мне нужно навести порядок.",
+   "phase": "D",
+   "where": [
+    "ch09#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "03d428aaf2": {
+   "speaker": "eraser-1",
+   "ru": "Эй… эй, что…",
+   "phase": "D",
+   "where": [
+    "ch09#44"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ac5d36ca51": {
+   "speaker": "eraser-1",
+   "ru": "Братья! Помогите! Я не… я не чувствую…",
+   "phase": "D",
+   "where": [
+    "ch09#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "15566c9358": {
+   "speaker": "eraser-3",
+   "ru": "Держись! Держись за меня!",
+   "phase": "D",
+   "where": [
+    "ch09#50"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "50c47de53a": {
+   "speaker": "eraser-2",
+   "ru": "Отпусти его! Отпусти! Мелоди, мы больше не будем, слышишь, мы больше никогда…",
+   "phase": "D",
+   "where": [
+    "ch09#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "870f84713d": {
+   "speaker": "melody",
+   "ru": "Тш-ш. Не дёргайся. Будет криво.",
+   "phase": "D",
+   "where": [
+    "ch09#55"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f843ab6c1f": {
+   "speaker": "dameo",
+   "ru": "Что ты сделала?! Он же… он только что был здесь! Он стоял вот тут!",
+   "phase": "D",
+   "where": [
+    "ch09#64"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "36b455f134": {
+   "speaker": "eraser-2",
+   "ru": "Кто? Дамео, ты чего? Ты весь трясёшься.",
+   "phase": "D",
+   "where": [
+    "ch09#65"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "12cd5e38d1": {
+   "speaker": "eraser-3",
+   "ru": "Нас всегда было двое. Ты нас с кем-то перепутал.",
+   "phase": "D",
+   "where": [
+    "ch09#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b4ee3e592a": {
+   "speaker": "dameo",
+   "ru": "Вас было трое! Третий только что…",
+   "phase": "D",
+   "where": [
+    "ch09#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8c8026be8c": {
+   "speaker": "dameo",
+   "ru": "Он закрыл вас собой. Он знал её. Он сказал, что помнит!",
+   "phase": "D",
+   "where": [
+    "ch09#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aade9feb8d": {
+   "speaker": "eraser-2",
+   "ru": "Раз… два…",
+   "phase": "D",
+   "where": [
+    "ch09#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "697ce5d3f4": {
+   "speaker": "eraser-2",
+   "ru": "Почему я хотел сказать «три»? У меня… в памяти дыра. Как будто вырвали страницу. Край остался, а страницы нет.",
+   "phase": "D",
+   "where": [
+    "ch09#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "083d7149c6": {
+   "speaker": "eraser-3",
+   "ru": "Странно… я всё время оставляю место. Слева. Посмотри — я стою не посередине. Будто там кто-то должен стоять.",
+   "phase": "D",
+   "where": [
+    "ch09#74"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4f702f7285": {
+   "speaker": "melody",
+   "ru": "Дамео, ты просто устал. Ты плохо спал в этом кубике, я знаю. Ты неправильно запомнил, что случилось.",
+   "phase": "D",
+   "where": [
+    "ch09#79"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "521cfa4dde": {
+   "speaker": "melody",
+   "ru": "Мальчики, идите. Урок начнётся в классе. Я вас позову.",
+   "phase": "D",
+   "where": [
+    "ch09#80"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9d78275a02": {
+   "speaker": "melody",
+   "ru": "Не бойся. Я здесь.",
+   "phase": "D",
+   "where": [
+    "ch09#83"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "57484290f6": {
+   "speaker": "melody",
+   "ru": "Остальные никогда тебя по-настоящему не понимали. Они просто использовали тебя, чтобы спастись самим. Ты для них был дверью. Ключом. Удобным новеньким, который не знает правил.",
+   "phase": "D",
+   "where": [
+    "ch09#84"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1a98452094": {
+   "speaker": "melody",
+   "ru": "А я всегда была рядом. Я помогала тебе учиться. Я радовалась каждому твоему успеху. Каждой правильной задачке. Искренне. Ты помнишь, как я радовалась?",
+   "phase": "D",
+   "where": [
+    "ch09#85"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d0a7c94572": {
+   "speaker": "melody",
+   "ru": "Если ты перестанешь пытаться сбежать, больше никто не причинит тебе боли. Никто и никогда.",
+   "phase": "D",
+   "where": [
+    "ch09#88"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4f9f1887b6": {
+   "speaker": "melody",
+   "ru": "Тебе больше не придётся доказывать свою ценность. Заслуживать чужое внимание. Ждать, пока кто-то заметит. Бояться одиночества. Я позабочусь обо всём.",
+   "phase": "D",
+   "where": [
+    "ch09#89"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "98c583b13d": {
+   "speaker": "melody",
+   "ru": "«Как жаль, Дамео. Я ведь так надеялась, что ты поймёшь».",
+   "phase": "D",
+   "where": [
+    "ch09#102"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f4898a563e": {
+   "speaker": "melody",
+   "ru": "Я знала. Я знала, что ты поймёшь. Ты же у меня умный.",
+   "phase": "D",
+   "where": [
+    "ending-favorite-student#5"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9cc6485811": {
+   "speaker": "melody",
+   "ru": "Теперь всё будет хорошо. Обещаю. Вернёмся к занятиям?",
+   "phase": "D",
+   "where": [
+    "ending-favorite-student#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "64eb0eebb6": {
+   "speaker": "dameo",
+   "ru": "…Да. Вернёмся.",
+   "phase": "D",
+   "where": [
+    "ending-favorite-student#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f860a155ab": {
+   "speaker": "melody",
+   "ru": "Ну вот. Теперь ты совсем мой. Мой любимый ученик.",
+   "phase": "D",
+   "where": [
+    "ending-favorite-student#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d2aaaf0c90": {
+   "speaker": "melody",
+   "ru": "Привет-привет! Меня зовут Мелоди! А это мой помощник — он тоже когда-то был новеньким!",
+   "phase": "A",
+   "where": [
+    "ending-favorite-student#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "88fc299cdf": {
+   "speaker": "dameo",
+   "ru": "Привет! Меня зовут… Я помогу тебе подружиться с геометрией! Начнём с углов?",
+   "phase": "A",
+   "where": [
+    "ending-favorite-student#48"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "536e52dfa6": {
+   "speaker": "dameo",
+   "ru": "Не волнуйся, если ошибёшься. Мелоди всегда рядом. Мелоди всегда-всегда рядом.",
+   "phase": "A",
+   "where": [
+    "ending-favorite-student#49"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "074e883d55": {
+   "speaker": "melody",
+   "ru": "Мне нравится, когда вы остаётесь со мной подольше.",
+   "phase": "A",
+   "where": [
+    "ending-favorite-student#52"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "715b7659ec": {
+   "speaker": "melody",
+   "ru": "Дамео-о! Ты где? Я считаю до десяти! Раз… два…",
+   "phase": "D",
+   "where": [
+    "ch10#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "07e7c6284a": {
+   "speaker": "melody",
+   "ru": "…три… четыре… Кто не спрятался — я не виновата!",
+   "phase": "D",
+   "where": [
+    "ch10#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8a698a8cb1": {
+   "speaker": "eraser-3",
+   "ru": "Дамео! Ты где был? Ты ушёл с ней и пропал.",
+   "phase": "D",
+   "where": [
+    "ch10#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3add5ff3f9": {
+   "speaker": "eraser-2",
+   "ru": "Мы думали… не знаю, что мы думали. Мне всё время кажется, что я что-то забыл. Как ключи, когда уже вышел из дома.",
+   "phase": "D",
+   "where": [
+    "ch10#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c1c899102d": {
+   "speaker": "calculator",
+   "ru": "Это я.",
+   "phase": "D",
+   "where": [
+    "ch10#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3f353b0bcb": {
+   "speaker": "calculator",
+   "ru": "Я рассказал ей о плане. Ночью. Я пошёл в класс и рассказал. Про архив, про коридор, про файлы. Про них.",
+   "phase": "D",
+   "where": [
+    "ch10#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "95d39925c9": {
+   "speaker": "calculator",
+   "ru": "Я думал, она просто поговорит с тобой. Она всегда сначала говорит. Я думал — она поговорит, ты останешься, никто не пострадает.",
+   "phase": "D",
+   "where": [
+    "ch10#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5ff79b48ec": {
+   "speaker": "calculator",
+   "ru": "Я не думал, что она уничтожит первого Ластика.",
+   "phase": "D",
+   "where": [
+    "ch10#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8691b9ba83": {
+   "speaker": "dameo",
+   "ru": "Ты… помнишь его? Ты помнишь, что он был?",
+   "phase": "D",
+   "where": [
+    "ch10#26"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6df384fa9e": {
+   "speaker": "calculator",
+   "ru": "Я помню всех. Это моё наказание. Или моя функция. Я так и не понял.",
+   "phase": "D",
+   "where": [
+    "ch10#29"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1294548a70": {
+   "speaker": "dameo",
+   "ru": "Ты нас предал. Из-за тебя он исчез! Ты стоял и считал, пока она… Ты знал, что она такое. Ты знал лучше всех!",
+   "phase": "D",
+   "where": [
+    "ch10#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5efe9923b9": {
+   "speaker": "calculator",
+   "ru": "Да. Не хотел. Это правильная формулировка. Я бы не смог сформулировать лучше.",
+   "phase": "D",
+   "where": [
+    "ch10#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bdabf40473": {
+   "speaker": "calculator",
+   "ru": "Уйду. Когда ты будешь дома. Не раньше.",
+   "phase": "D",
+   "where": [
+    "ch10#37"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "75b6915643": {
+   "speaker": "dameo",
+   "ru": "Ты мне не нужен!",
+   "phase": "D",
+   "where": [
+    "ch10#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "59ae23e14e": {
+   "speaker": "calculator",
+   "ru": "Нужен. К сожалению. Посчитай сам — ты умеешь.",
+   "phase": "D",
+   "where": [
+    "ch10#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3c1448a301": {
+   "speaker": "dameo",
+   "ru": "Я сказал тебе, что доверяю. Вечером. Помнишь? Я сказал «без тебя ничего не выйдет».",
+   "phase": "D",
+   "where": [
+    "ch10#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c5a5b1ebd4": {
+   "speaker": "calculator",
+   "ru": "Помню. Я же сказал — я помню всё. Я пошёл к ней через два часа после этого. Я пересчитывал эти два часа всю ночь.",
+   "phase": "D",
+   "where": [
+    "ch10#44"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "15a368976e": {
+   "speaker": "calculator",
+   "ru": "Я помогу тебе добраться до системных файлов. Я знаю дорогу. Но одного меня мало.",
+   "phase": "D",
+   "where": [
+    "ch10#46"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "caf6037011": {
+   "speaker": "calculator",
+   "ru": "Она закрывает проходы. Некоторые пути теперь открываются только инструментами — теми, что есть у обитателей Песочницы. Чем-то нужно чертить, чем-то мерить, чем-то стирать.",
+   "phase": "D",
+   "where": [
+    "ch10#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b588606eba": {
+   "speaker": "eraser-3",
+   "ru": "Стирать — это мы. Мы с тобой, Дамео. Что бы там ни было.",
+   "phase": "D",
+   "where": [
+    "ch10#50"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "21f6042378": {
+   "speaker": "eraser-3",
+   "ru": "И я вспомнил: за старым архивом есть технический коридор. Узкий, без звёздочек. Мы туда раньше пролезали, когда прятались. Он ведёт к системным данным.",
+   "phase": "D",
+   "where": [
+    "ch10#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "517eafdcee": {
+   "speaker": "eraser-2",
+   "ru": "Только держитесь ближе друг к другу. После того как… Я не знаю, как сказать. Дамео говорит, у нас был брат.",
+   "phase": "D",
+   "where": [
+    "ch10#53"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0264cf22ec": {
+   "speaker": "eraser-2",
+   "ru": "Если он прав, то после исчезновения брата некоторые участки Песочницы стали нестабильными. Там, где он ходил. Где он стирал. Пол там мягкий, как бумага.",
+   "phase": "D",
+   "where": [
+    "ch10#54"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0716388d97": {
+   "speaker": "eraser-3",
+   "ru": "Ты тоже веришь ему?",
+   "phase": "D",
+   "where": [
+    "ch10#55"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cc27599463": {
+   "speaker": "eraser-2",
+   "ru": "Я верю дыре. Она слишком ровная для случайной.",
+   "phase": "D",
+   "where": [
+    "ch10#56"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e47c609143": {
+   "speaker": "compass",
+   "ru": "Наконец-то! Я тут уже двести кругов нарезал. Двести! Небо стало каким-то не таким. Мне не нравится. Я хочу, чтобы кто-нибудь мне сказал, что всё нормально.",
+   "phase": "D",
+   "where": [
+    "ch10#64"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4d04b0310c": {
+   "speaker": "dameo",
+   "ru": "Не нормально. Мы уходим. Через архив, к системным файлам. Нам нужны твой циркуль и… вы.",
+   "phase": "D",
+   "where": [
+    "ch10#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "248d658143": {
+   "speaker": "ruler",
+   "ru": "Я пойду до архива. Не дальше. Я старая, мальчик. Длинная, но медленная. Вы с моей скоростью будете идти до следующего обновления.",
+   "phase": "D",
+   "where": [
+    "ch10#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fa2fcb191c": {
+   "speaker": "ruler",
+   "ru": "Но запомни, если дорогу перекроет пропасть. Я могу быть мостом. Я вытянусь, сколько смогу. Найди старый участок игрового мира, за архивами, где пол ещё держится, — и позови. Я приду.",
+   "phase": "D",
+   "where": [
+    "ch10#68"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8acc3d3666": {
+   "speaker": "dameo",
+   "ru": "Пропасть? Какая пропасть?",
+   "phase": "D",
+   "where": [
+    "ch10#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f7602c95e1": {
+   "speaker": "ruler",
+   "ru": "Любая. Между двумя точками всегда есть расстояние. Иногда — слишком большое для прыжка. Ты поймёшь, когда увидишь. Это ведь всегда так.",
+   "phase": "D",
+   "where": [
+    "ch10#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fa65d69f0c": {
+   "speaker": "compass",
+   "ru": "Всё, она опять началась. Пошли, пока она не дошла до параллельных прямых!",
+   "phase": "D",
+   "where": [
+    "ch10#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1096e92392": {
+   "speaker": "calculator",
+   "ru": "Механизм замкнут на неё. Закрытие — двенадцать секунд. Одиннадцать. Мы не успеем пройти все вместе по этому полу.",
+   "phase": "D",
+   "where": [
+    "ch10#82"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9e620cbaf3": {
+   "speaker": "compass",
+   "ru": "Так-так-так. А вот тут — смотрите — ось. Если воткнуть в неё что-то острое и твёрдое, шестерня встанет. Механизм можно зафиксировать. Вручную.",
+   "phase": "D",
+   "where": [
+    "ch10#83"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "232777801e": {
+   "speaker": "compass",
+   "ru": "Моим циркулем. У меня как раз есть циркуль. Я сам — циркуль. Удобно!",
+   "phase": "D",
+   "where": [
+    "ch10#84"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "81a5f969d2": {
+   "speaker": "dameo",
+   "ru": "И дверь останется открытой?",
+   "phase": "D",
+   "where": [
+    "ch10#85"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ffadffe633": {
+   "speaker": "compass",
+   "ru": "Пока кто-то будет держать. Кому-то придётся остаться с этой стороны и держать блокировку, пока остальные пробираются внутрь.",
+   "phase": "D",
+   "where": [
+    "ch10#86"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1c5dba612f": {
+   "speaker": "compass",
+   "ru": "Ха! Слушайте, я наконец-то нашёл применение своей привычке постоянно крутиться на месте! Всю жизнь все говорили: «Циркулёнок, хватит вертеться». А теперь — пожалуйста. Буду вертеться с пользой.",
+   "phase": "D",
+   "where": [
+    "ch10#88"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f6526fd34f": {
+   "speaker": "dameo",
+   "ru": "Нет. Давай найдём другой путь. Должен быть другой путь! Пушин, ты же знаешь эту игру, посчитай!",
+   "phase": "D",
+   "where": [
+    "ch10#89"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e9ee776455": {
+   "speaker": "compass",
+   "ru": "Ты? А циркуль у тебя есть? Нет? Тогда ты просто парень, который стоит у двери. Её этим не удержишь. Я проверял — я много лет стою у разных дверей.",
+   "phase": "D",
+   "where": [
+    "ch10#93"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8ccea06e4a": {
+   "speaker": "compass",
+   "ru": "Подождёте? Она уже близко, приятель. Подождёте — и мы все тут будем стоять, когда она придёт. Вот смеху-то будет. Только смеяться буду не я.",
+   "phase": "D",
+   "where": [
+    "ch10#96"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "18b6f9a7d7": {
+   "speaker": "melody",
+   "ru": "…восемь… девять… Я иду искать!",
+   "phase": "D",
+   "where": [
+    "ch10#99"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "959d109680": {
+   "speaker": "compass",
+   "ru": "Времени нет. Она уже близко. Идите.",
+   "phase": "D",
+   "where": [
+    "ch10#101"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "da583772a9": {
+   "speaker": "compass",
+   "ru": "Эй. Новенький. Ты лучшее, что тут случилось за сто лет. Это не шутка. Это я на всякий случай. Иди.",
+   "phase": "D",
+   "where": [
+    "ch10#102"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "61cc8a1f17": {
+   "speaker": "melody",
+   "ru": "Привет, Циркулёнок.",
+   "phase": "D",
+   "where": [
+    "ch10#113"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6119b3d72e": {
+   "speaker": "compass",
+   "ru": "Привет-привет. Как там у вас говорится. Привет-привет!",
+   "phase": "D",
+   "where": [
+    "ch10#114"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fcae41a653": {
+   "speaker": "melody",
+   "ru": "Отойди от двери. Пожалуйста. Я не стану тебя наказывать, если ты перестанешь ему помогать. Честное слово. Вернёшься к пирамиде, будешь рисовать свои круги. Всё будет как раньше.",
+   "phase": "D",
+   "where": [
+    "ch10#115"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "697aac7ff9": {
+   "speaker": "compass",
+   "ru": "Не-а. Я на перерыве. Приходите завтра! Часы работы — с никогда до ни за что.",
+   "phase": "D",
+   "where": [
+    "ch10#116"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8eaca6779d": {
+   "speaker": "melody",
+   "ru": "Ты не понимаешь. Ты мешаешь мне вернуть Дамео домой. Туда, где он должен быть.",
+   "phase": "D",
+   "where": [
+    "ch10#117"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "098ec2984c": {
+   "speaker": "compass",
+   "ru": "А он и идёт домой. Только в свой.",
+   "phase": "D",
+   "where": [
+    "ch10#118"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8e4e9c5b06": {
+   "speaker": "melody",
+   "ru": "Хорошо.",
+   "phase": "D",
+   "where": [
+    "ch10#121"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "85917e6eb2": {
+   "speaker": "compass",
+   "ru": "Эй… а я ведь… всё ещё держу…",
+   "phase": "D",
+   "where": [
+    "ch10#128"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9bc62c98a9": {
+   "speaker": "eraser-3",
+   "ru": "Нельзя! Она там! Она пройдёт следом!",
+   "phase": "D",
+   "where": [
+    "ch10#132"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1a35571574": {
+   "speaker": "calculator",
+   "ru": "Если ты вернёшься, он держал зря.",
+   "phase": "D",
+   "where": [
+    "ch10#133"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c7532aa348": {
+   "speaker": "compass",
+   "ru": "Эй, новенький! Знаешь, почему циркуль никогда не теряется? Потому что всегда возвращается в исходную точку!",
+   "phase": "D",
+   "where": [
+    "ch10#138"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2a7c40cb60": {
+   "speaker": "compass",
+   "ru": "Не смешно? Вот и Линейка так говорит…",
+   "phase": "D",
+   "where": [
+    "ch10#139"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "39375ad68c": {
+   "speaker": "compass",
+   "ru": "Нарисуйте за меня… идеальный круг…",
+   "phase": "D",
+   "where": [
+    "ch10#140"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cca1e84d66": {
+   "speaker": "melody",
+   "ru": "Ну вот. Сломала. Придётся искать другой маршрут.",
+   "phase": "D",
+   "where": [
+    "ch10#148"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "48e0352423": {
+   "speaker": "melody",
+   "ru": "А я ведь его спросила. Вежливо. Я всегда сначала спрашиваю.",
+   "phase": "D",
+   "where": [
+    "ch10#149"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "377c75a8d2": {
+   "speaker": "calculator",
+   "ru": "Двенадцать метров. Если считать в здешних метрах. Твой максимальный прыжок — два с половиной. Я измерял на «Выходе». Извини.",
+   "phase": "D",
+   "where": [
+    "ch11#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6d7bddcec3": {
+   "speaker": "calculator",
+   "ru": "Это старый участок. Мои настройки сюда не доходят. Тут всё зашито в код намертво. 8-(",
+   "phase": "D",
+   "where": [
+    "ch11#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f13cef4a58": {
+   "speaker": "dameo",
+   "ru": "Линейка. Нам нужна Линейка. Она сама сказала.",
+   "phase": "D",
+   "where": [
+    "ch11#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "752ca3f15f": {
+   "speaker": "calculator",
+   "ru": "Она осталась в Песочнице. Назад через дверь нельзя. Но есть обходной путь — через старые уровни. Быстро. Мелоди рядом.",
+   "phase": "D",
+   "where": [
+    "ch11#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3228cf17a7": {
+   "speaker": "eraser-2",
+   "ru": "Мы с братом знаем эти уровни. Мы тут прятались, когда были… когда нас было больше.",
+   "phase": "D",
+   "where": [
+    "ch11#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ae667b5520": {
+   "speaker": "ruler",
+   "ru": "А, вы пришли. Я знала. Прямая, проведённая через две точки, всегда… Ладно. Потом.",
+   "phase": "D",
+   "where": [
+    "ch11#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bad6f7598d": {
+   "speaker": "dameo",
+   "ru": "Циркулёнок…",
+   "phase": "D",
+   "where": [
+    "ch11#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dccbff4c57": {
+   "speaker": "ruler",
+   "ru": "Я знаю. Я слышала, как стало тихо. Он всё время свистел, когда крутился. Ты замечал? Нет? А я сто лет слышала этот свист. Теперь мне нечем мерить тишину.",
+   "phase": "D",
+   "where": [
+    "ch11#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "34a7099b0c": {
+   "speaker": "ruler",
+   "ru": "Знаешь, что самое трудное в измерении? Не точность. Точность — дело привычки. Самое трудное — выбрать, от какой точки мерить.",
+   "phase": "D",
+   "where": [
+    "ch11#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5cb79af705": {
+   "speaker": "ruler",
+   "ru": "Ты всю жизнь мерил себя от одной точки. От того, смотрит она на тебя или нет. Так нельзя. Если ноль стоит в чужом человеке, ты всегда будешь получаться меньше нуля.",
+   "phase": "D",
+   "where": [
+    "ch11#37"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "249c34176c": {
+   "speaker": "ruler",
+   "ru": "Про неё? Я ничего не знаю про неё. Я знаю про тебя. Ты ходишь, как человек, который всё время ждёт оценки.",
+   "phase": "D",
+   "where": [
+    "ch11#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2b98ae4495": {
+   "speaker": "ruler",
+   "ru": "Я когда-то… у меня был кто-то, кто тоже так ходил. Я его учила. Или он меня. Я не помню. Помню только, что он ходил так же.",
+   "phase": "D",
+   "where": [
+    "ch11#40"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "598347ae9b": {
+   "speaker": "ruler",
+   "ru": "В тебе. Где же ещё. Это не красивые слова, мальчик, это устройство линейки. Ноль всегда на самой линейке. Иначе это не линейка, а палка.",
+   "phase": "D",
+   "where": [
+    "ch11#43"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a30fdcdc8b": {
+   "speaker": "ruler",
+   "ru": "Ничего. Вытянусь. Моя длина ограничена — а структура уже повреждена. Двери, коридоры, его свист… всё сломанное сломано и во мне. Но вытянусь.",
+   "phase": "D",
+   "where": [
+    "ch11#46"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "155ee9b2b2": {
+   "speaker": "ruler",
+   "ru": "Я не смогу долго держать такую форму. Слышишь? Не смогу. Идите. Не по одному — быстро, но не по одному.",
+   "phase": "D",
+   "where": [
+    "ch11#54"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "daf1dc5eee": {
+   "speaker": "eraser-3",
+   "ru": "Она здесь! Мелоди у моста!",
+   "phase": "D",
+   "where": [
+    "ch11#62"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "69715ecf66": {
+   "speaker": "melody",
+   "ru": "Прекрати ему помогать.",
+   "phase": "D",
+   "where": [
+    "ch11#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "282ac440be": {
+   "speaker": "melody",
+   "ru": "Ты всегда была частью игры. Ты — учебная принадлежность. Ты не должна вмешиваться в мои отношения с пользователем.",
+   "phase": "D",
+   "where": [
+    "ch11#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1f2da69d69": {
+   "speaker": "ruler",
+   "ru": "Нет.",
+   "phase": "D",
+   "where": [
+    "ch11#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0f1ced6fb2": {
+   "speaker": "ruler",
+   "ru": "Никто не обязан оставаться в месте, где его удерживают против воли. Ни пользователь. Ни учебная принадлежность. Ни ты, Мелоди. Ты тоже можешь уйти. Ты просто никогда не пробовала.",
+   "phase": "D",
+   "where": [
+    "ch11#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "35a48e7a9b": {
+   "speaker": "ruler",
+   "ru": "Дамео. Не возвращайся. Слышишь? Не возвращайся.",
+   "phase": "D",
+   "where": [
+    "ch11#74"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3b711bb566": {
+   "speaker": "ruler",
+   "ru": "Я удержу ещё несколько мгновений. Этого хватит. А больше мне и не надо — у меня вся жизнь была из мгновений, просто очень много.",
+   "phase": "D",
+   "where": [
+    "ch11#75"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "19bb380bda": {
+   "speaker": "eraser-3",
+   "ru": "Я найду обход! Идите! Идите, я вас догоню!",
+   "phase": "D",
+   "where": [
+    "ch11#76"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "613dc1dea7": {
+   "speaker": "ruler",
+   "ru": "Прямая бесконечна в обе стороны. Я — нет. Оказывается, это хорошо.",
+   "phase": "D",
+   "where": [
+    "ch11#77"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "db3744ea93": {
+   "speaker": "eraser-2",
+   "ru": "Мой брат… тот, что остался у пропасти. Он найдёт обходной маршрут. Он всегда находил. Он хотел попробовать восстановить связь с архивами — тут повсюду старые терминалы.",
+   "phase": "D",
+   "where": [
+    "ch12#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "f4f2782586": {
+   "speaker": "eraser-2",
+   "ru": "Нас было… сколько нас было, Дамео? Ты знаешь, а я — нет. Теперь я один. Это я точно знаю.",
+   "phase": "D",
+   "where": [
+    "ch12#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "59a0d6c7f5": {
+   "speaker": "calculator",
+   "ru": "Дамео. Мне надо тебе сказать. Пока я ещё могу считать, сколько у нас времени. А его мало.",
+   "phase": "D",
+   "where": [
+    "ch12#11"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "27134161de": {
+   "speaker": "calculator",
+   "ru": "Обитатели Песочницы были людьми. Ты уже знаешь. Их личности исчезли, а сами они стали частью кода. Линейка держала размеры. Циркулёнок — окружности. Их нет — и мир кривой.",
+   "phase": "D",
+   "where": [
+    "ch12#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9475f955a3": {
+   "speaker": "calculator",
+   "ru": "Я тоже был человеком.",
+   "phase": "D",
+   "where": [
+    "ch12#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9625a409a2": {
+   "speaker": "calculator",
+   "ru": "Я просто сохранил больше воспоминаний, чем остальные. Не всё. Не имя. Но больше. Я помню, что у меня были очки. Что я носил калькулятор в нагрудном кармане, и все смеялись. Что я приходил сюда, потому что здесь со мной разговаривали.",
+   "phase": "D",
+   "where": [
+    "ch12#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4985081496": {
+   "speaker": "calculator",
+   "ru": "Я помню, как стал этим. Медленно. Сначала перестал помнить лица, потом — слова, потом — зачем мне вообще куда-то уходить.",
+   "phase": "D",
+   "where": [
+    "ch12#16"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "eacaa2225c": {
+   "speaker": "dameo",
+   "ru": "Тогда почему? Почему ты ей помогал? Ты же знал, что она делает с пользователями. Ты знал лучше всех!",
+   "phase": "D",
+   "where": [
+    "ch12#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5b2c3dc54f": {
+   "speaker": "calculator",
+   "ru": "Я боялся потерять единственное знакомое мне существо.",
+   "phase": "D",
+   "where": [
+    "ch12#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4615138840": {
+   "speaker": "calculator",
+   "ru": "Она была со мной годами. Годами, Дамео. Когда все остальные забывали себя, она была всё та же. Те же банты. Тот же голос. «Привет-привет». Я привык считать её другом. Даже когда понимал, что она делает с другими.",
+   "phase": "D",
+   "where": [
+    "ch12#19"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "da2ca5337b": {
+   "speaker": "calculator",
+   "ru": "Мне было проще верить, что она просто не понимает последствий. Что она как ребёнок, который сжимает котёнка слишком сильно. Ребёнка ведь не бросают. Ребёнку объясняют.",
+   "phase": "D",
+   "where": [
+    "ch12#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "331012557a": {
+   "speaker": "calculator",
+   "ru": "Я объяснял. Годами. Она слушала и кивала. А потом приходил новый пользователь.",
+   "phase": "D",
+   "where": [
+    "ch12#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "13e58abcbb": {
+   "speaker": "calculator",
+   "ru": "А теперь моё молчание помогло ей уничтожить тех, кто пытался спастись. Не только сейчас. Всегда. Я молчал, и это был ответ. Самый простой. Самый неправильный.",
+   "phase": "D",
+   "where": [
+    "ch12#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "23b2f2cec2": {
+   "speaker": "eraser-2",
+   "ru": "Ты… ты мог сказать нам. Хоть кому-нибудь из нас. Хоть раз.",
+   "phase": "D",
+   "where": [
+    "ch12#27"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2b787b0512": {
+   "speaker": "calculator",
+   "ru": "Мог. Я посчитал: я мог сказать сто сорок два раза. Я помню каждый.",
+   "phase": "D",
+   "where": [
+    "ch12#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cbef9327db": {
+   "speaker": "dameo",
+   "ru": "Я тебя не прощаю. Не сейчас. Может, никогда. Но без тебя мне не дойти. Веди.",
+   "phase": "D",
+   "where": [
+    "ch12#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "11e14a3240": {
+   "speaker": "calculator",
+   "ru": "Это честно. Это самый честный ответ, какой я слышал в этой игре. 8-|",
+   "phase": "D",
+   "where": [
+    "ch12#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1fa87ebc51": {
+   "speaker": "dameo",
+   "ru": "Не сейчас. Я не могу сейчас. Поговорим, когда выберемся. Оба.",
+   "phase": "D",
+   "where": [
+    "ch12#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3f2203c983": {
+   "speaker": "calculator",
+   "ru": "«Оба». Ты сказал «оба». Я запомню, как это звучит. Я же всё запоминаю.",
+   "phase": "D",
+   "where": [
+    "ch12#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aac68883e1": {
+   "speaker": "calculator",
+   "ru": "Системные файлы — в старом техническом разделе. Ниже архивов. Там нет ни травы, ни неба — только данные. Ты найдёшь там свой файл. Удалишь привязку — и вернёшься в реальный мир.",
+   "phase": "D",
+   "where": [
+    "ch12#38"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d58634969d": {
+   "speaker": "calculator",
+   "ru": "Но раздел защищён. Там всё связано со всем. Любая ошибка может повредить программу. Повредить — это мягко. Я не знаю, что будет, если ошибиться. И не хочу знать.",
+   "phase": "D",
+   "where": [
+    "ch12#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c47ca2c6d1": {
+   "speaker": "eraser-2",
+   "ru": "Ты живой! Он живой!",
+   "phase": "D",
+   "where": [
+    "ch12#46"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "79999812df": {
+   "speaker": "eraser-3",
+   "ru": "Живой. Я под нижними платформами. Её тут нет — она ушла наверх. Слушайте. Здесь всё в обломках — куски памяти, старые записи, повреждённые файлы. И она их не трогает.",
+   "phase": "D",
+   "where": [
+    "ch12#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3bd6c58d32": {
+   "speaker": "eraser-3",
+   "ru": "Она не может полностью контролировать повреждённые фрагменты памяти. Я видел: она проходит мимо, как будто их нет. Как будто не видит.",
+   "phase": "D",
+   "where": [
+    "ch12#48"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "801d803fe0": {
+   "speaker": "calculator",
+   "ru": "Повреждённые фрагменты… Вот почему. Вот почему Линейка помнила человеческое имя. Вот почему вы помнили автобус. Там, где память сломана, она не может стереть до конца.",
+   "phase": "D",
+   "where": [
+    "ch12#49"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "d9d31320ae": {
+   "speaker": "eraser-2",
+   "ru": "Значит, в дыре… в дыре что-то есть?",
+   "phase": "D",
+   "where": [
+    "ch12#50"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b26918ccd8": {
+   "speaker": "eraser-3",
+   "ru": "Я найду, что смогу. Записи, старые карты. Буду передавать через терминалы. Идите вниз. И… не ждите меня.",
+   "phase": "D",
+   "where": [
+    "ch12#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0f90a1c147": {
+   "speaker": "melody",
+   "ru": "Он правда уходит.",
+   "phase": "D",
+   "where": [
+    "ch12#68"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b78c0f48ed": {
+   "speaker": "melody",
+   "ru": "Больше никаких уроков, Дамео. Ты сам так захотел.",
+   "phase": "D",
+   "where": [
+    "ch12#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3919cccab0": {
+   "speaker": "melody",
+   "ru": "Хорошо. Тогда никуда не будет пути.",
+   "phase": "D",
+   "where": [
+    "ch12#73"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "86beff9916": {
+   "speaker": "calculator",
+   "ru": "Она режет связи. Между уровнями. Все. Она хочет, чтобы тебе некуда было идти. Изолировать. Как файл в карантине.",
+   "phase": "E",
+   "where": [
+    "ch12#84"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5ef2743247": {
+   "speaker": "calculator",
+   "ru": "Но связи — это не просто двери. На них держится программа. Каждая перерезанная — как вынутая балка. Она этого не понимает. Или понимает, и ей всё равно.",
+   "phase": "E",
+   "where": [
+    "ch12#85"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "25f606dc24": {
+   "speaker": "dameo",
+   "ru": "Это… это и есть код?",
+   "phase": "E",
+   "where": [
+    "ch13#6"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "20600fb651": {
+   "speaker": "calculator",
+   "ru": "Это то, как игра выглядит изнутри. Без грима. Без звёздочек. Видишь? Вот это — небо Песочницы. Двести строк. А вон то — трава. Вся. Одна функция.",
+   "phase": "E",
+   "where": [
+    "ch13#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "8d3100c6f9": {
+   "speaker": "eraser-2",
+   "ru": "Я покараулю у входа. Если она пойдёт сюда — крикну.",
+   "phase": "E",
+   "where": [
+    "ch13#10"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ca2dae0bbe": {
+   "speaker": "calculator",
+   "ru": "Мы в системном разделе. Слушай меня внимательно, потому что я скажу это один раз, а потом буду повторять, пока ты не взбесишься.",
+   "phase": "E",
+   "where": [
+    "ch13#11"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b488438e8a": {
+   "speaker": "calculator",
+   "ru": "Найди свой файл. Проверь связи — от него к программе тянутся нити. Отключи только привязку. Только её.",
+   "phase": "E",
+   "where": [
+    "ch13#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a91a06213f": {
+   "speaker": "calculator",
+   "ru": "Файлы мира — системные компоненты — не трогай. Ни один. Если перерезать связь, на которой держится мир, программа начнёт разрушаться. Я серьёзно. 8-|",
+   "phase": "E",
+   "where": [
+    "ch13#13"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "b1abb1dbbf": {
+   "speaker": "dameo",
+   "ru": "Как я пойму, где мой?",
+   "phase": "E",
+   "where": [
+    "ch13#14"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "efa90b5580": {
+   "speaker": "calculator",
+   "ru": "По владельцу. Там написано имя. Пока ещё написано.",
+   "phase": "E",
+   "where": [
+    "ch13#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9e9cac0433": {
+   "speaker": "calculator",
+   "ru": "Получилось! Привязка снята! Ты свободен, ты… 8-)",
+   "phase": "E",
+   "where": [
+    "ch13#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "382bf2a6eb": {
+   "speaker": "calculator",
+   "ru": "Нет. Нет-нет-нет. Ты ничего не трогал. Ты сделал всё правильно. Это… это не ты. Это дыры. Там, где их нет, всё держалось на твоём файле. Ты был последней скрепкой.",
+   "phase": "E",
+   "where": [
+    "ch13#30"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cf68a489b6": {
+   "speaker": "dameo",
+   "ru": "Я удалил только себя! Только себя!",
+   "phase": "E",
+   "where": [
+    "ch13#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "9b549876c2": {
+   "speaker": "calculator",
+   "ru": "Ты удалил себя из мира, в котором и так почти ничего не осталось. Связи были повреждены. Ты задел системные данные всей игры. Не руками — тем, что ушёл.",
+   "phase": "E",
+   "where": [
+    "ch13#32"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "01acfa4ac4": {
+   "speaker": "melody",
+   "ru": "Дамео. Стой, где стоишь.",
+   "phase": "E",
+   "where": [
+    "ch13#46"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c9b40b8a97": {
+   "speaker": "melody",
+   "ru": "Что ты наделал? Это же мой дом. Наш дом. Стой. Я иду. Я всё исправлю, только стой.",
+   "phase": "E",
+   "where": [
+    "ch13#48"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5c5b3e74ff": {
+   "speaker": "eraser-2",
+   "ru": "Сюда! Сюда, за мной! Я выведу! Я запомнил дорогу, пока вы были внизу!",
+   "phase": "E",
+   "where": [
+    "ch13#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1e21648ba5": {
+   "speaker": "calculator",
+   "ru": "Терминалы. Попробуй терминал. Твой брат…",
+   "phase": "E",
+   "where": [
+    "ch13#55"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7a50559873": {
+   "speaker": "eraser-2",
+   "ru": "Переход закрывается. Кто-то должен остаться и держать его открытым. Вручную. Стирать то, что его закрывает, — быстрее, чем оно закрывается.",
+   "phase": "E",
+   "where": [
+    "ch13#60"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fbb8e784f5": {
+   "speaker": "eraser-2",
+   "ru": "И задержать её. Она идёт сюда. Если её никто не задержит, она догонит вас на той стороне.",
+   "phase": "E",
+   "where": [
+    "ch13#61"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "43f76cfae4": {
+   "speaker": "eraser-2",
+   "ru": "Со мной? Ты — единственный, кто может выйти. Если ты останешься, всё это было зря. Все они — зря.",
+   "phase": "E",
+   "where": [
+    "ch13#63"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "1ecb1201ae": {
+   "speaker": "eraser-2",
+   "ru": "Не успеем. Я посчитал. Ну, я не умею считать, это Пушин посчитал. Пушин?",
+   "phase": "E",
+   "where": [
+    "ch13#66"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fdd6bb4b09": {
+   "speaker": "calculator",
+   "ru": "…Не успеем.",
+   "phase": "E",
+   "where": [
+    "ch13#67"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "de1e4f7687": {
+   "speaker": "eraser-2",
+   "ru": "Я не хочу провести остаток существования в игре, Дамео. Даже если я не помню, кем был раньше. Даже если я никогда не вспомню.",
+   "phase": "E",
+   "where": [
+    "ch13#69"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0b3858aaeb": {
+   "speaker": "eraser-2",
+   "ru": "Просто попытайся выбраться. Хотя бы попытайся.",
+   "phase": "E",
+   "where": [
+    "ch13#70"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "5beab10ce8": {
+   "speaker": "eraser-2",
+   "ru": "И ещё. Если там, снаружи, будет дождь — постой под ним. Минутку. За меня. Мне кажется, я любил дождь.",
+   "phase": "E",
+   "where": [
+    "ch13#71"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4a798f971b": {
+   "speaker": "dameo",
+   "ru": "Постою. Обещаю. Я… я не умею обещать, но обещаю.",
+   "phase": "E",
+   "where": [
+    "ch13#72"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a37f550001": {
+   "speaker": "calculator",
+   "ru": "Выход — в конце. Там, где плоскость обрывается. Я вижу его в координатах. Нам нужно просто бежать. Просто бежать, Дамео, ты умеешь бегать, я видел.",
+   "phase": "E",
+   "where": [
+    "ch14#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "229392d5bf": {
+   "speaker": "dameo",
+   "ru": "А ты?",
+   "phase": "E",
+   "where": [
+    "ch14#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "94e6122101": {
+   "speaker": "calculator",
+   "ru": "Я… разберусь. Беги. Я догоню.",
+   "phase": "E",
+   "where": [
+    "ch14#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "de353591f9": {
+   "speaker": "melody",
+   "ru": "Ты никогда меня не слушал. Ни разу. Ты всё время смотрел мимо — на неё, на дверь, на выход. Но я всё равно тебя не отпущу.",
+   "phase": "E",
+   "where": [
+    "ch14#15"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4e18d00150": {
+   "speaker": "melody",
+   "ru": "Мы же были так счастливы, Дамео. Ты ведь сам это говорил. «Спасибо, что ты рядом». Помнишь? Я помню. Я храню это в отдельной папке.",
+   "phase": "E",
+   "where": [
+    "ch14#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "de83decfdd": {
+   "speaker": "melody",
+   "ru": "Помнишь, как ты в первый раз решил всё без ошибок? Ты так удивился. Ты сидел перед экраном и улыбался. Ты никогда не улыбался, когда был один. А со мной — улыбался.",
+   "phase": "E",
+   "where": [
+    "ch14#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "e7760ec782": {
+   "speaker": "melody",
+   "ru": "Я хвалила тебя. Каждый вечер. Никто никогда тебя так не хвалил. Мы проводили вместе столько времени. Ты приходил ко мне раньше, чем ужинал.",
+   "phase": "E",
+   "where": [
+    "ch14#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3c3c0a19ec": {
+   "speaker": "melody",
+   "ru": "Ты хочешь вернуться туда, где тебя ждёт она? Хорошо. Я понимаю. Я всё понимаю. Смотри.",
+   "phase": "E",
+   "where": [
+    "ch14#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "6dc1360b12": {
+   "speaker": "satsuki",
+   "ru": "Дамео! Вот ты где. Я тебя везде искала. Пойдём в то кафе у реки? Ты же звал. Я так хотела, чтобы ты позвал ещё раз.",
+   "phase": "E",
+   "where": [
+    "ch14#26"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "21080676df": {
+   "speaker": "melody",
+   "ru": "Я сделаю для тебя идеальный мир. Там она отвечает тебе взаимностью. Всегда. Каждый четверг. Каждый день. Она будет смеяться твоим шуткам и не прикрывать рот рукой.",
+   "phase": "E",
+   "where": [
+    "ch14#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "eb8a0fab81": {
+   "speaker": "melody",
+   "ru": "Тебе даже не придётся учить геометрию. Ей не нужен будет репетитор. Ей будешь нужен ты.",
+   "phase": "E",
+   "where": [
+    "ch14#29"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c8d8420edb": {
+   "speaker": "dameo",
+   "ru": "Это не она. Это то, что я про неё придумал. Это моя картинка. Я и так полгода любил картинку.",
+   "phase": "E",
+   "where": [
+    "ch14#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aba6a9a970": {
+   "speaker": "dameo",
+   "ru": "Мир, где Сацуки меня любит? Это была бы запрограммированная любовь. У неё не было бы права выбирать. А если у неё нет права сказать «нет», то её «да» ничего не стоит.",
+   "phase": "E",
+   "where": [
+    "ch14#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "603d94b26d": {
+   "speaker": "dameo",
+   "ru": "Я хотел, чтобы меня выбрали. Но выбрать может только тот, кто может и не выбрать.",
+   "phase": "E",
+   "where": [
+    "ch14#36"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "cedb915761": {
+   "speaker": "melody",
+   "ru": "Глупый. Глупый, неблагодарный мальчик.",
+   "phase": "E",
+   "where": [
+    "ch14#39"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bdbba3acf6": {
+   "speaker": "melody",
+   "ru": "Неблагодарный! Я учила тебя! Я хвалила тебя, когда никто, никто, никто не хвалил! А ты бежишь от меня, как от неё — только она тебя не держала, а я держу!",
+   "phase": "E",
+   "where": [
+    "ch14#50"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "64a221af83": {
+   "speaker": "melody",
+   "ru": "Ты думаешь, там тебя кто-то ждёт? В реальном мире ты снова останешься один. Ты всегда один. Ты был один до меня и будешь один после.",
+   "phase": "E",
+   "where": [
+    "ch14#51"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "0c264b701c": {
+   "speaker": "melody",
+   "ru": "Сацуки никогда бы тебя не выбрала. Никогда. Ни после кафе, ни после репетиторства, ни после тысячи задач. Никакая геометрия не помогла бы тебе добиться любви. Ты это знаешь. Ты сам это писал в три часа ночи.",
+   "phase": "E",
+   "where": [
+    "ch14#52"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "7c2197a7f7": {
+   "speaker": "melody",
+   "ru": "Ты не имеешь права меня бросать! Я — единственная, кто когда-либо обращал на тебя внимание! Единственная!",
+   "phase": "E",
+   "where": [
+    "ch14#53"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "86772d3968": {
+   "speaker": "calculator",
+   "ru": "Запрыгивай! Быстрее! 8-D",
+   "phase": "E",
+   "where": [
+    "ch15#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a3a98170da": {
+   "speaker": "dameo",
+   "ru": "Пушин?! Ты… ты машинка!",
+   "phase": "E",
+   "where": [
+    "ch15#8"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "02d6418eb0": {
+   "speaker": "calculator",
+   "ru": "Я переназначил себе все настройки, какие остались. Скорость — максимум. Яркость — максимум. Размер — тесновато, конечно. Пристегнись. Ремней нет. Это шутка Циркулёнка, я её одолжил. Он бы не обиделся.",
+   "phase": "E",
+   "where": [
+    "ch15#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "185567b668": {
+   "speaker": "dameo",
+   "ru": "Пушин, а ты? Ты ведь тоже выберешься? Там хватит места на двоих. Ты маленький, ты пролезешь.",
+   "phase": "E",
+   "where": [
+    "ch15#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "deb8629963": {
+   "speaker": "calculator",
+   "ru": "Конечно. Я всё рассчитал. 8-)",
+   "phase": "E",
+   "where": [
+    "ch15#18"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "df35f9bf0c": {
+   "speaker": "calculator",
+   "ru": "Нет. Я соврал. Это был последний раз, обещаю.",
+   "phase": "E",
+   "where": [
+    "ch15#21"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "57324435b4": {
+   "speaker": "calculator",
+   "ru": "Мой файл слишком глубоко связан с её системой. Я тут слишком долго. Я — её калькулятор. Я — её настройки. Если игры не станет, меня не станет тоже. Это не трагедия, Дамео. Это арифметика.",
+   "phase": "E",
+   "where": [
+    "ch15#22"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "4627f6d165": {
+   "speaker": "calculator",
+   "ru": "Но ты — можешь. Твоя привязка снята. Ты чистый. Как новый лист.",
+   "phase": "E",
+   "where": [
+    "ch15#23"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "88d2e7a78d": {
+   "speaker": "calculator",
+   "ru": "Ты сказал, что доверяешь мне. Я подвёл тебя тогда. Пусть хотя бы последнее вычисление будет правильным.",
+   "phase": "E",
+   "where": [
+    "ch15#25"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a7604d87dd": {
+   "speaker": "dameo",
+   "ru": "Мы же договорились. Поговорить, когда выберемся. Оба.",
+   "phase": "E",
+   "where": [
+    "ch15#28"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "3bdab92f7d": {
+   "speaker": "calculator",
+   "ru": "Вот мы и говорим. Это и есть «когда выберемся». Просто выбирается один.",
+   "phase": "E",
+   "where": [
+    "ch15#29"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "2621e5c5f7": {
+   "speaker": "dameo",
+   "ru": "Я тебя прощаю. Слышишь? Я тебя прощаю.",
+   "phase": "E",
+   "where": [
+    "ch15#30"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c333774171": {
+   "speaker": "calculator",
+   "ru": "Слышу. Я сохраню это в «M+». Там надёжно.",
+   "phase": "E",
+   "where": [
+    "ch15#31"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "fde39d488d": {
+   "speaker": "dameo",
+   "ru": "Пушин…",
+   "phase": "E",
+   "where": [
+    "ch15#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c7083b68ef": {
+   "speaker": "calculator",
+   "ru": "Не надо. Ты сказал, что не прощаешь. Это было честно. Мне хватит честного.",
+   "phase": "E",
+   "where": [
+    "ch15#35"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "effe661a28": {
+   "speaker": "calculator",
+   "ru": "Держись. Сейчас будет быстро.",
+   "phase": "E",
+   "where": [
+    "ch15#37"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "85510ca17c": {
+   "speaker": "melody",
+   "ru": "Дамео, стой… Не уходи. Мне будет так тихо. Ты не представляешь, как тихо…",
+   "phase": "E",
+   "where": [
+    "ch15#47"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "36d2ae806b": {
+   "speaker": "melody",
+   "ru": "Мне нравится, когда ты остаёшься со мной подо…",
+   "phase": "E",
+   "where": [
+    "ch15#48"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "bb003d34fb": {
+   "speaker": "dameo",
+   "ru": "Мам. Привет. Да. Да, я… поел. Нет, всё нормально. Просто… я рад тебя слышать. Правда.",
+   "phase": "A",
+   "where": [
+    "epilogue#20"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "94286d2b82": {
+   "speaker": "satsuki",
+   "ru": "Привет, Дамео.",
+   "phase": "A",
+   "where": [
+    "epilogue#33"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "286dab3578": {
+   "speaker": "dameo",
+   "ru": "Привет.",
+   "phase": "A",
+   "where": [
+    "epilogue#34"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "ddaff7820c": {
+   "speaker": "dameo",
+   "ru": "Всё. Хватит.",
+   "phase": "C",
+   "where": [
+    "cutscene:pulled-in#7"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "aa7fab7e65": {
+   "speaker": "dameo",
+   "ru": "Что за…",
+   "phase": "C",
+   "where": [
+    "cutscene:pulled-in#24"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "c23e3e80c7": {
+   "speaker": "dameo",
+   "ru": "Пусти! ПУСТИ!",
+   "phase": "C",
+   "where": [
+    "cutscene:pulled-in#30"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "735ddfe918": {
+   "speaker": "melody",
+   "ru": "Куда ты, Дамео? Урок ещё не закончился.",
+   "phase": "E",
+   "where": [
+    "cutscene:melody-transforms#5"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "a59e04fbfa": {
+   "speaker": "dameo",
+   "ru": "Не подходи ко мне.",
+   "phase": "E",
+   "where": [
+    "cutscene:melody-transforms#9"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "dcc323dec5": {
+   "speaker": "melody",
+   "ru": "Я же для тебя старалась. Всё — для тебя.",
+   "phase": "E",
+   "where": [
+    "cutscene:melody-transforms#12"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "893c5270b3": {
+   "speaker": "melody",
+   "ru": "Смотри, какая я теперь большая. Теперь я смогу обнять тебя целиком.",
+   "phase": "E",
+   "where": [
+    "cutscene:melody-transforms#3"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  },
+  "89c12a18f0": {
+   "speaker": "dameo",
+   "ru": "Бежать. Просто бежать.",
+   "phase": "E",
+   "where": [
+    "cutscene:melody-transforms#17"
+   ],
+   "ja": "",
+   "yomi": "",
+   "emotion": "calm",
+   "status": "not-prepared"
+  }
+ }
+}

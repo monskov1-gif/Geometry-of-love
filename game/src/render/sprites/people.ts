@@ -28,7 +28,14 @@ export interface PersonSpec {
   bottomTones: Tones;
   legs: Tones; // skin or tights under a skirt
   socks?: string;
+  /** Different socks on each leg (Melody: a striped thigh-high and a knee sock); rows above the shoes. */
+  sockL?: { c: string; rows: number; stripes?: string[] };
+  sockR?: { c: string; rows: number; stripes?: string[] };
   shoes: Tones;
+  /** A bow on the shoes (Melody's platform sneakers). */
+  shoeBow?: string;
+  /** Frame colour of glasses (Dameo). */
+  glasses?: string;
   ribbons?: [string, string];
   hairclip?: boolean;
   eyeBags?: boolean;
@@ -102,7 +109,20 @@ function faceFront(put: Put, s: PersonSpec, hx: number, hy: number, e: Emotion, 
   };
   eye(L, false);
   eye(R, true);
-  if (s.eyeBags) {
+  if (s.glasses) {
+    const g = s.glasses;
+    for (const x of [L, R]) {
+      span(put, x - 1, x + 3, ey - 2, g);
+      span(put, x - 1, x + 3, ey + 2, g);
+      put(x - 1, ey - 1, g);
+      put(x - 1, ey, g);
+      put(x - 1, ey + 1, g);
+      put(x + 3, ey - 1, g);
+      put(x + 3, ey, g);
+      put(x + 3, ey + 1, g);
+    }
+  }
+  if (s.eyeBags && !s.glasses) {
     put(L, ey + 2, s.skin[0]);
     put(L + 2, ey + 2, s.skin[0]);
     put(R, ey + 2, s.skin[0]);
@@ -324,11 +344,16 @@ function legsFront(put: Put, s: PersonSpec, cx: number, y0: number, H: number): 
     }
     for (let i = skirtH; i < H - 4; i++) {
       const y = y0 + i;
-      const sock = s.socks && i > H - 15;
-      span(put, cx - 5, cx - 2, y, sock ? s.socks! : s.legs[1]);
-      put(cx - 2, y, sock ? '#c8c4c0' : s.legs[0]);
-      span(put, cx + 1, cx + 4, y, sock ? s.socks! : s.legs[1]);
-      put(cx + 4, y, sock ? '#c8c4c0' : s.legs[0]);
+      const fromShoe = H - 4 - i; // rows above the shoes
+      const leg = (side: { c: string; rows: number; stripes?: string[] } | undefined, x0: number, x1: number) => {
+        const on = side ? fromShoe <= side.rows : !!s.socks && i > H - 15;
+        const top = side ? side.rows - fromShoe : 99;
+        const c = side ? (side.stripes && top >= 1 && top <= side.stripes.length ? side.stripes[top - 1]! : side.c) : s.socks!;
+        span(put, x0, x1, y, on ? c : s.legs[1]);
+        put(x1, y, on ? '#c8c4c0' : s.legs[0]);
+      };
+      leg(s.sockL, cx - 5, cx - 2);
+      leg(s.sockR, cx + 1, cx + 4);
     }
   }
   // shoes
@@ -338,6 +363,7 @@ function legsFront(put: Put, s: PersonSpec, cx: number, y0: number, H: number): 
     span(put, cx - 7 + (i < 1 ? 1 : 0), cx - 1, sy + i, i === 3 ? sh[0] : sh[1]);
     span(put, cx, cx + 6 - (i < 1 ? 1 : 0), sy + i, i === 3 ? sh[0] : sh[1]);
   }
+  if (s.shoeBow) for (const x of [cx - 5, cx + 2]) span(put, x, x + 2, sy, s.shoeBow);
   put(cx - 6, sy + 1, sh[2]);
   put(cx + 1, sy + 1, sh[2]);
 }
@@ -363,6 +389,12 @@ function drawSide(put: Put, s: PersonSpec, f: Frame, bob: number): void {
   put(hx + 5, hy + 7, s.skin[1]); // nose
   put(hx + 2, hy + 6, s.line);
   put(hx + 3, hy + 6, f.emotion === 'scared' ? '#ffffff' : s.eyes);
+  if (s.glasses) {
+    span(put, hx + 1, hx + 4, hy + 5, s.glasses);
+    span(put, hx + 1, hx + 4, hy + 7, s.glasses);
+    put(hx + 4, hy + 6, s.glasses);
+    span(put, hx - 2, hx, hy + 5, s.glasses); // temple to the ear
+  }
   put(hx + 2, hy + 5, s.line);
   put(hx + 3, hy + 10, s.line);
   if (f.mouthOpen) put(hx + 3, hy + 11, '#9a3a48');
@@ -526,14 +558,15 @@ export const PEOPLE: Record<string, PersonSpec> = {
     hairStyle: 'messy',
     slouch: true,
     top: 'hoodie',
-    topTones: ['#2a3230', '#3c4644', '#566260'],
-    inner: ['#2a3230', '#3c4644', '#566260'],
+    topTones: ['#141216', '#221f26', '#353139'],
+    inner: ['#7e7e84', '#a2a2a8', '#c2c2c8'], // grey t-shirt under the black hoodie (author art 2026-10-30)
     accent: '#c8ccc4',
     bottom: 'pants',
     bottomTones: ['#16161c', '#23232b', '#33333e'],
     legs: ['#16161c', '#23232b', '#33333e'],
     shoes: ['#6a6a70', '#c8c8cc', '#ececf0'],
     eyeBags: true,
+    glasses: '#3a3a42',
   },
   satsuki: {
     skin: ['#cfa48c', '#ecc8b0', '#f8dccc'],
@@ -552,7 +585,7 @@ export const PEOPLE: Record<string, PersonSpec> = {
     shoes: ['#3a2418', '#5a3a26', '#7a5236'],
   },
   melody: {
-    skin: ['#e0a898', '#f8d4c4', '#ffe8dc'],
+    skin: ['#b87a5c', '#d89a78', '#eab894'], // warm tan (author art 2026-10-30)
     hair: ['#d8608a', '#f08ab0', '#ffc0d8'],
     eyes: '#c83a7a',
     line: '#3a1a2a',
@@ -563,10 +596,13 @@ export const PEOPLE: Record<string, PersonSpec> = {
     inner: ['#d8d4dc', '#f4f0f8', '#ffffff'],
     accent: '#e8304a',
     bottom: 'skirt',
-    bottomTones: ['#1e2450', '#2c3470', '#3e4890'],
-    legs: ['#e0a898', '#f8d4c4', '#ffe8dc'],
+    bottomTones: ['#46287e', '#6440a8', '#8460c8'], // purple pleated skirt
+    legs: ['#b87a5c', '#d89a78', '#eab894'],
     socks: '#f4f0f8',
-    shoes: ['#141418', '#24242c', '#3a3a44'],
+    shoes: ['#6a4aa8', '#f4f0f8', '#ffffff'], // white platform sneakers, purple soles
+    shoeBow: '#f070b8',
+    sockL: { c: '#f6f2fa', rows: 21, stripes: ['#f6f2fa', '#f080b0', '#80c0f0'] }, // striped thigh-high
+    sockR: { c: '#7048b0', rows: 13 }, // purple knee sock
     ribbons: ['#3a5ad8', '#3ad86a'],
     hairclip: true,
   },
