@@ -1,6 +1,7 @@
-// Chiptune audio engine on the Web Audio API. Everything is synthesised in the
-// browser (pulse waves with 12.5/25/50% duty, triangle, noise), so the game
-// ships original music and sound without audio files.
+// Chiptune audio engine on the Web Audio API. Most music and every sound are
+// synthesised in the browser (pulse waves with 12.5/25/50% duty, triangle,
+// noise); a few story themes are recorded files (audio/recorded.ts), mixed on
+// the same music bus with the same crossfades.
 //
 // Browsers block audio until the player interacts with the page: the engine
 // creates its AudioContext on the first pointer/key event and then starts the
@@ -8,6 +9,7 @@
 import type { Track } from './tracks';
 import { TRACKS } from './tracks';
 import { SOUNDS, type SoundId } from './sfx';
+import { RECORDED } from './recorded';
 
 export interface AudioSettings {
   musicVolume: number;
@@ -34,6 +36,9 @@ export class AudioEngine {
   private noise!: AudioBuffer;
   private current: { id: string; track: Track; gain: GainNode; step: number; nextTime: number; bar: number } | null = null;
   private requested: string | null = null;
+  /** The recorded theme playing now (null while a synthesised track or silence plays). */
+  private recorded: { id: string; url: string; src: AudioBufferSourceNode; gain: GainNode } | null = null;
+  private readonly buffers = new Map<string, Promise<AudioBuffer>>();
   private settings: AudioSettings = { musicVolume: 0.55, sfxVolume: 0.8, muted: false };
   private lastText = 0;
   /** 0..1: chance that the music "sticks" on a step (Mini-game 1 «Выход»). */
@@ -72,7 +77,7 @@ export class AudioEngine {
 
   /** Switches the music with a short crossfade; null fades to silence. */
   music(id: string | null): void {
-    if (id === this.requested && (this.current?.id === id || !this.ctx)) return;
+    if (id === this.requested && (this.current?.id === id || this.recorded?.id === id || !this.ctx)) return;
     this.requested = id;
     if (!this.ctx) return; // will start on unlock
     this.startTrack(id);
@@ -133,9 +138,83 @@ export class AudioEngine {
     if (this.requested) this.startTrack(this.requested);
   }
 
+  private loadBuffer(url: string): Promise<AudioBuffer> {
+    let p = this.buffers.get(url);
+    if (!p) {
+      p = fetch(url)
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.arrayBuffer();
+        })
+        .then((data) => this.ctx!.decodeAudioData(data));
+      p.catch((e: unknown) => {
+        console.error(`[audio] could not load ${url}`, e);
+        this.buffers.delete(url);
+      });
+      this.buffers.set(url, p);
+    }
+    return p;
+  }
+
+  /** Fades out whatever recorded theme plays (a different one, or silence, follows). */
+  private stopRecorded(): void {
+    const r = this.recorded;
+    if (!r || !this.ctx) return;
+    r.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.4);
+    // looping sources never end by themselves, so stop() is always valid here
+    window.setTimeout(() => {
+      r.src.stop();
+      r.gain.disconnect();
+    }, 2500);
+    this.recorded = null;
+  }
+
+  private startRecorded(id: string): void {
+    const spec = RECORDED[id]!;
+    const ctx = this.ctx!;
+    const r = this.recorded;
+    if (r && r.url === spec.url) {
+      // Same file, another section: keep playing, only the loop changes.
+      r.id = id;
+      r.src.loopStart = spec.loopStart;
+      if (spec.loopEnd) r.src.loopEnd = spec.loopEnd;
+      return;
+    }
+    this.stopRecorded();
+    void this.loadBuffer(spec.url).then(
+      (buffer) => {
+        if (this.requested !== id || !this.ctx) return; // something else was asked for meanwhile
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+        src.loop = true;
+        src.loopStart = spec.loopStart;
+        src.loopEnd = spec.loopEnd ?? buffer.duration;
+        const gain = ctx.createGain();
+        const t = ctx.currentTime;
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(spec.gain, t + 1.2);
+        src.connect(gain).connect(this.musicBus);
+        src.start(t, spec.start);
+        this.recorded = { id, url: spec.url, src, gain };
+      },
+      (e: unknown) => console.warn(`[audio] theme "${id}" skipped`, e), // the game continues without it
+    );
+  }
+
   private startTrack(id: string | null): void {
     const ctx = this.ctx!;
     const t = ctx.currentTime;
+    if (!id || !RECORDED[id]) this.stopRecorded();
+    if (id && RECORDED[id]) {
+      if (this.current) {
+        const old = this.current.gain;
+        old.gain.setTargetAtTime(0, t, 0.25);
+        window.setTimeout(() => old.disconnect(), 1500);
+        this.current = null;
+      }
+      this.startRecorded(id);
+      return;
+    }
     if (this.current) {
       const old = this.current.gain;
       old.gain.setTargetAtTime(0, t, 0.25);

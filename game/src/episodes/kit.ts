@@ -2,6 +2,7 @@
 // keyboard + touch controls, a frame loop and palette lookup. Each episode
 // keeps its own rules; this file only removes boilerplate.
 import { el } from '../ui/dom';
+import { touchControls } from './touch-controls';
 
 export type ControlName = 'left' | 'right' | 'jump' | 'down';
 
@@ -33,7 +34,13 @@ const LABELS: Record<ControlName, [string, string]> = {
   down: ['▼', 'Пригнуться'],
 };
 
-/** Keyboard listeners plus on-screen hold buttons for the given controls only. */
+/** Is this a touch-first device (phone, tablet)? Then the joystick replaces the buttons. */
+export const touchFirst = () => typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+
+/**
+ * Keyboard listeners plus on-screen controls for the given controls only:
+ * a virtual joystick and action buttons on touch screens, hold buttons for the mouse otherwise.
+ */
 export function createControls(enabled: ControlName[]): { state: ControlState; bar: HTMLElement; dispose: () => void } {
   const state: ControlState = { left: false, right: false, jump: false, down: false, jumpPressed: false };
   const set = (name: ControlName, down: boolean) => {
@@ -68,10 +75,12 @@ export function createControls(enabled: ControlName[]): { state: ControlState; b
       LABELS[name][0],
     ),
   );
+  const touch = touchFirst() ? touchControls(enabled, set, state) : null;
   return {
     state,
-    bar: el('div', { class: 'episode-controls' }, ...buttons),
+    bar: touch ? touch.root : el('div', { class: 'episode-controls' }, ...buttons),
     dispose: () => {
+      touch?.dispose();
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('keyup', onKey);
     },

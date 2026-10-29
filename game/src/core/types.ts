@@ -17,7 +17,8 @@ export type TextKind =
   | 'corrupted'
   | 'memory';
 
-export type StagePosition = 'left' | 'center' | 'right';
+/** left / center / right, or a named mark of a 3D location (e.g. 'desk', 'door'). */
+export type StagePosition = 'left' | 'center' | 'right' | (string & {});
 
 /** Lighting state of a painted location. */
 export type LightingId = 'day' | 'evening' | 'night';
@@ -70,6 +71,8 @@ export type Step =
   | { type: 'hide'; character: string }
   | { type: 'background'; background: string; lighting?: LightingId; variant?: string }
   | { type: 'light'; lighting: LightingId }
+  /** Camera shot of the 3D location; null hands framing back to the automatic director. */
+  | { type: 'shot'; shot: string | null }
   | { type: 'music'; track: string | null }
   | { type: 'sfx'; sound: string }
   | { type: 'space'; space: SpaceId; phase?: VisualPhase }
@@ -79,7 +82,23 @@ export type Step =
   | { type: 'branch'; if: Condition; goto: Target }
   | { type: 'goto'; target: Target }
   | { type: 'episode'; episode: string; params?: Record<string, unknown> }
+  /** Full-screen chapter / volume card; waits for the player. */
+  | { type: 'card'; card: ChapterCard }
+  /** A staged scene run by the Cutscene Director (world/director); the story waits for it. */
+  | { type: 'cutscene'; cutscene: string }
   | { type: 'ending'; ending: string };
+
+export interface ChapterCard {
+  /** e.g. 'Глава 1' or 'Том I'. */
+  label: string;
+  title: string;
+  /** Small line under the title (volume name, epigraph). */
+  subtitle?: string;
+  /** Look of the card: the space it opens, or a story moment. */
+  style: 'reality' | 'app' | 'game' | 'code' | 'volume' | 'end';
+  /** 3D location shown behind the title (blurred, slow camera drift). */
+  backdrop?: string;
+}
 
 export interface Scene {
   id: string;
@@ -109,6 +128,8 @@ export interface StageState {
   variant: string | null;
   /** Current music track; restored on load. */
   music: string | null;
+  /** Named camera shot (3D locations); null = automatic framing of the cast. */
+  shot: string | null;
   space: SpaceId;
   phase: VisualPhase;
   characters: StagedCharacter[];
@@ -150,4 +171,6 @@ export type Presentation =
     }
   | { kind: 'choice'; key: string; prompt: string | null; options: PresentedOption[] }
   | { kind: 'episode'; key: string; episode: string; params: Record<string, unknown> }
+  | { kind: 'card'; key: string; card: ChapterCard }
+  | { kind: 'cutscene'; key: string; cutscene: string }
   | { kind: 'ending'; key: string; ending: string };

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World bench (dev only)</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #0a0a12; overflow: hidden; }
+      #host { position: absolute; inset: 0; }
+      .world-view { position: absolute; inset: 0; }
+      .world-canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    </style>
+  </head>
+  <body>
+    <div id="host"></div>
+    <script type="module" src="./dev/world-preview.ts"></script>
+    <link rel="stylesheet" href="./src/styles/episodes.css" />
+  </body>
+</html>

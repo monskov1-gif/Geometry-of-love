@@ -4,15 +4,53 @@
   inset: 0;
 }
 
+/* A screen's layers (cards, cutscenes, choices) stack inside it; panels and toasts stay above. */
+.screen {
+  isolation: isolate;
+}
+
 /* ======================================================================
-   Stage: painted scene + cast
+   Stage: 3D world or painted scene + cast
    ====================================================================== */
 .stage,
 .stage-bg,
 .stage-cast,
-.scene-view {
+.scene-view,
+.world-view {
   position: absolute;
   inset: 0;
+}
+
+/* The 3D scene renders at ~360 lines and is scaled up without smoothing. */
+.world-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* In 3D, people stand inside the scene; only portraits (Melody) stay in the DOM,
+   shown beside the dialogue while their character speaks. */
+.stage[data-mode='3d'] .cast-slot[data-kind='pixel'],
+.stage[data-mode='crt'] .cast-slot {
+  display: none;
+}
+
+.stage[data-mode='3d'] .cast-slot[data-kind='sheet'] {
+  left: auto;
+  right: 3%;
+  height: 78%;
+  translate: 0 0;
+  opacity: 0;
+  transform: translateY(6%);
+  transition:
+    opacity var(--dur-med) ease,
+    transform var(--dur-med) ease;
+}
+
+.stage[data-mode='3d'] .cast-slot[data-kind='sheet'][data-speaking='true'] {
+  opacity: 1;
+  transform: none;
 }
 
 .scene-layer {
@@ -111,8 +149,8 @@
 
 /* Generated pixel characters: whole-number scale (set by Stage) keeps pixels square. */
 .sprite-pixel {
-  width: calc(24px * var(--px-scale, 4));
-  height: calc(48px * var(--px-scale, 4));
+  width: calc(var(--sw, 24) * 1px * var(--px-scale, 4));
+  height: calc(var(--sh, 48) * 1px * var(--px-scale, 4));
   image-rendering: pixelated;
   flex-shrink: 0;
 }
@@ -148,53 +186,50 @@
 
 .dialogue {
   position: relative;
-  width: min(1120px, 100%);
+  width: min(1180px, 100%);
   height: var(--dialog-height);
   display: flex;
-  padding: 30px clamp(18px, 3vw, 40px) 14px clamp(48px, 7vw, 92px);
-  background-color: color-mix(in srgb, var(--notebook-paper) calc(var(--dialog-opacity) * 100%), transparent);
-  background-image:
-    linear-gradient(90deg, transparent clamp(30px, 5vw, 64px), var(--notebook-margin) clamp(30px, 5vw, 64px), var(--notebook-margin) calc(clamp(30px, 5vw, 64px) + 2px), transparent calc(clamp(30px, 5vw, 64px) + 2px)),
-    repeating-linear-gradient(180deg, transparent 0 calc(var(--fs-body) * var(--lh-body) - 1px), var(--notebook-blue) calc(var(--fs-body) * var(--lh-body) - 1px) calc(var(--fs-body) * var(--lh-body)));
-  background-position: 0 0, 0 30px;
-  border: 3px solid var(--panel-border);
-  border-radius: 14px 14px 8px 8px;
-  box-shadow: var(--card-shadow), inset 0 0 0 2px rgba(255, 255, 255, 0.55);
-  color: var(--geometry-ink);
+  padding: 22px clamp(20px, 4vw, 64px) 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 40%),
+    color-mix(in srgb, var(--dlg-bg) calc(var(--dialog-opacity) * 100%), transparent);
+  border-top: 2px solid var(--dlg-line);
+  border-bottom: 2px solid var(--dlg-line);
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4);
+  color: var(--dlg-text);
   cursor: pointer;
   animation: card-in 240ms ease-out;
+  -webkit-font-smoothing: none;
 }
 
-/* Binder rings along the top edge. */
-.dialogue::before {
-  content: '';
-  position: absolute;
-  top: -11px;
-  left: 6%;
-  right: 6%;
-  height: 20px;
-  background: radial-gradient(circle at 10px 10px, var(--ring-hole) 0 3px, var(--ring) 3.5px 6px, rgba(0, 0, 0, 0.35) 6.5px 7px, transparent 7.5px) 0 0 / 42px 20px repeat-x;
-  pointer-events: none;
-}
-
-/* A pixel star sticker in the corner (decor at the edges, calm centre). */
+/* Pixel lace ornaments at both ends of the band (decor at the edges, calm centre). */
+.dialogue::before,
 .dialogue::after {
   content: '';
   position: absolute;
-  right: -10px;
-  bottom: -12px;
-  width: 34px;
-  height: 34px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 9' shape-rendering='crispEdges'%3E%3Cpath fill='%2330243b' d='M4 0h1v2h1v1h3v1H8v1H7v1h1v3H7V8H6V7H3v1H2v1H1V6h1V5H1V4H0V3h3V2h1z'/%3E%3Cpath fill='%23f8feb4' d='M4 1h1v2h1v1h2v1H7v1h0v2H6V7H3v1H2V6h1V5H2V4h2z'/%3E%3C/svg%3E") center / contain no-repeat;
-  image-rendering: pixelated;
-  transform: rotate(12deg);
+  bottom: -2px;
+  width: 64px;
+  height: 32px;
+  background: var(--dlg-line);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 7h16v1H0zM1 6h3v1H1zM5 5h2v2H5zM2 3h2v1H2zM1 4h1v2H1zM4 4h1v2H4zM8 4h1v1H8zM9 3h2v1H9zM11 4h1v2h-1zM12 6h3v1h-3zM13 2h1v1h-1zM14 3h1v1h-1z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 7h16v1H0zM1 6h3v1H1zM5 5h2v2H5zM2 3h2v1H2zM1 4h1v2H1zM4 4h1v2H4zM8 4h1v1H8zM9 3h2v1H9zM11 4h1v2h-1zM12 6h3v1h-3zM13 2h1v1h-1zM14 3h1v1h-1z'/%3E%3C/svg%3E") center / contain no-repeat;
   pointer-events: none;
+  opacity: 0.8;
+}
+
+.dialogue::before {
+  left: 8px;
+}
+
+.dialogue::after {
+  right: 8px;
+  transform: scaleX(-1);
 }
 
 @keyframes card-in {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
 }
 
@@ -202,21 +237,19 @@
   animation: none;
 }
 
-/* Name on a strip of washi tape. */
+/* Speaker name: pixel caps on the band's top edge, a short underline in the character's colour. */
 .nameplate {
   position: absolute;
   top: 0;
-  left: clamp(40px, 6vw, 80px);
-  translate: 0 -62%;
-  rotate: -2deg;
-  padding: 5px 18px 4px;
-  font-size: clamp(14px, 0.6rem + 0.5vw, 18px);
-  color: var(--ink);
-  background:
-    repeating-linear-gradient(-45deg, transparent 0 6px, rgba(255, 255, 255, 0.35) 6px 12px),
-    var(--accent, var(--tape));
-  clip-path: polygon(0 8%, 3% 0, 7% 10%, 11% 0, 89% 0, 93% 12%, 97% 0, 100% 10%, 100% 90%, 96% 100%, 92% 88%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+  left: clamp(20px, 4vw, 64px);
+  translate: 0 -60%;
+  padding: 4px 14px 4px;
+  font-size: var(--fs-ui);
+  letter-spacing: 0.06em;
+  color: var(--dlg-text);
+  background: color-mix(in srgb, var(--dlg-bg) 96%, black);
+  border: 2px solid var(--dlg-line);
+  box-shadow: inset 0 -3px 0 var(--accent, var(--tape));
   max-width: calc(100% - 120px);
   overflow-wrap: anywhere;
   z-index: 1;
@@ -229,10 +262,10 @@
 }
 
 .dialogue-text {
-  margin: 0 0 var(--space-4);
-  max-width: 72ch;
+  margin: 0 0 var(--space-2);
+  max-width: 64ch;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
@@ -240,8 +273,8 @@
 /* Blinking pixel heart: the line is complete. */
 .continue-indicator {
   position: absolute;
-  right: 22px;
-  bottom: 10px;
+  right: clamp(24px, 4vw, 64px);
+  bottom: 14px;
   width: 14px;
   height: 12px;
   font-size: 0;
@@ -262,14 +295,13 @@
 }
 
 /* Text kinds */
+/* Narration a step dimmer, thoughts in the line colour and parentheses (no italics in pixel type). */
 .dialogue[data-kind='narration'] .dialogue-text {
-  font-style: normal;
-  color: color-mix(in srgb, var(--geometry-ink) 85%, var(--notebook-blue));
+  color: color-mix(in srgb, var(--dlg-text) 78%, var(--dlg-line));
 }
 
 .dialogue[data-kind='thought'] .dialogue-text {
-  font-style: italic;
-  color: #5c6b7a;
+  color: var(--dlg-line);
 }
 
 .dialogue[data-kind='thought'] .dialogue-text::before {
@@ -291,42 +323,34 @@
   letter-spacing: 0.03em;
 }
 
-.dialogue[data-kind='system'] {
-  background-image: none;
-  background-color: color-mix(in srgb, var(--system-gray) 94%, transparent);
-  border-radius: 4px;
+.dialogue[data-kind='system'],
+.dialogue[data-kind='error'] {
+  padding-top: 30px;
 }
 
-.dialogue[data-kind='system']::before {
-  content: 'メロディのまほう — системное сообщение';
-  top: 6px;
-  left: 12px;
-  right: auto;
-  height: auto;
+.dialogue[data-kind='system']::before,
+.dialogue[data-kind='error']::before {
+  content: 'メロディのまほう · системное сообщение';
+  -webkit-mask: none;
+  mask: none;
   background: none;
-  font-family: var(--font-pixel);
-  font-size: 11px;
-  color: var(--plum);
+  width: auto;
+  height: auto;
+  top: 8px;
+  bottom: auto;
+  left: clamp(20px, 4vw, 64px);
+  font-size: 16px;
+  color: var(--dlg-line);
+  opacity: 0.8;
 }
 
 .dialogue[data-kind='error'] {
-  background-image: none;
-  background-color: var(--paper);
-  border-color: var(--correction-red);
-  box-shadow: var(--card-shadow), 0 0 0 3px color-mix(in srgb, var(--correction-red) 30%, transparent);
-  color: var(--correction-red);
-  border-radius: 4px;
+  --dlg-line: var(--correction-red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--correction-red) 40%, transparent);
 }
 
 .dialogue[data-kind='error']::before {
   content: '⚠ ОШИБКА';
-  top: 6px;
-  left: 12px;
-  right: auto;
-  height: auto;
-  background: none;
-  font-family: var(--font-pixel);
-  font-size: 11px;
   color: var(--correction-red);
 }
 
@@ -336,137 +360,46 @@
 }
 
 /* Reality: muted card stock, no app decoration. */
-[data-space='reality'] .dialogue {
-  background-color: color-mix(in srgb, #ddd6c8 calc(var(--dialog-opacity) * 100%), transparent);
-  background-image: radial-gradient(rgba(57, 43, 39, 0.07) 1px, transparent 1px);
-  background-size: 4px 4px;
-  border-color: var(--reality-walnut);
-  border-radius: 4px;
-  box-shadow: 0 5px 0 rgba(20, 16, 12, 0.45), inset 0 0 0 2px rgba(255, 255, 255, 0.25);
-  color: var(--reality-shadow);
-}
-
-[data-space='reality'] .dialogue::before,
-[data-space='reality'] .dialogue::after {
-  display: none;
-}
-
-[data-space='reality'] .nameplate {
-  background: #d9cfb6;
-  rotate: -1deg;
-}
-
-[data-space='reality'] .dialogue[data-kind='thought'] .dialogue-text {
-  color: #5a554e;
-}
-
-/* Code / system space: a terminal. */
-[data-space='code'] .dialogue {
-  background: color-mix(in srgb, var(--code-black) 94%, transparent);
-  background-image: repeating-linear-gradient(180deg, transparent 0 2px, rgba(57, 255, 136, 0.04) 2px 3px);
-  border: 1px solid var(--code-green-muted);
-  border-radius: 0;
-  box-shadow: 0 0 0 1px var(--code-grid), 0 0 30px rgba(57, 255, 136, 0.1);
-  color: var(--code-green);
-  font-family: var(--font-code);
-}
-
+/* Each space tints the band (tokens: --dlg-bg / --dlg-line / --dlg-text). */
 [data-space='code'] .dialogue-text {
-  font-family: var(--font-code);
-  font-weight: 400;
-  font-size: calc(var(--fs-body) * 0.92);
+  text-shadow: 0 0 6px rgba(57, 255, 136, 0.35);
 }
 
-[data-space='code'] .dialogue::before,
-[data-space='code'] .dialogue::after {
-  display: none;
-}
-
-[data-space='code'] .nameplate {
-  background: var(--code-black);
-  color: var(--code-green);
-  border: 1px solid var(--code-green);
-  clip-path: none;
-  rotate: 0deg;
-  font-family: var(--font-code);
-}
-
-[data-space='code'] .nameplate::before {
-  content: '> ';
-}
-
-[data-space='code'] .dialogue[data-kind='system'],
-[data-space='code'] .dialogue[data-kind='error'] {
-  background: var(--code-panel);
-  color: var(--code-green);
-}
-
-[data-space='code'] .dialogue[data-kind='error'] {
-  color: var(--code-corruption);
-  border-color: var(--code-corruption);
-}
-
-/* In-game world: lavender binding. */
-[data-space='game'] .dialogue {
-  border-color: var(--plum);
-  box-shadow: var(--card-shadow), inset 0 0 0 2px rgba(222, 204, 255, 0.8);
-}
-
-/* Index tabs under the card: Auto, Skip, Log, Hide, saves, settings, menu. */
+/* Small pixel buttons in one row under the band: Auto, Skip, Log, Hide, saves, settings, menu. */
 .toolbar {
   display: flex;
-  gap: 3px;
-  justify-content: flex-end;
-  width: min(1060px, calc(100% - 24px));
-  margin-top: -3px;
+  gap: 4px;
+  justify-content: center;
+  width: min(1180px, 100%);
+  padding: 4px 0 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.btn-tool {
-  padding: 5px 10px 4px;
-  font-size: 12px;
+/* (prefixed with .hud to win over the per-space .btn colours) */
+.hud .btn-tool {
+  padding: 3px 9px 2px;
+  font-size: 16px;
+  line-height: 1;
   white-space: nowrap;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
-  background: var(--tab-color, var(--surface-alt));
+  color: var(--dlg-text);
+  background: color-mix(in srgb, var(--dlg-bg) 88%, transparent);
+  border: 2px solid var(--dlg-line);
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.btn-tool:hover:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+.hud .btn-tool:hover:not(:disabled) {
+  background: var(--dlg-line);
+  color: var(--dlg-bg);
+  transform: none;
+  box-shadow: none;
 }
 
-.toolbar .btn-tool:nth-child(5n + 1) {
-  --tab-color: var(--baby-pink);
-}
-.toolbar .btn-tool:nth-child(5n + 2) {
-  --tab-color: var(--mint);
-}
-.toolbar .btn-tool:nth-child(5n + 3) {
-  --tab-color: var(--lemon);
-}
-.toolbar .btn-tool:nth-child(5n + 4) {
-  --tab-color: var(--lavender);
-}
-.toolbar .btn-tool:nth-child(5n + 5) {
-  --tab-color: #d8ecff;
-}
-
-[data-space='reality'] .btn-tool {
-  --tab-color: #d6cebe !important;
-  border-radius: 0 0 3px 3px;
-}
-
-[data-space='code'] .btn-tool {
-  --tab-color: var(--code-black) !important;
-}
-
-.btn-tool[aria-pressed='true'] {
-  background: var(--accent);
-  color: var(--ink);
-  transform: translateY(3px);
+.hud .btn-tool[aria-pressed='true'] {
+  background: var(--dlg-line);
+  color: var(--dlg-bg);
+  transform: none;
 }
 
 [data-mode='episode'] .hud,
@@ -515,7 +448,7 @@
   border-radius: 3px;
   padding: 12px 18px 12px 52px;
   font-family: var(--font-text);
-  font-weight: 700;
+  font-weight: 400;
   font-size: var(--fs-body);
   letter-spacing: 0;
   text-align: left;
@@ -524,7 +457,7 @@
   background-image: linear-gradient(90deg, transparent 38px, var(--notebook-margin) 38px, var(--notebook-margin) 40px, transparent 40px);
   border: 2px solid var(--panel-border);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: none;
   rotate: -0.6deg;
 }
 
@@ -918,12 +851,13 @@
   }
 
   .dialogue {
-    padding: 26px 14px 12px 40px;
+    padding: 18px 14px 10px;
   }
 
+  .dialogue::before,
   .dialogue::after {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 20px;
   }
 
   .toolbar {
@@ -934,11 +868,9 @@
     gap: 2px;
   }
 
-  .btn-tool {
-    border-top: 2px solid var(--panel-border);
-    border-radius: 6px;
-    padding: 4px 8px 3px;
-    font-size: 11px;
+  .hud .btn-tool {
+    padding: 6px 8px 5px;
+    font-size: 16px;
   }
 
   .setting {
@@ -954,4 +886,260 @@
   .panel-body {
     padding: var(--space-2) var(--space-4) var(--space-4);
   }
+}
+
+/* ======================================================================
+   Chapter cards
+   ====================================================================== */
+.card-layer:empty {
+  display: none;
+}
+
+.card-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  cursor: pointer;
+}
+
+.chapter-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--cc-text);
+  --cc-bg: rgba(20, 14, 28, 0.82);
+  --cc-text: #fff4fb;
+  --cc-accent: var(--pink);
+  animation: cc-in 600ms ease-out both;
+}
+
+.chapter-card[data-style='reality'] {
+  --cc-bg: rgba(18, 16, 14, 0.88);
+  --cc-text: #ece6d8;
+  --cc-accent: #b8ae94;
+}
+
+.chapter-card[data-style='app'] {
+  --cc-bg: rgba(255, 201, 246, 0.86);
+  --cc-text: #30243b;
+  --cc-accent: var(--pink);
+}
+
+.chapter-card[data-style='game'] {
+  --cc-bg: rgba(42, 30, 62, 0.86);
+  --cc-text: #fbf6ff;
+  --cc-accent: var(--lavender);
+}
+
+.chapter-card[data-style='code'] {
+  --cc-bg: rgba(5, 10, 7, 0.94);
+  --cc-text: #39ff88;
+  --cc-accent: #39ff88;
+}
+
+.chapter-card[data-style='volume'],
+.chapter-card[data-style='end'] {
+  --cc-bg: #050408;
+  --cc-text: #fff4fb;
+  --cc-accent: var(--correction-red);
+}
+
+.cc-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--cc-bg);
+  backdrop-filter: blur(3px);
+}
+
+.cc-body {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: 24px;
+  max-width: min(92vw, 1000px);
+}
+
+.cc-label {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  color: var(--cc-accent);
+  animation: cc-in 500ms 200ms ease-out both;
+}
+
+.cc-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(16px, 3.2vw, 32px);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.cc-letter {
+  display: inline-block;
+  animation: cc-letter 260ms calc(500ms + var(--i) * 45ms) steps(3) both;
+}
+
+.cc-rule {
+  width: min(60vw, 420px);
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--cc-accent) 0 8px, transparent 8px 12px);
+  animation: cc-rule 700ms 900ms ease-out both;
+  transform-origin: left;
+}
+
+.cc-subtitle {
+  margin: 0;
+  font-size: var(--fs-body);
+  opacity: 0.85;
+  animation: cc-in 600ms 1200ms ease-out both;
+}
+
+.cc-hint {
+  margin: 24px 0 0;
+  font-size: 16px;
+  opacity: 0.6;
+  animation: cc-hint 1400ms 1800ms steps(2) infinite both;
+}
+
+@keyframes cc-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes cc-letter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes cc-rule {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes cc-hint {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.reduce-motion .chapter-card,
+.reduce-motion .chapter-card * {
+  animation: none !important;
+}
+
+/* ======================================================================
+   Cutscenes: letterbox, captions, fades
+   ====================================================================== */
+.cutscene-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.cutscene-layer.is-playing {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+[data-mode='cutscene'] .hud {
+  visibility: hidden;
+}
+
+.cs-fade,
+.cs-flash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cs-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: #050408;
+  transition: height 500ms ease;
+}
+
+.cs-bar-top {
+  top: 0;
+}
+
+.cs-bar-bottom {
+  bottom: 0;
+}
+
+.cutscene-layer.has-bars .cs-bar {
+  height: 11vh;
+}
+
+.cs-caption {
+  position: absolute;
+  left: 50%;
+  bottom: calc(11vh + 16px);
+  translate: -50% 0;
+  width: min(900px, 92vw);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  color: #fff4fb;
+  text-shadow: 2px 2px 0 #050408;
+}
+
+.cutscene-layer:not(.has-bars) .cs-caption {
+  bottom: 40px;
+}
+
+.cs-caption.is-visible {
+  opacity: 1;
+}
+
+.cs-name {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 10px;
+  font-size: 16px;
+  border-bottom: 3px solid var(--accent);
+}
+
+.cs-text {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.cs-skip {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  padding: 4px 10px;
+  font: 16px var(--font-pixel);
+  color: #fff4fb;
+  background: rgba(5, 4, 8, 0.6);
+  border: 2px solid #fff4fb;
+  cursor: pointer;
+  display: none;
+}
+
+.cutscene-layer.is-playing .cs-skip {
+  display: block;
+}
+
+.cs-skip:hover,
+.cs-skip:focus-visible {
+  background: #fff4fb;
+  color: #050408;
+  outline: none;
 }

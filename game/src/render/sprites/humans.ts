@@ -7,7 +7,7 @@ export const HUMAN_W = 24;
 export const HUMAN_H = 48;
 
 export type Emotion = 'neutral' | 'happy' | 'sad' | 'angry' | 'scared' | 'tired';
-export type Facing = 'front' | 'side';
+export type Facing = 'front' | 'side' | 'back';
 
 export interface HumanSpec {
   skin: string;
@@ -38,6 +38,8 @@ export interface Frame {
   walk: number;
   breath: 0 | 1;
   mouthOpen: boolean;
+  /** Special body poses for the chase (side view only). */
+  pose?: 'crouch';
 }
 
 type Put = (x: number, y: number, c: string) => void;

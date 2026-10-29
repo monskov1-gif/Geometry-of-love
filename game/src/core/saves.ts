@@ -1,7 +1,7 @@
 import type { StoryState, TextKind } from './types';
 
 /** Bump when the save format changes incompatibly; add a migration in `migrate`. */
-export const SAVE_SCHEMA = 2;
+export const SAVE_SCHEMA = 3;
 export const MANUAL_SLOT_COUNT = 6;
 
 export type SlotId = 'auto' | 'quick' | `slot-${number}`;
@@ -71,6 +71,11 @@ export function migrate(data: SaveData): SaveData {
     // 2: the stage remembers lighting, location variant and music.
     const old = d.state.stage as Partial<StoryState['stage']>;
     d = { ...d, schema: 2, state: { ...d.state, stage: { ...d.state.stage, lighting: old.lighting ?? null, variant: old.variant ?? null, music: old.music ?? null } } };
+  }
+  if (d.schema === 2) {
+    // 3: the stage remembers the camera shot of 3D locations.
+    const old = d.state.stage as Partial<StoryState['stage']>;
+    d = { ...d, schema: 3, state: { ...d.state, stage: { ...d.state.stage, shot: old.shot ?? null } } };
   }
   return d;
 }

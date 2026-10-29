@@ -12,7 +12,8 @@ describe('game content', () => {
   });
 
   it('starts without errors', () => {
-    expect(new StoryRuntime(story).present().kind).toBe('line');
+    // The story opens on the volume card of Volume I.
+    expect(new StoryRuntime(story).present()).toMatchObject({ kind: 'card', card: { label: 'Том I' } });
   });
 
   it('sheet poses stay inside their sprite sheets', () => {

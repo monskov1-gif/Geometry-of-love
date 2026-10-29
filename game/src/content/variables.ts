@@ -15,6 +15,10 @@ export const relationships: Record<string, { label: string; note: string }> = {
 export const traits: Record<string, { label: string; note: string }> = {};
 
 export const flags: Record<string, { label: string; note: string }> = {
+  'ch2.anonymous': { label: 'Пытался назваться «Анонимом»', note: 'Гл. 2 (развитие): программа сама подставляет имя' },
+  'ch2.told-board': { label: 'Рассказал Мелоди об унижении у доски', note: 'Гл. 2 (развитие)' },
+  'ch2.boundary': { label: 'Ответил Мелоди «это не твоё дело»', note: 'Гл. 2: «просить её не задавать личных вопросов»' },
+  'ch3.flattered': { label: 'Ревность Мелоди польстила Дамео', note: 'Гл. 3: «ревнует к Сацуки»' },
   'sandbox.calculator': { label: 'Познакомился с Калькулятором-Пушином', note: 'Гл. 6' },
   'sandbox.ruler': { label: 'Познакомился с Говорящей Линейкой', note: 'Гл. 6' },
   'sandbox.compass': { label: 'Познакомился с Циркулёнком', note: 'Гл. 6' },

@@ -16,6 +16,9 @@ import type { Overlays } from './overlays';
 import { backlogView, choicePanel, saveLoadView, settingsView, speakerName } from './panels';
 import { EffectsLayer } from './effects';
 import { Stage } from './stage';
+import { chapterCardView } from './chapter-card';
+import { CutsceneLayer, type CutsceneRun } from './cutscene-host';
+import { getWorld } from '../world/instance';
 
 const BACKLOG_LIMIT = 200;
 const SKIP_INTERVAL_MS = 60;
@@ -59,6 +62,10 @@ export class GameScreen {
   // Clicks inside these layers must not bubble up and advance the dialogue.
   private readonly choiceLayer = el('div', { class: 'choice-layer', onclick: (e: Event) => e.stopPropagation() });
   private readonly episodeLayer = el('div', { class: 'episode-layer', onclick: (e: Event) => e.stopPropagation() });
+  private readonly cardLayer = el('div', { class: 'card-layer' });
+  private readonly cutsceneLayer: CutsceneLayer;
+  private cutscene: CutsceneRun | null = null;
+  private cardTimer = 0;
   private readonly autoButton: HTMLButtonElement;
   private readonly skipButton: HTMLButtonElement;
   private backlog: BacklogEntry[];
@@ -107,11 +114,16 @@ export class GameScreen {
       tool('Меню', 'Меню (Esc)', () => this.openMenu(), 'tool-menu'),
     );
 
+    this.cutsceneLayer = new CutsceneLayer(this.stage.root, services.audio, (speaker, text) => {
+      this.backlog.push({ speaker: speaker ? speakerName(speaker, this.runtime.state.flags) : null, text, kind: speaker ? 'speech' : 'narration' });
+    });
     this.root = el(
       'div',
       { class: 'screen game-screen', 'data-testid': 'game-screen', onclick: () => this.onStageClick() },
       this.stage.root,
       this.effects.root,
+      this.cutsceneLayer.root,
+      this.cardLayer,
       el('div', { class: 'hud' }, this.dialogue.root, toolbar),
       this.choiceLayer,
       this.episodeLayer,
@@ -125,6 +137,9 @@ export class GameScreen {
 
   destroy(): void {
     this.destroyed = true;
+    this.cutscene?.stop();
+    this.cutscene = null;
+    window.clearTimeout(this.cardTimer);
     this.stopTimers();
     this.episodeCancel?.();
     this.popInput();
@@ -146,6 +161,8 @@ export class GameScreen {
     this.services.audio.music(stage.music ?? spaceTrack(stage.space, stage.phase));
     for (const s of this.runtime.takeSounds()) this.services.audio.sfx(s);
     this.choiceLayer.replaceChildren();
+    if (p.kind !== 'card') this.cardLayer.replaceChildren();
+    window.clearTimeout(this.cardTimer);
     this.root.dataset.mode = p.kind;
 
     switch (p.kind) {
@@ -187,6 +204,18 @@ export class GameScreen {
         this.setSkip(false);
         this.setAuto(false);
         this.startEpisode(p.episode, p.params);
+        break;
+      case 'card':
+        this.stage.setSpeaking(null);
+        this.cardLayer.replaceChildren(chapterCardView(p.card));
+        this.services.audio.sfx('page');
+        // Auto and Skip move on by themselves; otherwise the card waits for the player.
+        if (this.skipping || this.auto) this.cardTimer = window.setTimeout(() => this.advance(), this.skipping ? 300 : 3200);
+        break;
+      case 'cutscene':
+        this.setAuto(false);
+        this.stage.setSpeaking(null);
+        this.playCutscene(p.cutscene, p.key);
         break;
       case 'ending':
         this.setSkip(false);
@@ -257,7 +286,48 @@ export class GameScreen {
     this.onLineShown();
   }
 
+  /**
+   * A cutscene plays on the shared 3D world; when it ends (watched or skipped)
+   * the story moves on. Skip mode passes scenes already seen.
+   */
+  private playCutscene(id: string, key: string): void {
+    let run: CutsceneRun;
+    try {
+      run = this.cutsceneLayer.play(id, getWorld(), this.services.settings.get().reduceMotion);
+    } catch (e) {
+      this.fatal(`Кат-сцена не запустилась: ${(e as Error).message}`);
+      console.error(e);
+      return;
+    }
+    this.cutscene = run;
+    if (this.skipping && this.services.meta.isRead(key)) run.skip();
+    run.done
+      .then(() => {
+        if (this.cutscene !== run || this.destroyed) return;
+        this.cutscene = null;
+        this.services.meta.markRead(key);
+        this.act(() => this.runtime.completeCutscene());
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+        // A broken scene must not block the story: report it and continue.
+        this.services.overlays.toast(`Ошибка кат-сцены: ${(e as Error).message}`, 'error');
+        if (this.cutscene === run && !this.destroyed) {
+          this.cutscene = null;
+          this.act(() => this.runtime.completeCutscene());
+        }
+      });
+  }
+
   private advance(): void {
+    if (this.presentation.kind === 'card') {
+      this.act(() => this.runtime.advance());
+      return;
+    }
+    if (this.presentation.kind === 'cutscene') {
+      this.cutscene?.next();
+      return;
+    }
     if (this.presentation.kind !== 'line') return;
     if (this.dialogue.typing) {
       this.dialogue.complete();
@@ -334,6 +404,16 @@ export class GameScreen {
         return;
       }
       if (this.pendingRevision !== null) this.applyRevision();
+      // A cutscene in progress finishes on its own (skipped if already seen); skip resumes after it.
+      if (this.presentation.kind === 'cutscene') {
+        this.skipTimer = window.setTimeout(tick, SKIP_INTERVAL_MS);
+        return;
+      }
+      if (this.presentation.kind === 'card') {
+        this.act(() => this.runtime.advance());
+        this.skipTimer = window.setTimeout(tick, SKIP_INTERVAL_MS);
+        return;
+      }
       if (!this.canSkipCurrent()) {
         this.skipToggle = false;
         this.skipHeld = false;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { initialState } from '../../game/src/core/runtime';
-import { SAVE_SCHEMA, SaveStore, type KeyValueStore, type SaveData } from '../../game/src/core/saves';
+import { migrate, SAVE_SCHEMA, SaveStore, type KeyValueStore, type SaveData } from '../../game/src/core/saves';
 
 function memoryStore(): KeyValueStore & { map: Map<string, string> } {
   const map = new Map<string, string>();
@@ -60,5 +60,25 @@ describe('SaveStore', () => {
     saves.write('slot-3', save('x'));
     expect(saves.remove('slot-3')).toEqual({ ok: true });
     expect(saves.read('slot-3').status).toBe('empty');
+  });
+});
+
+describe('migrate', () => {
+  it('upgrades a schema-1 save through every step to the current stage shape', () => {
+    const current = save('2026-01-01T00:00:00.000Z');
+    const { lighting, variant, music, shot, ...stage1 } = current.state.stage;
+    void lighting, void variant, void music, void shot;
+    const old = { ...current, schema: 1, state: { ...current.state, stage: stage1 } } as unknown as SaveData;
+    const up = migrate(old);
+    expect(up.schema).toBe(SAVE_SCHEMA);
+    expect(up.state.stage).toEqual({ ...stage1, lighting: null, variant: null, music: null, shot: null });
+  });
+
+  it('adds the camera shot to schema-2 saves', () => {
+    const current = save('x');
+    const { shot, ...stage2 } = current.state.stage;
+    void shot;
+    const up = migrate({ ...current, schema: 2, state: { ...current.state, stage: stage2 as typeof current.state.stage } });
+    expect(up.state.stage.shot).toBeNull();
   });
 });

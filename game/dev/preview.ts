@@ -74,3 +74,35 @@ if (params.get('logo')) {
     out.append(wrap);
   }
 }
+
+// ?monster=1&scale=3 — Melody the monster: rise poses, crawl cycle, head tilts.
+import { CRAWL_FRAMES, drawMonster, loadMonsterSheet, MONSTER_H, MONSTER_W, type MonsterPose } from '../src/render/sprites/monster-sheet';
+if (params.get('monster')) {
+  out.replaceChildren();
+  out.style.display = 'block';
+  out.style.background = '#6a7890';
+  const scale = Number(params.get('scale') ?? 3);
+  const row = (poses: [MonsterPose, number][]) => {
+    const r = document.createElement('div');
+    r.style.cssText = 'display:flex;gap:8px;margin:8px;flex-wrap:wrap';
+    for (const [pose, tilt] of poses) {
+      const src = document.createElement('canvas');
+      src.width = MONSTER_W;
+      src.height = MONSTER_H;
+      drawMonster(src.getContext('2d')!, pose, tilt);
+      const c = document.createElement('canvas');
+      c.width = src.width * scale;
+      c.height = src.height * scale;
+      const ctx = c.getContext('2d')!;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(src, 0, 0, c.width, c.height);
+      r.append(c);
+    }
+    out.append(r);
+  };
+  void loadMonsterSheet().then(() => {
+    row([['rise', 0], ['lunge', 0], ['reach', 0]]);
+    row(CRAWL_FRAMES.map((f) => [f, 0] as [MonsterPose, number]));
+    row([['crawl1', -0.55], ['crawl2', 0.5], ['reach', 0.6]]);
+  });
+}
