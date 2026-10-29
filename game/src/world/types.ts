@@ -18,6 +18,12 @@ export interface Shot {
    * monitor instead of a crop of it).
    */
   fit?: [number, number];
+  /**
+   * With `fit`: where the box centre sits vertically in the frame (0 top … 1
+   * bottom; default 0.5). Lifts the subject above the dialogue band, which is
+   * taller on phones.
+   */
+  frameY?: number;
   /** No idle camera sway (a picture the player reads, e.g. the app on the CRT). */
   still?: boolean;
 }

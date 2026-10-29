@@ -28,6 +28,8 @@ interface Pose {
   pitch: number;
   /** The glass stretched around the wrist after it broke through (0…1). */
   collar: number;
+  /** Pulling the viewer: the hand drops below the lens so the camera passes over the arm (0…1). */
+  low: number;
 }
 
 const FINGERS = [
@@ -170,7 +172,7 @@ export class MonitorHand {
   private readonly normal: THREE.Vector3;
   private readonly screenW: number;
   private readonly screenH: number;
-  private pose: Pose = { reach: 0, press: 0, curl: 0.35, spread: 0, pitch: 0, collar: 0 };
+  private pose: Pose = { reach: 0, press: 0, curl: 0.35, spread: 0, pitch: 0, collar: 0, low: 0 };
   private anim: { from: Pose; to: Pose; t: number; dur: number; resolve: () => void } | null = null;
   private tip = new THREE.Vector3();
   private target = new THREE.Vector3();
@@ -232,7 +234,7 @@ export class MonitorHand {
         return this.tween({ curl: 1, spread: 0.1, pitch: 0.7 }, dur);
       case 'pull':
         // holding the camera, the hand stays in front of the lens while the camera follows it in
-        return this.aim.kind === 'camera' ? this.tween({ collar: 1 }, dur) : this.tween({ reach: 0 }, dur);
+        return this.aim.kind === 'camera' ? this.tween({ collar: 1, low: 1 }, dur) : this.tween({ reach: 0 }, dur);
       case 'hide':
         this.group.visible = false;
         if (this.membrane) this.membrane.mesh.visible = false;
@@ -282,7 +284,10 @@ export class MonitorHand {
       const fwd = new THREE.Vector3();
       cam.getWorldDirection(fwd);
       const up = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion);
-      this.target.copy(cam.position).addScaledVector(fwd, 0.24).addScaledVector(up, -0.075);
+      const low = this.pose.low;
+      const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion);
+      // low and a little to the right: the arm comes up at him and the screen stays in view behind it
+      this.target.copy(cam.position).addScaledVector(fwd, 0.26 - 0.05 * low).addScaledVector(up, -0.14 - 0.08 * low).addScaledVector(right, 0.05);
     } else if (this.aim.kind === 'actor') {
       const a = this.world.actor(this.aim.id);
       if (a && !this.carry) this.target.set(a.position.x + 0.12, a.height * 0.5, a.position.z + 0.05);
@@ -301,7 +306,8 @@ export class MonitorHand {
     this.tip.lerpVectors(exit, aim, reach);
     // the arm bows a little and wavers: it is not quite a human arm
     const mid = new THREE.Vector3().lerpVectors(this.origin, this.tip, 0.55);
-    mid.y += 0.06 * reach + Math.sin(this.t * 6) * 0.012 * reach;
+    // (toward the viewer it sags below his line of sight and comes up at him, so the screen stays visible behind it)
+    mid.y += (this.aim.kind === 'camera' ? -0.16 : 0.06) * reach + Math.sin(this.t * 6) * 0.012 * reach;
     mid.x += Math.sin(this.t * 4.3) * 0.015 * reach;
     const inside = this.origin.clone().addScaledVector(this.normal, -0.25);
     const depth = this.tip.clone().sub(this.origin).dot(this.normal);

@@ -357,24 +357,27 @@ export const dameoRoom3D: LocationDef3D = {
         // bezel, the case under it, the wall notes and the dark room around. The
         // fit box keeps all of it in frame on a phone held upright, too.
         crt: {
-          pos: [screenCenter.x, screenCenter.y + 0.06, screenCenter.z + 1],
+          // (a wide lens keeps the camera in front of his office chair even on a phone)
+          pos: [screenCenter.x, screenCenter.y + 0.1, screenCenter.z + 1],
           look: [screenCenter.x, screenCenter.y - 0.03, screenCenter.z],
-          fov: 34,
-          fit: [0.45, 0.52],
+          fov: 60,
+          fit: [0.45, 0.56],
+          frameY: 0.42,
           still: true,
         },
         // Melody's pop-ups stacked on the right edge of the screen, close enough to read
         'crt-notice': {
-          pos: [screenCenter.x + 0.06, screenCenter.y + 0.03, screenCenter.z + 1],
-          look: [screenCenter.x + 0.075, screenCenter.y - 0.005, screenCenter.z],
-          fov: 34,
-          fit: [0.26, 0.31],
+          pos: [screenCenter.x + 0.06, screenCenter.y + 0.05, screenCenter.z + 1],
+          look: [screenCenter.x + 0.075, screenCenter.y, screenCenter.z],
+          fov: 60,
+          fit: [0.26, 0.36],
+          frameY: 0.38,
           still: true,
         },
         // first person: Dameo in his chair, looking at the monitor (chapter 3 cutscene)
         pov: { pos: [crtX + 0.02, 1.22, -1.05], look: [screenCenter.x, screenCenter.y - 0.02, screenCenter.z], fov: 50 },
         // he jerks back from the glass
-        'pov-recoil': { pos: [crtX + 0.05, 1.18, -0.78], look: [screenCenter.x, screenCenter.y + 0.02, screenCenter.z], fov: 54 },
+        'pov-recoil': { pos: [crtX + 0.06, 1.3, -0.97], look: [screenCenter.x, screenCenter.y + 0.02, screenCenter.z], fov: 54 },
         desk: { pos: [crtX - 0.9, 1.45, -0.4], look: [crtX + 0.1, 0.95, BACK + 0.2], fov: 42 },
         bed: { pos: [0.2, 1.4, 0.9], look: [-1.5, 0.6, -1.3], fov: 46 },
         window: { pos: [0.3, 1.45, 0.8], look: [-0.15, 1.45, BACK], fov: 44 },

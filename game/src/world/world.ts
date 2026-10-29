@@ -304,9 +304,14 @@ export class World3D {
     if (dir.lengthSq() < 1e-8) return s;
     dir.normalize();
     const t = Math.tan(THREE.MathUtils.degToRad((s.fov ?? 40) / 2));
-    const dist = Math.max(s.fit[1] / 2 / t, s.fit[0] / 2 / (t * Math.max(0.1, this.camera.aspect)));
-    const p = look.addScaledVector(dir, dist);
-    return { ...s, pos: [p.x, p.y, p.z] };
+    const fy = Math.min(0.9, Math.max(0.1, s.frameY ?? 0.5));
+    // visible height needed: the box fits above and below its centre, and across
+    const height = Math.max(s.fit[1] / (2 * Math.min(fy, 1 - fy)), s.fit[0] / Math.max(0.1, this.camera.aspect));
+    const p = look.clone().addScaledVector(dir, height / 2 / t);
+    // aim below the box centre so the centre lands at frameY
+    const aim = look.clone();
+    aim.y -= (0.5 - fy) * height;
+    return { ...s, pos: [p.x, p.y, p.z], look: [aim.x, aim.y, aim.z] };
   }
 
   /** Called after every rendered frame (overlays that follow something in the scene). */
