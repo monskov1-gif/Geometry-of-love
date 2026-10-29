@@ -3,7 +3,12 @@
 // and cut only the links that bind him to the game. Cutting a link that
 // holds the world together is refused by the Calculator and resets the
 // puzzle (failure → retry). Success = every binding link of Dameo's file cut.
+// Look: the code space of the brief (near-black, green, pink-red for damage)
+// with a pixel backdrop, file-type icons, Dameo's sprite by his file and the
+// Calculator's sprite next to his hints (episodes/files-art.ts).
 import { el } from '../ui/dom';
+import type { Emotion } from '../render/sprites';
+import { fileIcon, filesBackdrop, spriteURL, type FileKind } from './files-art';
 import type { EpisodeDefinition, EpisodeOutcome } from './types';
 
 export interface FileNode {
@@ -66,7 +71,7 @@ export const systemFiles: EpisodeDefinition = {
   title: 'Системные файлы',
   instructions:
     'Найдите файл Дамео среди пользовательских файлов, изучите его связи и разорвите только те, что привязывают его к игре. Выберите файл, чтобы увидеть сведения и связи. Связи, которые держат мир, трогать нельзя.',
-  create({ root }) {
+  create({ root, reduceMotion }) {
     let finish: ((o: EpisodeOutcome) => void) | null = null;
     const cut = new Set<string>();
     let selected: string | null = null;
@@ -74,12 +79,31 @@ export const systemFiles: EpisodeDefinition = {
     const info = el('div', { class: 'files-info', 'aria-live': 'polite' });
     const hint = el('p', { class: 'episode-caption' }, 'Калькулятор: «Пользовательские файлы — внизу. Ищи по владельцу. Связи ядра и карты мира не трогай: на них держится всё».');
     const list = el('div', { class: 'files-list', role: 'list' });
-    root.replaceChildren(el('div', { class: 'files' }, hint, el('div', { class: 'files-main' }, svg, el('div', { class: 'files-side' }, list, info))));
+    const calc = el('img', { src: spriteURL('calculator'), alt: 'Калькулятор', width: 48, height: 96, style: { imageRendering: 'pixelated', flex: 'none', width: '48px', height: '96px' } });
+    const setCalc = (emotion: Emotion) => (calc.src = spriteURL('calculator', emotion));
+    const hintRow = el('div', { style: { display: 'flex', gap: 'var(--space-2)', alignItems: 'center' } }, calc, hint);
+    root.replaceChildren(el('div', { class: 'files' }, hintRow, el('div', { class: 'files-main' }, svg, el('div', { class: 'files-side' }, list, info))));
+    const backdrop = filesBackdrop();
+    const icons = Object.fromEntries((['system', 'user', 'damaged', 'link'] as FileKind[]).map((k) => [k, fileIcon(k)]));
+    const dameo = spriteURL('dameo', 'tired');
+    const image = (href: string, x: number, y: number, w: number, h: number) =>
+      svgEl('image', { href, x, y, width: w, height: h, preserveAspectRatio: 'none', style: 'image-rendering: pixelated', 'pointer-events': 'none' });
+    // a slow scanline over the graph (still when reduce-motion is on)
+    const scan = svgEl('rect', { x: -60, y: 0, width: 220, height: 1.2, fill: 'var(--code-green)', opacity: 0.12, 'pointer-events': 'none' });
+    let frame = 0;
+    if (!reduceMotion) {
+      const t0 = performance.now();
+      const loop = (now: number) => {
+        scan.setAttribute('y', String((((now - t0) / 60) % 104) - 2));
+        frame = requestAnimationFrame(loop);
+      };
+      frame = requestAnimationFrame(loop);
+    }
 
     const nodeById = (id: string) => NODES.find((n) => n.id === id)!;
 
     const render = () => {
-      svg.replaceChildren();
+      svg.replaceChildren(image(backdrop, -60, 0, 220, 100));
       for (const l of LINKS) {
         const a = nodeById(l.from);
         const b = nodeById(l.to);
@@ -95,13 +119,18 @@ export const systemFiles: EpisodeDefinition = {
       }
       for (const n of NODES) {
         const g = svgEl('g', { class: `files-node kind-${n.kind}${selected === n.id ? ' is-selected' : ''}` });
-        g.append(svgEl('rect', { x: n.x - 11, y: n.y - 4, width: 22, height: 8, rx: 1 }));
-        const t = svgEl('text', { x: n.x, y: n.y + 1.6, 'text-anchor': 'middle' });
+        g.append(svgEl('rect', { x: n.x - 12, y: n.y - 4, width: 24, height: 8, rx: 1 }));
+        g.append(image(icons[n.kind]!, n.x - 11.4, n.y - 2.5, 3, 2.5 * 2));
+        const t = svgEl('text', { x: n.x + 1.6, y: n.y + 1.6, 'text-anchor': 'middle' });
         t.textContent = n.label;
         g.append(t);
         g.addEventListener('click', () => select(n.id));
         svg.append(g);
       }
+      // Dameo stands by his own file: the program is turning him into it
+      const me = nodeById('u07');
+      svg.append(image(dameo, me.x - 18.5, me.y - 12, 4.8, 12));
+      svg.append(scan);
       list.replaceChildren(
         ...NODES.map((n) =>
           el(
@@ -150,11 +179,13 @@ export const systemFiles: EpisodeDefinition = {
         selected = null;
         hint.textContent = 'Калькулятор: «Стой! Эта связь держит мир. Я откатил изменения — начни заново».';
         hint.dataset.state = 'wrong';
+        setCalc('scared');
         render();
         return;
       }
       cut.add(linkId);
       hint.dataset.state = '';
+      setCalc(result === 'done' ? 'happy' : 'neutral');
       hint.textContent = result === 'done' ? 'Привязка отключена.' : 'Калькулятор: «Так. Ещё одна связь держит тебя».';
       render();
       if (result === 'done') window.setTimeout(() => finish?.({ outcome: 'success' }), 900);
@@ -168,6 +199,7 @@ export const systemFiles: EpisodeDefinition = {
         }),
       destroy: () => {
         finish = null;
+        cancelAnimationFrame(frame);
         root.replaceChildren();
       },
     };
