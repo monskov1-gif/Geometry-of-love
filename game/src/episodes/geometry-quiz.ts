@@ -91,6 +91,31 @@ export const geometryQuiz: EpisodeDefinition = {
       later(700 + WALL_MESSAGES.length * 400 + 1200, () => finish?.({ outcome: 'success' }));
     };
 
+    // The impossible task (гл. 5): huge numbers flash over the room, too big and too fast
+    // to read, like a lesson that has stopped making sense. The task text stays legible.
+    const noise = (room: HTMLElement) => {
+      const layer = el('div', { class: 'quiz-noise', 'aria-hidden': 'true' });
+      room.append(layer);
+      const digits = '0123456789';
+      const shuffle = () => {
+        layer.replaceChildren(
+          ...Array.from({ length: 9 }, () => {
+            const n = Array.from({ length: 1 + Math.floor(Math.random() * 4) }, () => digits[Math.floor(Math.random() * 10)]).join('');
+            return el(
+              'span',
+              {
+                class: 'quiz-noise-n pixel',
+                style: `left:${Math.random() * 90}%;top:${Math.random() * 85}%;font-size:${80 + Math.random() * 260}px;rotate:${(Math.random() - 0.5) * 40}deg;color:hsl(${Math.random() * 360} 90% 55%)`,
+              },
+              n,
+            );
+          }),
+        );
+      };
+      shuffle();
+      timers.push(window.setInterval(shuffle, reduceMotion ? 900 : 110));
+    };
+
     const showTask = (i: number) => {
       const task = tasks[i] as GeometryTask;
       const feedback = el('p', { class: 'quiz-feedback', role: 'status', 'aria-live': 'polite' });
@@ -172,6 +197,7 @@ export const geometryQuiz: EpisodeDefinition = {
       }
       const checkButton = el('button', { class: 'btn btn-primary', type: 'button', onclick: submit }, 'Проверить');
 
+      if (task.impossible) noise(root.querySelector('.quiz-room') as HTMLElement);
       sheet.replaceChildren(
         el('div', { class: 'quiz-progress pixel' }, `${set.title} · Задача ${i + 1} / ${tasks.length}`),
         el('p', { class: 'quiz-prompt' }, task.prompt),
@@ -210,7 +236,7 @@ export const geometryQuiz: EpisodeDefinition = {
         }),
       destroy: () => {
         finish = null;
-        timers.forEach((t) => window.clearTimeout(t));
+        timers.forEach((t) => (window.clearTimeout(t), window.clearInterval(t)));
         root.replaceChildren();
       },
     };
