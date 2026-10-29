@@ -446,8 +446,47 @@ function legSide(put: Put, cx: number, y: number, len: number, dx: number, lift:
   span(put, fx, fx + 6, fy + 2, sh[0]);
 }
 
+/** Seen from behind: the back of the head, no face; hood, back seams, heels of the shoes. */
+function drawBack(put: Put, s: PersonSpec, cx: number, hy: number, y0: number): void {
+  legsFront(put, { ...s, shoes: [s.shoes[0], s.shoes[0], s.shoes[1]] }, cx, y0 + 26, 80 - y0 - 26);
+  bodyFront(put, { ...s, top: s.top === 'hoodie' ? 'hoodie' : 'cardigan', inner: s.topTones }, cx, y0);
+  if (s.top === 'hoodie') {
+    // the hood lies over the shoulders; drawstrings and pocket are on the other side
+    for (let i = 0; i < 6; i++) span(put, cx - 6 + Math.floor(i / 2), cx + 5 - Math.floor(i / 2), y0 + i, i < 2 ? s.topTones[0] : s.topTones[1]);
+    for (let y = y0 + 1; y < y0 + 22; y++) put(cx, y, s.topTones[0]);
+  } else for (let y = y0 + 2; y < y0 + 24; y++) put(cx, y, s.topTones[0]);
+  headFront(put, s, cx, hy);
+  // the whole head is hair
+  const [sh, base, hi] = s.hair;
+  [6, 10, 12, 12, 12, 12, 12, 12, 12, 11, 10, 8, 6].forEach((w, i) => span(put, cx - w / 2, cx + w / 2 - 1, hy - 2 + i, i > 9 ? sh : base));
+  span(put, cx - 3, cx, hy - 1, hi);
+  if (s.hairStyle === 'long')
+    for (let y = hy + 10; y < hy + 44; y++) {
+      const w = 16 - Math.max(0, (y - hy - 38) * 2);
+      span(put, cx - w / 2, cx + w / 2 - 1, y, y % 7 === 0 ? sh : base);
+    }
+  if (s.hairStyle === 'low-tail') for (let y = hy + 10; y < hy + 22; y++) span(put, cx - 2, cx + 1, y, y > hy + 18 ? sh : base);
+  if (s.hairStyle === 'messy') for (const x of [cx - 5, cx - 2, cx + 1, cx + 4]) put(x, hy + 11, base);
+  if (s.ribbons) {
+    span(put, cx - 7, cx - 4, hy - 2, s.ribbons[0]);
+    span(put, cx + 3, cx + 6, hy - 2, s.ribbons[1]);
+  }
+}
+
 export function drawPerson(put: Put, s: PersonSpec, f: Frame): void {
   const bob = f.breath;
+  if (f.facing === 'side' && f.pose === 'crouch') {
+    // ducking under a line of code: the upper body drops, knees bent forward
+    const HIP = 45;
+    const DROP = 26;
+    drawSide((x, y, c) => y < HIP && put(x, y + DROP, c), s, { ...f, walk: -1, pose: undefined }, 0);
+    const b = s.bottom === 'pants' ? s.bottomTones : s.legs;
+    for (let y = HIP + DROP - 2; y < HIP + DROP + 2; y++) span(put, 12, 21, y, b[1]);
+    for (let y = HIP + DROP + 2; y < 77; y++) span(put, 17, 21, y, b[0]);
+    span(put, 13, 15, 77, b[1]);
+    for (const y of [77, 78, 79]) span(put, 17, 23, y, y === 79 ? s.shoes[0] : s.shoes[1]);
+    return;
+  }
   if (f.facing === 'side') {
     // a walking body bobs on the passing frames
     drawSide(put, s, f, f.walk === 1 || f.walk === 3 ? -1 : 0);
@@ -457,6 +496,10 @@ export function drawPerson(put: Put, s: PersonSpec, f: Frame): void {
   const slouch = s.slouch ? 1 : 0;
   const hx = cx;
   const hy = 5 + bob + slouch;
+  if (f.facing === 'back') {
+    drawBack(put, s, cx, hy, 19 + bob + slouch);
+    return;
+  }
   hairFront(put, s, hx, hy, 'back');
   const y0 = 19 + bob + slouch;
   legsFront(put, s, cx, y0 + 26, 80 - y0 - 26);

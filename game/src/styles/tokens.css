@@ -50,17 +50,20 @@
   --code-warning: #d7f36a;
   --code-corruption: #f04b67;
 
-  /* Typography (all fonts ship with the game, OFL):
-     Nunito — reading (dialogue, descriptions); Tiny5 — pixel UI labels;
-     JetBrains Mono — code / system space. */
-  --font-pixel: 'Tiny5', 'JetBrains Mono', monospace;
-  --font-text: 'Nunito', 'Noto Sans JP', sans-serif;
-  --font-code: 'JetBrains Mono', ui-monospace, monospace;
+  /* Typography: pixel fonts only, both OFL with Cyrillic, shipped with the game.
+     Tiny5 — every text (dialogue, UI, code space); Press Start 2P — titles
+     (chapter screens, endings, panel headers). Sizes are multiples of 8 px so
+     the glyph pixels land on whole screen pixels. */
+  --font-pixel: 'Tiny5', monospace;
+  --font-text: 'Tiny5', monospace;
+  --font-code: 'Tiny5', monospace;
+  --font-title: 'Press Start 2P', 'Tiny5', monospace;
   --text-scale: 1;
-  --fs-body: calc(clamp(15px, 0.6rem + 0.75vw, 21px) * var(--text-scale));
-  --fs-small: calc(0.82 * var(--fs-body));
-  --fs-ui: clamp(12px, 0.5rem + 0.4vw, 15px);
-  --lh-body: 1.55;
+  --fs-body: calc(24px * var(--text-scale));
+  --fs-small: calc(16px * var(--text-scale));
+  --fs-ui: 16px;
+  --fs-title: 24px;
+  --lh-body: 1.45;
 
   /* Paper and binding details used by panels and the dialogue card */
   --ring: #b8bcc8;
@@ -84,12 +87,17 @@
 
   /* Stage */
   /* Dialogue box ≈ 23–30% of the screen height (brief 6.2); the toolbar sits under it. */
-  --dialog-height: clamp(118px, 25vh, 230px);
-  --hud-height: calc(var(--dialog-height) + 52px);
+  /* three lines of 24 px text + padding; the band stays low, like an integrated VN box */
+  --dialog-height: clamp(112px, 22vh, 176px);
+  --hud-height: calc(var(--dialog-height) + 34px);
   /* Sprite size limits relative to the area above the dialogue box (.stage-cast container). */
   --sprite-height: 96cqh;
   --sprite-max-width: 96cqw;
-  --dialog-opacity: 0.94;
+  --dialog-opacity: 0.86;
+  /* dialogue band (integrated, translucent) — overridden per space below */
+  --dlg-bg: #241c2e;
+  --dlg-line: #ffc9f6;
+  --dlg-text: #fff4fb;
 
   /* Semantic defaults = app space */
   --surface: var(--notebook-paper);
@@ -105,6 +113,9 @@
 }
 
 [data-space='reality'] {
+  --dlg-bg: #1c1a18;
+  --dlg-line: #b8ae94;
+  --dlg-text: #ece6d8;
   --tape: #d9cfb6;
   --ring: #7d6e5a;
   --ring-hole: #2a2420;
@@ -121,6 +132,9 @@
 }
 
 [data-space='code'] {
+  --dlg-bg: #050a07;
+  --dlg-line: #39ff88;
+  --dlg-text: #39ff88;
   --tape: var(--code-green);
   --surface: var(--code-panel);
   --surface-alt: var(--code-black);
@@ -137,6 +151,9 @@
 /* In-game world (Sandbox, corridors): the app's toy palette turned into a
    place — lavender/plum surroundings, paper panels. Working values. */
 [data-space='game'] {
+  --dlg-bg: #2a1e3e;
+  --dlg-line: #deccff;
+  --dlg-text: #fbf6ff;
   --tape: color-mix(in srgb, var(--lavender) 70%, white);
   --surface: var(--paper);
   --surface-alt: #f3ecff;
@@ -153,4 +170,14 @@
 .reduce-motion {
   --dur-fast: 0ms;
   --dur-med: 0ms;
+}
+
+/* Phones: one step down (still whole pixels). */
+@media (max-width: 720px), (max-height: 480px) {
+  :root {
+    --fs-body: calc(16px * var(--text-scale));
+    --fs-small: 16px;
+    --fs-ui: 16px;
+    --fs-title: 16px;
+  }
 }

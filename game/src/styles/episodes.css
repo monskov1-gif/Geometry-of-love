@@ -347,3 +347,171 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- touch controls: floating joystick + action buttons ---------- */
+.touch-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(46vh, 300px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  pointer-events: none;
+  z-index: 5;
+}
+
+.joy-zone {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.joy-base {
+  position: absolute;
+  left: 90px;
+  top: calc(100% - 90px);
+  width: 132px;
+  height: 132px;
+  margin: -66px 0 0 -66px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 244, 251, 0.7);
+  background: radial-gradient(circle, rgba(255, 244, 251, 0.16), rgba(20, 14, 28, 0.35));
+  opacity: 0.55;
+  transition: opacity 150ms;
+}
+
+.joy-base.is-active {
+  opacity: 0.95;
+}
+
+.joy-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-radius: 50%;
+  background: var(--pink);
+  border: 3px solid #fff4fb;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.touch-actions {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+.touch-action {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  font: 24px var(--font-pixel);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--lemon) 85%, transparent);
+  border: 3px solid #fff4fb;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.touch-action[data-control='down'] {
+  background: color-mix(in srgb, var(--mint) 85%, transparent);
+  width: 66px;
+  height: 66px;
+}
+
+.touch-action:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- 3D episodes: the world fills the screen, the HUD floats over it ---------- */
+.episode:has(.episode-3d) {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  display: block;
+}
+
+.episode-stage.episode-3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0812;
+}
+
+.episode-3d > .world-view {
+  position: absolute;
+  inset: 0;
+}
+
+.episode-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.episode-hud > * {
+  pointer-events: auto;
+}
+
+.chase-top {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  translate: -50% 0;
+  width: min(520px, 80vw);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff4fb;
+  font-size: 16px;
+  text-shadow: 2px 2px 0 #050408;
+}
+
+.chase-top .chase-meter {
+  flex: 1;
+  height: 12px;
+  border: 2px solid #fff4fb;
+  background: linear-gradient(90deg, var(--error-red) calc((1 - var(--gap, 1)) * 100%), var(--mint) 0);
+}
+
+.chase-taunt {
+  position: absolute;
+  top: calc(max(14px, env(safe-area-inset-top)) + 34px);
+  left: 50%;
+  translate: -50% 0;
+  width: min(760px, 92vw);
+  margin: 0;
+  text-align: center;
+  color: #ffc9f6;
+  font-size: var(--fs-body);
+  text-shadow: 2px 2px 0 #050408;
+}
+
+.episode-3d .episode-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}
+
+.episode-3d.is-hit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(196, 30, 42, 0.35);
+  pointer-events: none;
+}

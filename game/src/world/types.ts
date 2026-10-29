@@ -17,7 +17,7 @@ export interface Shot {
 export interface Mark {
   x: number;
   z: number;
-  facing?: 'front' | 'left' | 'right';
+  facing?: 'front' | 'left' | 'right' | 'back';
 }
 
 export interface LocationBuild {
@@ -32,6 +32,8 @@ export interface LocationBuild {
   update?: (dt: number, t: number) => void;
   /** Story hooks: `variant` changes (the monitor shows the app, a door closes…). */
   setVariant?: (variant: string | null) => void;
+  /** Interactive episodes report the player's x (the world reacts: tiles fall behind him). */
+  track?: (x: number) => void;
   /** A computer screen in the scene that shows the app (Dameo's CRT). */
   screen?: { app: AppScreen; corners: THREE.Vector3[] };
   /** Objects that the render must not reuse once the location is gone. */

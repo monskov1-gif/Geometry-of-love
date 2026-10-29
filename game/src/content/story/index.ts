@@ -1,5 +1,5 @@
 import type { Scene, Story } from '../../core/types';
-import { chapter1, chapter2, chapter3, chapter4, endingSelfTaught } from './volume-1';
+import { chapter1, chapter2, chapter2Day2, chapter2Day3, chapter2Day4, chapter3, chapter4, endingSelfTaught } from './act1';
 import { chapter5, chapter6, chapter7, chapter8, chapter9, endingFavoriteStudent } from './volume-2';
 import { chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, epilogue } from './volume-3';
 
@@ -8,6 +8,9 @@ const scenes: Scene[] = [
   chapter1,
   endingSelfTaught,
   chapter2,
+  chapter2Day2,
+  chapter2Day3,
+  chapter2Day4,
   chapter3,
   chapter4,
   chapter5,

@@ -15,7 +15,7 @@ export function initialState(story: Story): StoryState {
     relationships: {},
     traits: {},
     decisions: [],
-    stage: { background: null, lighting: null, variant: null, music: null, space: 'app', phase: 'A', characters: [] },
+    stage: { background: null, lighting: null, variant: null, music: null, shot: null, space: 'app', phase: 'A', characters: [] },
     ending: null,
   };
 }
@@ -110,6 +110,10 @@ export class StoryRuntime {
         };
       case 'episode':
         return { kind: 'episode', key, episode: step.episode, params: step.params ?? {} };
+      case 'card':
+        return { kind: 'card', key, card: step.card };
+      case 'cutscene':
+        return { kind: 'cutscene', key, cutscene: step.cutscene };
       case 'ending':
         return { kind: 'ending', key, ending: step.ending };
       default:
@@ -117,8 +121,10 @@ export class StoryRuntime {
     }
   }
 
+  /** Past a line or a chapter card. */
   advance(): Presentation {
-    this.expect('say', 'advance');
+    const step = this.step();
+    if (step.type !== 'say' && step.type !== 'card') throw new StoryError(`advance() called on "${step.type}" step at ${this.where()}`);
     this.s.position.index += 1;
     this.settle();
     return this.present();
@@ -140,6 +146,15 @@ export class StoryRuntime {
     return this.present();
   }
 
+  /** The Director finished (or the player skipped) a cutscene; its effects on the story are in the script. */
+  completeCutscene(): Presentation {
+    this.expect('cutscene', 'completeCutscene');
+    this.s.position.index += 1;
+    this.checkpoint = true;
+    this.settle();
+    return this.present();
+  }
+
   /** Only a confirmed success moves the story past a mandatory episode. */
   completeEpisode(): Presentation {
     this.expect('episode', 'completeEpisode');
@@ -157,6 +172,8 @@ export class StoryRuntime {
         case 'say':
         case 'choice':
         case 'episode':
+        case 'card':
+        case 'cutscene':
           return;
         case 'ending':
           this.s.ending = step.ending;
@@ -179,6 +196,10 @@ export class StoryRuntime {
           stage.background = step.background;
           stage.lighting = step.lighting ?? null;
           stage.variant = step.variant ?? null;
+          stage.shot = null; // a new place starts with the automatic framing
+          break;
+        case 'shot':
+          stage.shot = step.shot;
           break;
         case 'light':
           stage.lighting = step.lighting;

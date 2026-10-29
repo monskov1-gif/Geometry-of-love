@@ -61,6 +61,8 @@ export class World3D {
   private move: CameraMove | null = null;
   /** Camera follows the speaker slightly (auto-direction for dialogue). */
   private speaker: string | null = null;
+  /** A named shot chosen by the story; null = the camera frames whoever is on stage. */
+  private storyShot: string | null = null;
   private autoFrame = true;
   private frame = 0;
   private last = 0;
@@ -81,6 +83,7 @@ export class World3D {
     this.gl.outputColorSpace = THREE.SRGBColorSpace;
     this.gl.toneMapping = THREE.ACESFilmicToneMapping;
     this.gl.toneMappingExposure = 1.05;
+    this.gl.localClippingEnabled = true; // actors being erased are clipped by a plane
     // ?low=1 / ?low=0 force the mode (screenshots, debugging); otherwise software GL → low.
     const forced = new URLSearchParams(location.search).get('low');
     this.low = forced === null ? isSoftwareGL(this.gl) : forced === '1';
@@ -121,6 +124,7 @@ export class World3D {
       this.variant = null;
       for (const a of this.actors.values()) this.scene.remove(a.group);
       this.actors.clear();
+      this.storyShot = null;
       this.setShot('wide', 0);
     }
     const s = state && def.states.includes(state) ? state : def.defaultState;
@@ -145,6 +149,7 @@ export class World3D {
       m.geometry?.dispose();
     });
     // Materials and canvas textures are cached by the kit across locations; geometry is per build.
+    this.updaters.clear();
     this.group = null;
     this.build = null;
     this.locationId = null;
@@ -176,10 +181,78 @@ export class World3D {
       }
       a.emotion = c.emotion;
     }
+    this.frameCast();
+  }
+
+  /** The app on the desk monitor (locations with a screen). */
+  setScreen(state: Partial<import('./app-screen').AppScreenState>): void {
+    this.build?.screen?.app.set(state);
+  }
+
+  /** The story's camera: a named shot, or null for automatic framing of the cast. */
+  setStoryShot(name: string | null): void {
+    if (name === this.storyShot) return;
+    this.storyShot = name;
+    if (name) void this.setShot(name, 1.1);
+    else this.frameCast(1.1);
+  }
+
+  /**
+   * Automatic director: frames everyone on stage from in front, a little above
+   * eye level, close enough for a VN medium shot; an empty stage gets the wide shot.
+   */
+  private frameCast(duration = 1.2): void {
+    const b = this.build;
+    if (!b || this.storyShot) return;
+    const people = [...this.actors.values()];
+    if (!people.length) {
+      void this.setShot('wide', duration);
+      return;
+    }
+    const xs = people.map((a) => a.targetX);
+    const zs = people.map((a) => a.targetZ);
+    const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const cz = zs.reduce((a, z) => a + z, 0) / zs.length;
+    const spread = Math.max(...xs) - Math.min(...xs);
+    const wide = b.shots.wide;
+    const dist = Math.min(wide.pos[2] - cz, Math.max(2.3, 2.0 + spread * 0.9));
+    const x = Math.max(b.walk.minX, Math.min(b.walk.maxX, cx));
+    const height = Math.max(...people.map((a) => a.height));
+    void this.setShot({ pos: [x, height * 0.86, cz + dist], look: [x, height * 0.7, cz - 1.2], fov: 46 }, duration);
   }
 
   actor(id: string): Actor | undefined {
     return this.actors.get(id);
+  }
+
+  get locationName(): string | null {
+    return this.locationId;
+  }
+
+  get currentVariant(): string | null {
+    return this.variant;
+  }
+
+  /** Removes an actor added by spawn() (or by the stage). */
+  despawn(id: string): void {
+    const a = this.actors.get(id);
+    if (!a) return;
+    this.scene.remove(a.group);
+    a.dispose();
+    this.actors.delete(id);
+  }
+
+  private readonly updaters = new Set<(dt: number) => void>();
+
+  /** Per-frame callback for a story prop; returns its removal. Cleared on location change. */
+  addUpdater(fn: (dt: number) => void): () => void {
+    this.updaters.add(fn);
+    return () => this.updaters.delete(fn);
+  }
+
+  /** The scene root, for story props (the hand from the monitor) added by the director. */
+  get sceneRoot(): THREE.Scene {
+    return this.scene;
   }
 
   /** Adds an actor that is not part of the story stage (episodes, cutscenes). */
@@ -203,6 +276,9 @@ export class World3D {
   setShot(shot: string | Shot, duration = 0.9): Promise<void> {
     const to = typeof shot === 'string' ? this.build?.shots[shot] ?? this.build?.shots.wide : shot;
     if (!to) return Promise.resolve();
+    // Asking for the shot we are already in (or gliding to) changes nothing.
+    const key = JSON.stringify(to);
+    if (key === JSON.stringify(this.move?.to ?? this.shot)) return Promise.resolve();
     this.move?.resolve();
     if (duration <= 0 || this.reduceMotion) {
       this.shot = to;
@@ -241,11 +317,15 @@ export class World3D {
     if (this.running || document.hidden) return;
     this.running = true;
     this.last = performance.now();
+    // Software rasterisers (and weak devices) get 15 fps: the main thread stays responsive.
+    const minFrame = this.low ? 1000 / 15 : 0;
     const tick = (now: number) => {
       if (!this.running) return;
-      const dt = Math.min(0.1, (now - this.last) / 1000);
-      this.last = now;
-      this.tick(dt);
+      if (now - this.last >= minFrame) {
+        const dt = Math.min(0.1, (now - this.last) / 1000);
+        this.last = now;
+        this.tick(dt);
+      }
       this.frame = requestAnimationFrame(tick);
     };
     this.frame = requestAnimationFrame(tick);
@@ -286,6 +366,7 @@ export class World3D {
     this.panX = lerp(this.panX, ox, Math.min(1, dt * (this.follow ? 4 : 1.6)));
     const sway: Vec3 = this.reduceMotion ? [0, 0, 0] : [Math.sin(this.time * 0.31) * 0.025, Math.sin(this.time * 0.23) * 0.015, 0];
     this.applyCamera(base, [this.panX + sway[0], sway[1], sway[2]]);
+    for (const u of this.updaters) u(dt);
     for (const a of this.actors.values()) a.update(dt, this.camera);
     const player = this.follow ?? this.actors.get('dameo') ?? null;
     this.windowLight.update(dt, { world: b.kit, player: player ? { position: player.position } : null, camera: this.camera });
@@ -301,7 +382,7 @@ export class World3D {
     const w = this.root.clientWidth;
     const h = this.root.clientHeight;
     if (!w || !h) return;
-    const px = Math.max(2, Math.round(h / 360));
+    const px = Math.max(this.low ? 3 : 2, Math.round(h / (this.low ? 240 : 360)));
     const rw = Math.max(1, Math.round(w / px));
     const rh = Math.max(1, Math.round(h / px));
     this.gl.setPixelRatio(1);

@@ -6,6 +6,8 @@ export interface ContentIndex {
   characters: Record<string, readonly string[]>; // id -> pose ids
   backgrounds: readonly string[];
   episodes: readonly string[];
+  /** Cutscene ids the Director knows (absent = not checked). */
+  cutscenes?: readonly string[];
   /** Lighting states each painted background supports (absent = CSS background, no lighting). */
   lightings?: Record<string, readonly string[]>;
   tracks?: readonly string[];
@@ -133,8 +135,16 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
         case 'ending':
           if (!has(index.endings, step.ending)) problems.push(`${where}: unknown ending "${step.ending}"`);
           break;
+        case 'cutscene':
+          if (index.cutscenes && !has(index.cutscenes, step.cutscene)) problems.push(`${where}: unknown cutscene "${step.cutscene}"`);
+          break;
+        case 'card':
+          if (!step.card.title.trim()) problems.push(`${where}: chapter card without a title`);
+          if (step.card.backdrop && !has(index.backgrounds, step.card.backdrop)) problems.push(`${where}: unknown card backdrop "${step.card.backdrop}"`);
+          break;
         case 'space':
         case 'effect':
+        case 'shot':
           break;
       }
     });

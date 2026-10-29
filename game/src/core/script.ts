@@ -1,6 +1,7 @@
 // Small helpers that keep scene files readable. They only build plain Step
 // objects; scripts may also use object literals directly.
 import type {
+  ChapterCard,
   CharacterFx,
   ChoiceOption,
   Condition,
@@ -48,6 +49,8 @@ export const background = (id: string, lighting?: LightingId, variant?: string):
   ...(variant ? { variant } : {}),
 });
 export const light = (lighting: LightingId): Step => ({ type: 'light', lighting });
+/** Camera shot of the current 3D location ('wide', 'crt', 'desk'…); null = automatic. */
+export const shot = (name: string | null): Step => ({ type: 'shot', shot: name });
 export const music = (track: string | null): Step => ({ type: 'music', track });
 export const sfx = (sound: string): Step => ({ type: 'sfx', sound });
 export const space = (id: SpaceId, phase?: VisualPhase): Step =>
@@ -61,5 +64,11 @@ export const goto = (target: Target): Step => ({ type: 'goto', target });
 export const episode = (id: string, params?: Record<string, unknown>): Step =>
   params ? { type: 'episode', episode: id, params } : { type: 'episode', episode: id };
 export const ending = (id: string): Step => ({ type: 'ending', ending: id });
+/** Full-screen chapter card: card('Глава 2', '«Мелоди но Махо»', 'app'). */
+export const card = (label: string, title: string, style: ChapterCard['style'], extra: { subtitle?: string; backdrop?: string } = {}): Step => ({
+  type: 'card',
+  card: { label, title, style, ...extra },
+});
+export const cutscene = (id: string): Step => ({ type: 'cutscene', cutscene: id });
 
 export const defineScene = (scene: Scene): Scene => scene;

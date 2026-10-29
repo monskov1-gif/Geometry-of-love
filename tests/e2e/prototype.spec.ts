@@ -31,18 +31,29 @@ let poses = new Set<string>();
  */
 async function advance(page: Page): Promise<Stop> {
   const dialogue = page.getByTestId('dialogue');
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < 1500; i++) {
     if (await page.getByTestId('ending').isVisible()) return 'ending';
     if (await page.getByTestId('episode').isVisible()) return 'episode';
     if (await page.locator('.choices').isVisible()) return 'choice';
+    // Chapter cards wait for a click; cutscenes are skipped (their own test watches one through).
+    if (await page.getByTestId('chapter-card').isVisible()) {
+      await page.getByTestId('chapter-card').click();
+      continue;
+    }
+    if (await page.getByTestId('cutscene-skip').isVisible()) {
+      await page.getByTestId('cutscene-skip').click();
+      await page.waitForTimeout(100);
+      continue;
+    }
     {
       // Story effects (chapter 14 distortion, erasing) deform sprites on purpose; skip them.
       for (const m of await page.locator('.cast-slot:not([data-fx="distorted"]):not([data-fx="erasing"]) .sprite-sheet').evaluateAll((ns) =>
         ns.map((n) => {
           const r = n.getBoundingClientRect();
-          return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, bg: (n as HTMLElement).style.backgroundPosition };
+          return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, height: r.height, bg: (n as HTMLElement).style.backgroundPosition };
         }),
       )) {
+        if (!m.height) continue; // portraits hidden while their character is silent (3D scenes)
         poses.add(m.bg);
         expect(Math.abs(m.ratio - m.expected) / m.expected, `pose ${m.bg}`).toBeLessThan(0.01);
         expect(m.width).toBeLessThanOrEqual(page.viewportSize()!.width);
@@ -51,12 +62,21 @@ async function advance(page: Page): Promise<Stop> {
     if (await dialogue.isVisible()) await dialogue.click();
     else await page.waitForTimeout(50);
   }
-  throw new Error('advance(): nothing blocking reached after 400 clicks');
+  throw new Error('advance(): nothing blocking reached after 1500 clicks');
 }
 
+/** Advances to the choice that offers `name` (smaller choices on the way take their first option). */
 async function choose(page: Page, name: RegExp | string) {
-  expect(await advance(page)).toBe('choice');
-  await page.locator('.choices').getByRole('button', { name }).click();
+  for (let i = 0; i < 30; i++) {
+    expect(await advance(page)).toBe('choice');
+    const wanted = page.locator('.choices').getByRole('button', { name });
+    if (await wanted.count()) {
+      await wanted.click();
+      return;
+    }
+    await page.locator('.choices button:not(:disabled)').first().click();
+  }
+  throw new Error(`choose(): no choice offering ${name}`);
 }
 
 async function startEpisode(page: Page, title: string) {
@@ -89,6 +109,15 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
   }
 }
 
+/** The story opens on the volume card and the chapter card; click through to the first line. */
+async function passCards(page: Page) {
+  for (let i = 0; i < 4 && (await page.getByTestId('chapter-card').isVisible().catch(() => false)); i++) {
+    await page.getByTestId('chapter-card').click();
+    await page.waitForTimeout(150);
+  }
+  await expect(page.getByTestId('dialogue')).toBeVisible();
+}
+
 /** Opening logo: one key starts it (and unlocks audio), the next one skips it. */
 async function passIntro(page: Page) {
   await expect(page.getByTestId('intro-gate')).toBeVisible();
@@ -110,13 +139,14 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('ending 1 «Самоучка»: refuse to install the app', async ({ page }) => {
+  test.setTimeout(300_000);
   const errors = trackErrors(page);
   await expect(page.getByTestId('continue')).toBeDisabled();
   await shot(page, '00-title');
   await page.getByTestId('new-game').click();
   await expect(page.locator('#app')).toHaveAttribute('data-space', 'reality');
-  await page.getByTestId('dialogue').click();
-  await shot(page, '01-reality');
+  await expect(page.getByTestId('chapter-card')).toContainText('За экраном');
+  await shot(page, '01-volume-card');
   await choose(page, /Удалить установщик/);
   expect(await advance(page)).toBe('ending');
   await expect(page.getByTestId('ending')).toContainText('Самоучка');
@@ -132,10 +162,15 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await choose(page, /Установить/);
 
   // Chapter 2 — app onboarding: short articles + very easy tasks, played for real.
-  await expect(page.locator('#app')).toHaveAttribute('data-space', 'app');
   await startEpisode(page, 'Геометрические задачи');
+  await expect(page.locator('#app')).toHaveAttribute('data-space', 'app');
   await shot(page, '02-app-lesson');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
+  // The second and third evenings with Melody: isosceles triangles, areas.
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }]);
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['18', '20', '7']);
   await choose(page, /честно/);
   await shot(page, '03-choice');
   await choose(page, /Ты права/);
@@ -225,6 +260,10 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
   await choose(page, /Установить/);
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }]);
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['18', '20', '7']);
   await choose(page, /Отшутиться/);
   await choose(page, /Ревнуешь/);
   await winByHook(page, 'Выход');
@@ -239,6 +278,8 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
 
 test('opening the backlog or menu does not advance the story', async ({ page }) => {
   await page.getByTestId('new-game').click();
+  await expect(page.getByTestId('chapter-card')).toBeVisible();
+  await passCards(page);
   const dialogue = page.getByTestId('dialogue');
   await dialogue.click();
   const text = await dialogue.locator('.dialogue-text').textContent();
@@ -255,6 +296,8 @@ test('opening the backlog or menu does not advance the story', async ({ page }) 
 
 test('manual save survives a page reload and loads the same line', async ({ page }) => {
   await page.getByTestId('new-game').click();
+  await expect(page.getByTestId('chapter-card')).toBeVisible();
+  await passCards(page);
   const dialogue = page.getByTestId('dialogue');
   for (let i = 0; i < 6; i++) await dialogue.click();
   const text = await dialogue.locator('.dialogue-text').textContent();

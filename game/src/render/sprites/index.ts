@@ -38,7 +38,7 @@ export function spriteSize(id: string): { w: number; h: number } {
 const cache = new Map<string, HTMLCanvasElement>();
 
 export function frameKey(id: string, f: Frame): string {
-  return `${id}|${f.facing}|${f.emotion}|${f.walk}|${f.breath}|${f.mouthOpen ? 1 : 0}`;
+  return `${id}|${f.facing}|${f.emotion}|${f.walk}|${f.breath}|${f.mouthOpen ? 1 : 0}|${f.pose ?? ''}`;
 }
 
 /** Cached canvas for one frame. Throws for unknown ids (content validator checks ids). */

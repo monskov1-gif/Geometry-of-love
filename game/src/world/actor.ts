@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import { hdScale, spriteFrameHD, spriteSize, type Emotion } from '../render/sprites';
 
-export type ActorFacing = 'front' | 'left' | 'right';
+export type ActorFacing = 'front' | 'left' | 'right' | 'back';
 
 /** Body height in metres for each sprite id (the sprite canvas is 24×48 for everyone). */
 const HEIGHTS: Record<string, number> = {
@@ -50,6 +50,7 @@ export class Actor {
   private mouthT = 0;
   private turnT = 0;
   private target: { x: number; z: number; speed: number; resolve: () => void } | null = null;
+  private readonly clip = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   readonly height: number;
   emotion: Emotion = 'neutral';
   facing: ActorFacing = 'front';
@@ -99,11 +100,24 @@ export class Actor {
   }
 
   place(x: number, z: number, facing: ActorFacing = 'front'): void {
+    this.driven = null;
     this.target?.resolve();
     this.target = null;
     this.group.position.set(x, 0, z);
     this.facing = facing;
   }
+
+  /** Mini-games drive the figure directly: position (y = height above the floor), run cycle, crouch. */
+  drive(x: number, y: number, z: number, running: boolean, crouching: boolean, dt: number): void {
+    this.target?.resolve();
+    this.target = null;
+    this.group.position.set(x, y, z);
+    this.facing = 'right';
+    this.driven = { running, crouching };
+    if (running && y === 0) this.walkPhase += dt * 11;
+  }
+
+  private driven: { running: boolean; crouching: boolean } | null = null;
 
   /** Walks (or runs) to a floor point; resolves on arrival. */
   moveTo(x: number, z: number, speed = 1.3): Promise<void> {
@@ -111,6 +125,15 @@ export class Actor {
     return new Promise((resolve) => {
       this.target = { x, z, speed, resolve };
     });
+  }
+
+  /** Where the actor is going (or stands): framing uses the destination, not the walk. */
+  get targetX(): number {
+    return this.target?.x ?? this.group.position.x;
+  }
+
+  get targetZ(): number {
+    return this.target?.z ?? this.group.position.z;
   }
 
   get moving(): boolean {
@@ -143,6 +166,16 @@ export class Actor {
         this.walkPhase += dt * (this.running ? 11 : 7);
       }
     }
+    if (this.anim) {
+      this.anim.t += dt;
+      const k = Math.min(1, this.anim.t / this.anim.dur);
+      this.anim.apply(k);
+      if (k >= 1) {
+        const r = this.anim.resolve;
+        this.anim = null;
+        r();
+      }
+    }
     if (this.talking) this.mouthT += dt;
     if (this.turnT > 0) this.turnT -= dt;
     // cylindrical billboard: face the camera around y only
@@ -150,27 +183,86 @@ export class Actor {
     this.plane.rotation.y = Math.atan2(cam.x - this.group.position.x, cam.z - this.group.position.z);
     this.plane.scale.x = this.facing === 'left' ? -1 : 1;
     this.material.opacity = this.fade;
-    this.material.transparent = this.fade < 1;
+    if (this.material.transparent !== this.fade < 1) {
+      this.material.transparent = this.fade < 1;
+      this.material.needsUpdate = true;
+    }
+    // erasing: clip the figure from the feet up with a plane in world space
+    if (this.eraseCut > 0) {
+      this.clip.constant = -(this.group.position.y + this.eraseCut * this.height * 1.02);
+      this.material.clippingPlanes = [this.clip];
+    } else if (this.material.clippingPlanes?.length) this.material.clippingPlanes = [];
     this.redraw();
   }
 
   private redraw(): void {
-    const walking = this.target !== null;
-    const side = walking || this.facing !== 'front' || this.turnT > 0;
+    const walking = this.target !== null || !!this.driven?.running;
+    const side = walking || this.facing === 'left' || this.facing === 'right' || this.turnT > 0;
     const frame = {
-      facing: side ? ('side' as const) : ('front' as const),
+      facing: side ? ('side' as const) : this.facing === 'back' ? ('back' as const) : ('front' as const),
       emotion: this.emotion,
       walk: walking ? Math.floor(this.walkPhase) % 4 : -1,
       breath: (Math.floor(this.breathT / 0.7) % 2) as 0 | 1,
       mouthOpen: this.talking && Math.floor(this.mouthT / 0.11) % 2 === 0,
+      ...(this.driven?.crouching ? { pose: 'crouch' as const } : {}),
     };
-    const key = `${frame.facing}|${frame.emotion}|${frame.walk}|${frame.breath}|${frame.mouthOpen}`;
+    // in the air: the passing frame (legs tucked)
+    if (this.driven && this.group.position.y > 0.05) frame.walk = 1;
+    const key = `${frame.facing}|${frame.emotion}|${frame.walk}|${frame.breath}|${frame.mouthOpen}|${frame.pose ?? ''}`;
     if (key === this.frameKey) return;
     this.frameKey = key;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.drawImage(spriteFrameHD(this.id, frame), 0, 0);
     this.texture.needsUpdate = true;
   }
+
+  /** Body effects for cutscenes; resolves when done. `to` = where a shrinking body is pulled. */
+  effect(fx: import('./director').ActorEffect, dur: number, to?: { x: number; z: number }): Promise<void> {
+    const start = { x: this.group.position.x, z: this.group.position.z, y: this.group.position.y, s: this.group.scale.y };
+    const done = (apply: (k: number) => void) =>
+      new Promise<void>((resolve) => {
+        if (dur <= 0) {
+          apply(1);
+          resolve();
+          return;
+        }
+        this.anim = { t: 0, dur, apply, resolve };
+      });
+    switch (fx) {
+      case 'shrink':
+        return done((k) => {
+          const e = k * k;
+          this.group.scale.setScalar(Math.max(0.001, 1 - e * 0.98));
+          if (to) {
+            this.group.position.x = start.x + (to.x - start.x) * e;
+            this.group.position.z = start.z + (to.z - start.z) * e;
+          }
+          this.group.position.y = start.y + e * 0.9;
+        });
+      case 'grow':
+        return done((k) => this.group.scale.setScalar(Math.max(0.001, k)));
+      case 'appear':
+        return done((k) => (this.fade = k));
+      case 'dissolve':
+        return done((k) => (this.fade = 1 - k));
+      case 'erase':
+        // erased from the feet up: the figure is cut by a rising line
+        return done((k) => (this.eraseCut = k));
+      case 'tremble':
+        return done((k) => (this.group.position.x = start.x + (k < 1 ? Math.sin(k * 80) * 0.02 : 0)));
+      case 'fall':
+        return done((k) => {
+          this.group.position.y = start.y - k * k * 6;
+          this.plane.rotation.z = k * 1.2;
+        });
+      case 'stretch':
+        return done((k) => (this.group.scale.y = start.s * (1 + Math.sin(k * Math.PI) * 0.6)));
+    }
+  }
+
+  private anim: { t: number; dur: number; apply: (k: number) => void; resolve: () => void } | null = null;
+  /** 0..1 how much of the figure is erased from the bottom (cutscene «Стирание»). */
+  eraseCut = 0;
 
   dispose(): void {
     this.target?.resolve();

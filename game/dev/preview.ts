@@ -74,3 +74,29 @@ if (params.get('logo')) {
     out.append(wrap);
   }
 }
+
+// ?monster=1&scale=4 — Melody's crawl cycle and head tilts (chase monster).
+import { MONSTER_FRAMES, monsterFrame } from '../src/render/sprites/monster';
+if (params.get('monster')) {
+  out.replaceChildren();
+  out.style.display = 'block';
+  out.style.background = '#000';
+  const scale = Number(params.get('scale') ?? 3);
+  const row = (frames: HTMLCanvasElement[]) => {
+    const r = document.createElement('div');
+    r.style.cssText = 'display:flex;gap:8px;margin:8px;flex-wrap:wrap';
+    for (const src of frames) {
+      const c = document.createElement('canvas');
+      c.width = src.width * scale;
+      c.height = src.height * scale;
+      const ctx = c.getContext('2d')!;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(src, 0, 0, c.width, c.height);
+      r.append(c);
+    }
+    out.append(r);
+  };
+  row(Array.from({ length: MONSTER_FRAMES }, (_, i) => monsterFrame(i, 0)).slice(0, 3));
+  row(Array.from({ length: MONSTER_FRAMES }, (_, i) => monsterFrame(i, 0)).slice(3));
+  row([monsterFrame(0, -0.5), monsterFrame(0, 0.6)]);
+}

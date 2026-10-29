@@ -40,6 +40,11 @@ function sheetSprite(pose: SheetPose, referenceHeight: number, maxFrameWidth: nu
   return node;
 }
 
+/** The room whose monitor shows the app. */
+const SCREEN_ROOM = 'dameo-room';
+/** How broken the app looks in each visual phase of the story. */
+const PHASE_UNEASE: Record<string, number> = { A: 0, B: 0.15, C: 0.45, D: 0.8, E: 1 };
+
 function widestFrame(charId: string): number {
   const poses = Object.values(characters[charId]?.poses ?? {});
   return Math.max(1, ...poses.map((p) => (p.kind === 'sheet' ? p.frame.w : 0)));
@@ -140,14 +145,30 @@ export class Stage {
   render(stage: Readonly<StageState>, themeRoot: HTMLElement, reduceMotion = false): void {
     themeRoot.dataset.space = stage.space;
     themeRoot.dataset.phase = stage.phase;
-    const use3D = !!stage.background && stage.background in locations3D;
-    this.root.dataset.mode = use3D ? '3d' : '2d';
+    // The app's own screens are not places: they are what Dameo's old CRT shows,
+    // so they play as a close-up of the monitor in his room.
+    const onScreen = stage.space === 'app' && !!stage.background?.startsWith('app-');
+    const use3D = onScreen || (!!stage.background && stage.background in locations3D);
+    this.root.dataset.mode = onScreen ? 'crt' : use3D ? '3d' : '2d';
     if (use3D) {
       const world = getWorld();
       if (world.root.parentElement !== this.root) this.scene.root.after(world.root);
       world.reduceMotion = reduceMotion;
-      world.show(stage.background!, stage.lighting, stage.variant);
-      world.setCast(stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })));
+      if (onScreen) {
+        world.show(SCREEN_ROOM, stage.lighting ?? 'night', null);
+        world.setCast([]);
+        const melody = stage.characters.find((c) => c.id === 'melody');
+        world.setScreen({
+          view: stage.background === 'app-splash' ? 'splash' : stage.variant === 'quiz' ? 'quiz' : 'lesson',
+          melody: melody?.pose ?? null,
+          unease: PHASE_UNEASE[stage.phase] ?? 0,
+        });
+        world.setStoryShot(stage.shot ?? 'crt');
+      } else {
+        world.show(stage.background!, stage.lighting, stage.variant);
+        world.setCast(stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })));
+        world.setStoryShot(stage.shot);
+      }
       this.scene.show(null, null, null, true);
     } else {
       peekWorld()?.root.remove();

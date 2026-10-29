@@ -1,7 +1,7 @@
 // Rules of the five story mini-games (pure logic, no DOM).
 import { describe, expect, it } from 'vitest';
 import { taskSets, checkAnswer } from '../../game/src/content/geometry-tasks';
-import { AIR_TIME, buildCourse, CONFIGS, hits, obstacleBox, stepRunner, type Runner } from '../../game/src/episodes/chase';
+import { AIR_TIME, BODY, buildCourse, CONFIGS, hits, JUMP_HEIGHT, obstacleBox, startState, stepChase, stepRunner, type Runner } from '../../game/src/episodes/chase-logic';
 import { buildLevel } from '../../game/src/episodes/exit-climb';
 import { MAX_JUMP_HEIGHT, stepBody, unreachablePlatforms, type Body } from '../../game/src/episodes/physics';
 import { RULER_MAX, tryBridge } from '../../game/src/episodes/ruler-bridge';
@@ -96,22 +96,41 @@ describe('Mini-game 5 «Погоня»', () => {
       }
       if (config.mode === 'car') expect(course.every((o) => o.kind !== 'code')).toBe(true);
     });
+
+    it(`${config.mode}: a careful player escapes, a passive one is caught`, () => {
+      const course = buildCourse(config);
+      const run = (smart: boolean) => {
+        const s = startState(config);
+        for (let t = 0; t < 120; t += 1 / 60) {
+          const ahead = course.slice(s.next).find((o) => o.x + obstacleBox(o.kind).w > s.distance - BODY.width);
+          const d = ahead ? ahead.x - s.distance : Infinity;
+          const jump = smart && !!ahead && ahead.kind !== 'code' && d < config.speed * 0.2 && d > 0;
+          const crouch = smart && !!ahead && ahead.kind === 'code' && d < 1.2;
+          const r = stepChase(s, config, course, { jump, crouch }, 1 / 60);
+          if (r !== 'running') return { r, hits: s.hitsTaken };
+        }
+        return { r: 'timeout', hits: s.hitsTaken };
+      };
+      expect(run(true)).toEqual({ r: 'escaped', hits: 0 });
+      expect(run(false).r).toBe('caught');
+    });
   }
 
   const standing: Runner = { y: 0, vy: 0, crouching: false };
   const at = (kind: 'block' | 'code' | 'formula') => ({ x: 0, kind });
 
   it('blocks and formulas hit a standing runner; a jump clears them', () => {
-    expect(hits(standing, at('block'), 0)).toBe(true);
-    expect(hits(standing, at('formula'), 0)).toBe(true);
-    const airborne = { y: obstacleBox('formula').h + 4, vy: 0, crouching: false };
-    expect(hits(airborne, at('formula'), 0)).toBe(false);
+    expect(hits(standing, at('block'), 0.3)).toBe(true);
+    expect(hits(standing, at('formula'), 0.3)).toBe(true);
+    const airborne = { y: obstacleBox('formula').y1 + 0.05, vy: 0, crouching: false };
+    expect(hits(airborne, at('formula'), 0.3)).toBe(false);
+    expect(JUMP_HEIGHT).toBeGreaterThan(obstacleBox('formula').y1);
   });
 
   it('code lines hit a standing runner but not a crouching one', () => {
-    expect(hits(standing, at('code'), 0)).toBe(true);
-    expect(hits({ ...standing, crouching: true }, at('code'), 0)).toBe(false);
-    expect(hits({ ...standing, crouching: true }, at('formula'), 0)).toBe(true);
+    expect(hits(standing, at('code'), 0.5)).toBe(true);
+    expect(hits({ ...standing, crouching: true }, at('code'), 0.5)).toBe(false);
+    expect(hits({ ...standing, crouching: true }, at('formula'), 0.3)).toBe(true);
   });
 
   it('a jump starts only from the ground', () => {

@@ -354,10 +354,24 @@ export const dameoRoom3D: LocationDef3D = {
       shots: {
         wide: { pos: [0.0, 1.6, 1.5], look: [0.05, 1.05, -1.6], fov: 62 },
         // Dameo's view of the monitor: the app fills most of the frame, the desk around it
-        crt: { pos: [screenCenter.x, screenCenter.y + 0.03, screenCenter.z + 0.72], look: [screenCenter.x, screenCenter.y, screenCenter.z - 0.5], fov: 32 },
+        crt: { pos: [screenCenter.x, screenCenter.y - 0.02, screenCenter.z + 0.8], look: [screenCenter.x, screenCenter.y - 0.13, screenCenter.z - 0.5], fov: 34 },
         desk: { pos: [crtX - 0.9, 1.45, -0.4], look: [crtX + 0.1, 0.95, BACK + 0.2], fov: 42 },
         bed: { pos: [0.2, 1.4, 0.9], look: [-1.5, 0.6, -1.3], fov: 46 },
         window: { pos: [0.3, 1.45, 0.8], look: [-0.15, 1.45, BACK], fov: 44 },
+        // behind Dameo at the desk, the monitor over his shoulder (cutscenes)
+        'over-shoulder': { pos: [crtX + 0.55, 1.5, -0.05], look: [crtX - 0.05, 1.05, BACK], fov: 46 },
+        // the room as the monitor sees it: from inside the glass (chapter 4, «Выход»)
+        'from-screen': {
+          pos: [screenCenter.x, screenCenter.y + 0.02, screenCenter.z - 0.03],
+          look: [screenCenter.x - 0.6, 1.0, 1.2],
+          fov: 72,
+        },
+        // the camera falls into the tube after him
+        'into-screen': {
+          pos: [screenCenter.x, screenCenter.y, screenCenter.z + 0.06],
+          look: [screenCenter.x, screenCenter.y, screenCenter.z - 1],
+          fov: 18,
+        },
       },
       marks: {
         left: { x: -0.45, z: -1.05 },
@@ -366,6 +380,8 @@ export const dameoRoom3D: LocationDef3D = {
         desk: { x: crtX - 0.62, z: -1.45, facing: 'right' },
         window: { x: -0.15, z: -1.55 },
         bed: { x: -0.75, z: -1.3 },
+        chair: { x: crtX + 0.02, z: -1.02, facing: 'back' },
+        'backed-off': { x: crtX - 1.0, z: -0.55 },
       },
       walk: { minX: XL + 0.6, maxX: XR - 0.6, z: -1.0 },
       update(dt, t) {

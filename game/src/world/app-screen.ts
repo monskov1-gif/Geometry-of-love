@@ -78,7 +78,11 @@ export class AppScreen {
       return;
     }
     if (s.view === 'desktop') this.desktop(t);
-    else this.app(t);
+    else if (s.view === 'stare') this.stare(t);
+    else {
+      this.app(t);
+      if (s.view === 'close-dialog') this.closeDialog(t);
+    }
     this.glass(t);
   }
 
@@ -211,6 +215,61 @@ export class AppScreen {
     c.imageSmoothingEnabled = true; // downscaling a 1200px portrait: average, then the CRT quantises
     c.drawImage(img, p.frame.x, p.frame.y, p.frame.w, p.baseline, 4, APP_H - 14 - Math.round((p.baseline / p.frame.h) * h) + bob, w, Math.round((p.baseline / p.frame.h) * h));
     c.imageSmoothingEnabled = false;
+  }
+
+  /** «Закрыть «Мелоди но Махо»?» — a system dialog that will not take a «Да». */
+  private closeDialog(t: number): void {
+    const c = this.ctx;
+    const x = 96;
+    const y = 82;
+    c.fillStyle = '#30243b';
+    c.fillRect(x - 2, y - 2, 132, 76);
+    c.fillStyle = '#c8c4bc';
+    c.fillRect(x, y, 128, 72);
+    c.fillStyle = '#1a3a8a';
+    c.fillRect(x, y, 128, 11);
+    c.fillStyle = '#ffffff';
+    c.font = '8px Tiny5, monospace';
+    c.textBaseline = 'middle';
+    c.fillText('Выход', x + 4, y + 6);
+    c.fillStyle = '#1a1a1a';
+    c.fillText('Закрыть программу?', x + 10, y + 26);
+    const jitter = this.state.unease > 0.6 ? Math.round(Math.sin(t * 40) * 3) : 0;
+    for (const [bx, label] of [
+      [x + 16, 'Да'],
+      [x + 72, 'Нет'],
+    ] as const) {
+      c.fillStyle = '#30243b';
+      c.fillRect(bx + (label === 'Да' ? jitter : 0), y + 44, 40, 16);
+      c.fillStyle = label === 'Да' && this.state.unease > 0.6 ? '#9a9690' : '#e8e4dc';
+      c.fillRect(bx + 1 + (label === 'Да' ? jitter : 0), y + 45, 38, 14);
+      c.fillStyle = '#1a1a1a';
+      c.fillText(label, bx + 12 + (label === 'Да' ? jitter : 0), y + 52);
+    }
+    // the cursor on «Да»
+    c.fillStyle = '#ffffff';
+    const cx = x + 34;
+    const cy = y + 54;
+    for (let i = 0; i < 8; i++) c.fillRect(cx, cy + i, Math.max(1, i - 1), 1);
+  }
+
+  /** Melody fills the window and does not move. The program has stopped pretending. */
+  private stare(t: number): void {
+    const c = this.ctx;
+    c.fillStyle = '#1a0814';
+    c.fillRect(0, 0, APP_W, APP_H);
+    const pose = characters.melody?.poses['neutral'];
+    if (pose && pose.kind === 'sheet') {
+      const img = this.images.get(pose.src);
+      if (img) {
+        // cropped to the eyes, enlarged past the frame
+        const p = pose as SheetPose;
+        c.imageSmoothingEnabled = true;
+        c.drawImage(img, p.frame.x + p.frame.w * 0.18, p.frame.y + p.frame.h * 0.12, p.frame.w * 0.64, p.frame.h * 0.5, -20, -10, APP_W + 40, APP_H + 30);
+        c.imageSmoothingEnabled = false;
+      }
+    }
+    this.corrupt(t, 0.7);
   }
 
   /** Unease: colour bars shift, lines tear, a red cast creeps in. */
