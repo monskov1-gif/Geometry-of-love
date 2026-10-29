@@ -4,7 +4,8 @@
    sets data-crt="on" on the theme root. Episodes then appear on the monitor's
    glass: the bezel, the desk and the dark room stay visible around them.
    ====================================================================== */
-[data-crt='on'] .episode-layer {
+/* :not(:empty) — an empty layer stays hidden (display: none), or it would swallow every click */
+[data-crt='on'] .episode-layer:not(:empty) {
   display: block;
   padding: 0;
   background: transparent;
