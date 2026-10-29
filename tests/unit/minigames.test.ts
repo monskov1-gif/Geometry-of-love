@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { taskSets, checkAnswer } from '../../game/src/content/geometry-tasks';
 import { AIR_TIME, BODY, buildCourse, CONFIGS, hits, JUMP_HEIGHT, obstacleBox, startState, stepChase, stepRunner, type Runner } from '../../game/src/episodes/chase-logic';
-import { buildLevel } from '../../game/src/episodes/exit-climb';
+import { buildCourse as buildClimbCourse } from '../../game/src/episodes/exit-course';
 import { MAX_JUMP_HEIGHT, stepBody, unreachablePlatforms, type Body } from '../../game/src/episodes/physics';
 import { RULER_MAX, tryBridge } from '../../game/src/episodes/ruler-bridge';
 import { cutLink, LINKS } from '../../game/src/episodes/system-files';
@@ -23,6 +23,11 @@ describe('platformer physics', () => {
     expect(84 - top).toBeGreaterThan(MAX_JUMP_HEIGHT * 0.9);
   });
 
+  it('the reachability check accepts a fair staircase and rejects a too-high step', () => {
+    expect(unreachablePlatforms([ground[0]!, { x: 40, y: 60, w: 40, h: 6 }])).toEqual([]);
+    expect(unreachablePlatforms([ground[0]!, { x: 40, y: 20, w: 40, h: 6 }])).toEqual([1]);
+  });
+
   it('passes through a platform from below (one-way)', () => {
     const above = [{ x: 0, y: 60, w: 200, h: 6 }];
     const b = stepBody({ ...body, y: 70, vy: -300, onGround: false }, { dir: 0, jump: false }, above, 0.02, { minX: 0, maxX: 200 });
@@ -32,13 +37,12 @@ describe('platformer physics', () => {
 });
 
 describe('Mini-game 1 «Выход»', () => {
-  it('every platform of the level can be reached by a jump', () => {
-    expect(unreachablePlatforms(buildLevel())).toEqual([]);
-  });
+  // Full fairness checks (every hop, a scripted play-through) live in exit-climb.test.ts.
   it('upper platforms vanish, the top ledge does not', () => {
-    const level = buildLevel();
-    expect(level.some((p) => p.vanishing)).toBe(true);
-    expect(level.at(-1)!.vanishing).toBe(false);
+    const { pieces, goal } = buildClimbCourse();
+    expect(pieces.some((p) => p.crumble)).toBe(true);
+    expect(pieces[goal]!.crumble).toBeFalsy();
+    expect(pieces[goal]!.motion.kind).toBe('static');
   });
 });
 

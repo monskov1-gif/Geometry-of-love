@@ -1,6 +1,7 @@
 // Small, predictable platformer physics shared by the platformer episodes.
 // One-way platforms (you land on top, pass through from below), y grows
-// downwards like canvas coordinates. Pure functions: unit-tested.
+// downwards like canvas coordinates. Solid boxes (walls) block from every
+// side. Pure functions: unit-tested.
 
 export interface Rect {
   x: number;
@@ -15,19 +16,35 @@ export interface Body extends Rect {
   onGround: boolean;
   /** Index of the platform under the body, or -1. */
   standingOn: number;
+  /** Seconds left in which a jump is still allowed after walking off an edge. */
+  coyote?: number;
 }
 
-export const PHYS = {
+export interface PhysConfig {
+  gravity: number;
+  jumpSpeed: number;
+  moveSpeed: number;
+  maxFall: number;
+  /** Grace time for a jump after leaving a platform, s (0 = none). */
+  coyote?: number;
+}
+
+export const PHYS: PhysConfig = {
   gravity: 900,
   jumpSpeed: 330,
   moveSpeed: 110,
   maxFall: 520,
 };
 
-/** Highest rise of a jump, px (≈ 60). */
-export const MAX_JUMP_HEIGHT = (PHYS.jumpSpeed * PHYS.jumpSpeed) / (2 * PHYS.gravity);
-/** Horizontal distance covered while airborne on a level jump, px (≈ 80). */
-export const MAX_JUMP_REACH = ((2 * PHYS.jumpSpeed) / PHYS.gravity) * PHYS.moveSpeed;
+/** Highest rise of a jump, px. */
+export const maxJumpHeight = (p: PhysConfig) => (p.jumpSpeed * p.jumpSpeed) / (2 * p.gravity);
+/** Horizontal distance covered while airborne on a level jump, px. */
+export const maxJumpReach = (p: PhysConfig) => ((2 * p.jumpSpeed) / p.gravity) * p.moveSpeed;
+
+/** Highest rise of a jump with the default physics, px (≈ 60). */
+export const MAX_JUMP_HEIGHT = maxJumpHeight(PHYS);
+/** Horizontal distance of a level jump with the default physics, px (≈ 80). */
+export const MAX_JUMP_REACH = maxJumpReach(PHYS);
 
 export interface StepInput {
   dir: number; // -1, 0, 1
@@ -40,14 +57,17 @@ export function stepBody(
   platforms: readonly (Rect & { solid?: boolean })[],
   dt: number,
   bounds: { minX: number; maxX: number },
+  phys: PhysConfig = PHYS,
 ): Body {
   let { x, y, vx, vy, onGround, standingOn } = body;
-  vx = input.dir * PHYS.moveSpeed;
-  if (input.jump && onGround) {
-    vy = -PHYS.jumpSpeed;
+  let coyote = onGround ? (phys.coyote ?? 0) : Math.max(0, (body.coyote ?? 0) - dt);
+  vx = input.dir * phys.moveSpeed;
+  if (input.jump && (onGround || coyote > 0)) {
+    vy = -phys.jumpSpeed;
     onGround = false;
+    coyote = 0;
   }
-  vy = Math.min(PHYS.maxFall, vy + PHYS.gravity * dt);
+  vy = Math.min(phys.maxFall, vy + phys.gravity * dt);
   const prevBottom = y + body.h;
   x = Math.min(bounds.maxX - body.w, Math.max(bounds.minX, x + vx * dt));
   y += vy * dt;
@@ -64,11 +84,61 @@ export function stepBody(
         vy = 0;
         onGround = true;
         standingOn = i;
+        coyote = phys.coyote ?? 0;
         break;
       }
     }
   }
-  return { ...body, x, y, vx, vy, onGround, standingOn };
+  return { ...body, x, y, vx, vy, onGround, standingOn, coyote };
+}
+
+const overlap = (a: Rect, b: Rect) => a.x + a.w > b.x && a.x < b.x + b.w && a.y + a.h > b.y && a.y < b.y + b.h;
+
+/**
+ * Pushes the body out of solid boxes after a step: a head bump stops the
+ * rise, a side hit stops the walk. A box that appeared around the body
+ * (a window popping up) pushes it out to the nearer side.
+ */
+export function resolveSolids(prev: Body, next: Body, solids: readonly Rect[]): Body {
+  let b = next;
+  for (const s of solids) {
+    if (!overlap(b, s)) continue;
+    if (prev.y >= s.y + s.h - 0.01) {
+      b = { ...b, y: s.y + s.h, vy: Math.max(0, b.vy) };
+    } else if (prev.y + prev.h <= s.y + 0.01) {
+      b = { ...b, y: s.y - b.h, vy: 0, onGround: true };
+    } else if (prev.x + prev.w <= s.x + 0.01) {
+      b = { ...b, x: s.x - b.w };
+    } else if (prev.x >= s.x + s.w - 0.01) {
+      b = { ...b, x: s.x + s.w };
+    } else {
+      const left = b.x + b.w - s.x;
+      const right = s.x + s.w - b.x;
+      b = { ...b, x: left < right ? s.x - b.w : s.x + s.w };
+    }
+  }
+  return b;
+}
+
+/** Time until the feet come back down to `rise` px above the take-off point, s (null = too high). */
+export function jumpTime(rise: number, phys: PhysConfig): number | null {
+  const d = phys.jumpSpeed * phys.jumpSpeed - 2 * phys.gravity * rise;
+  if (d < 0) return null;
+  return (phys.jumpSpeed + Math.sqrt(d)) / phys.gravity;
+}
+
+/**
+ * Can a body of width `bodyW` standing on `from` land on `to` with one jump?
+ * Uses the exact ballistic arc and a safety margin (0.85 = 15 % spare).
+ */
+export function canJump(from: Rect, to: Rect, phys: PhysConfig, bodyW: number, margin = 0.85): boolean {
+  const rise = from.y - to.y;
+  if (rise > maxJumpHeight(phys) * margin) return false;
+  const t = jumpTime(Math.max(rise, -2000), phys);
+  if (t === null) return false;
+  const gap = Math.max(0, to.x - (from.x + from.w), from.x - (to.x + to.w));
+  const travel = Math.max(0, gap - bodyW / 2);
+  return travel <= phys.moveSpeed * t * margin;
 }
 
 /**
