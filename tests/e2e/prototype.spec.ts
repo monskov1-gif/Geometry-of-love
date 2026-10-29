@@ -113,7 +113,7 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
   for (let i = 0; i < 5 && (await episode.getByRole('button', { name: /Далее|К задачам/ }).isVisible()); i++) {
     await episode.getByRole('button', { name: /Далее|К задачам/ }).click();
   }
-  for (const a of answers) {
+  for (const [n, a] of answers.entries()) {
     // a slow software-rendered frame can swallow the first click: answer again until it is checked
     await expect(async () => {
       if (typeof a === 'string') await episode.getByLabel('Ответ', { exact: true }).fill(a);
@@ -121,7 +121,8 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
       await episode.getByRole('button', { name: 'Проверить' }).click();
       await expect(episode.locator('.quiz-feedback')).toHaveText(/Правильно/, { timeout: 8_000 });
     }).toPass({ timeout: 40_000 });
-    // Wait until the next task replaces this one, or the story moves on past the episode.
+    // Wait until the next task replaces this one (after the last one, advance() takes over).
+    if (n === answers.length - 1) continue;
     await expect
       .poll(async () => {
         if (await page.getByTestId('dialogue').isVisible()) return false;
