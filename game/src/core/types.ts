@@ -19,6 +19,9 @@ export type TextKind =
 
 export type StagePosition = 'left' | 'center' | 'right';
 
+/** Lighting state of a painted location. */
+export type LightingId = 'day' | 'evening' | 'night';
+
 /** Persistent visual state of a staged character (saved with the stage). */
 export type CharacterFx = 'distorted' | 'erasing' | 'frozen';
 
@@ -65,7 +68,10 @@ export type Step =
   | { type: 'show'; character: string; pose: string; position?: StagePosition; fx?: CharacterFx }
   | { type: 'effect'; effect: ScreenEffect }
   | { type: 'hide'; character: string }
-  | { type: 'background'; background: string }
+  | { type: 'background'; background: string; lighting?: LightingId; variant?: string }
+  | { type: 'light'; lighting: LightingId }
+  | { type: 'music'; track: string | null }
+  | { type: 'sfx'; sound: string }
   | { type: 'space'; space: SpaceId; phase?: VisualPhase }
   | { type: 'label'; name: string }
   | { type: 'effects'; effects: Effect[] }
@@ -97,6 +103,12 @@ export interface StagedCharacter {
 
 export interface StageState {
   background: string | null;
+  /** Lighting of the painted location (null = the location's default). */
+  lighting: LightingId | null;
+  /** Scene detail switch for a location (e.g. the app shown on the monitor). */
+  variant: string | null;
+  /** Current music track; restored on load. */
+  music: string | null;
   space: SpaceId;
   phase: VisualPhase;
   characters: StagedCharacter[];

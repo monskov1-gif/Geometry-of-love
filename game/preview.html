@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Preview — locations & sprites (dev only)</title>
+    <style>
+      body { margin: 0; background: #111; color: #ddd; font: 12px monospace; }
+      .grid { display: grid; gap: 8px; padding: 8px; grid-template-columns: repeat(auto-fill, minmax(768px, 1fr)); }
+      canvas { width: 768px; height: 432px; image-rendering: pixelated; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="out" class="grid"></div>
+    <script type="module" src="./dev/preview.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,337 @@
+/* ---------- Title screen + opening logo ---------------------------------- */
+.title-screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--terminal-black);
+}
+
+.title-screen > .scene-view {
+  position: absolute;
+  inset: 0;
+  filter: brightness(0.9) saturate(0.95);
+  transition: opacity 900ms ease-out;
+}
+
+.title-screen.is-intro > .scene-view,
+.title-screen.is-intro > .title-vignette {
+  opacity: 0;
+}
+
+.title-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 40% 50%, transparent 35%, rgba(8, 6, 12, 0.7) 100%);
+  transition: opacity 900ms ease-out;
+}
+
+/* The logo sheet: full screen during the intro, pinned to the left after. */
+.logo-frame {
+  position: absolute;
+  container-type: inline-size;
+  aspect-ratio: 16 / 9;
+  width: min(100vw, calc(100vh * 16 / 9));
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition:
+    width 900ms cubic-bezier(0.6, 0, 0.2, 1),
+    left 900ms cubic-bezier(0.6, 0, 0.2, 1),
+    top 900ms cubic-bezier(0.6, 0, 0.2, 1),
+    transform 900ms cubic-bezier(0.6, 0, 0.2, 1),
+    box-shadow 900ms;
+}
+
+.logo-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.title-screen:not(.is-intro) .logo-frame {
+  width: min(58vw, calc(82vh * 16 / 9));
+  left: 4vw;
+  transform: translate(0, -50%) rotate(-1.6deg);
+  box-shadow: var(--card-shadow);
+}
+
+/* washi tape holding the sheet */
+.title-screen:not(.is-intro) .logo-frame::before,
+.title-screen:not(.is-intro) .logo-frame::after {
+  content: '';
+  position: absolute;
+  width: 14%;
+  height: 7%;
+  background: color-mix(in srgb, var(--pink) 60%, transparent);
+  clip-path: polygon(0 8%, 6% 0, 12% 10%, 20% 0, 30% 8%, 40% 0, 50% 10%, 60% 0, 70% 8%, 80% 0, 90% 10%, 100% 2%, 100% 92%, 92% 100%, 84% 90%, 72% 100%, 60% 92%, 48% 100%, 36% 90%, 24% 100%, 12% 92%, 0 100%);
+  animation: fade-in 400ms 700ms both;
+}
+
+.title-screen:not(.is-intro) .logo-frame::before {
+  left: -3%;
+  top: -2%;
+  transform: rotate(-32deg);
+}
+
+.title-screen:not(.is-intro) .logo-frame::after {
+  right: -3%;
+  bottom: -2%;
+  transform: rotate(-28deg);
+  background: color-mix(in srgb, var(--mint) 70%, transparent);
+}
+
+.logo-equation {
+  position: absolute;
+  left: 2%;
+  top: 3%;
+  margin: 0;
+  padding: 0 0.4em;
+  font-family: var(--font-code);
+  font-size: 2.6cqw;
+  line-height: 1.5;
+  color: var(--logo-ink);
+  background: color-mix(in srgb, var(--logo-paper) 85%, transparent);
+  white-space: pre;
+}
+
+.logo-equation:empty,
+.logo-equation[data-n='0'] {
+  background: none;
+}
+
+.logo-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.12em;
+  margin-left: 0.08em;
+  background: currentColor;
+  vertical-align: -0.1em;
+  animation: caret-blink 900ms steps(1) infinite;
+}
+
+.logo-frame[data-state='done'] .logo-caret {
+  display: none;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- intro gate + skip -------------------------------------------- */
+.intro-gate {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: var(--space-2);
+  text-align: center;
+  cursor: pointer;
+  color: #e9e4ff;
+}
+
+.intro-gate p {
+  margin: 0;
+}
+
+.intro-gate-prompt {
+  font-size: clamp(16px, 1rem + 1vw, 26px);
+}
+
+.intro-gate-note {
+  font-family: var(--font-text);
+  font-size: var(--fs-small);
+  color: #8f88a8;
+}
+
+.intro-skip {
+  position: absolute;
+  right: max(16px, 2vw);
+  bottom: max(16px, 3vh);
+  padding: 6px 12px;
+  font-size: var(--fs-ui);
+  color: var(--logo-ink);
+  background: color-mix(in srgb, var(--logo-paper) 80%, transparent);
+  border: 2px solid var(--logo-ink);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--dur-med);
+}
+
+.is-playing .intro-skip {
+  opacity: 0.85;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  opacity: 1;
+  outline: 3px dashed var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- lace menu card ---------------------------------------------- */
+.title-menu {
+  position: absolute;
+  right: 6vw;
+  top: 50%;
+  transform: translateY(-50%) rotate(1deg);
+  width: min(30vw, 330px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 34px 22px 22px;
+  transition:
+    opacity 500ms ease-out 300ms,
+    transform 600ms cubic-bezier(0.2, 0.8, 0.3, 1.2) 300ms;
+}
+
+/* the card itself: ruled pink paper inside a scalloped lace edge */
+.title-menu::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  z-index: -1;
+  border-radius: 10px;
+  padding: 7px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 23px, color-mix(in srgb, var(--notebook-blue) 55%, transparent) 23px 24px),
+    linear-gradient(var(--baby-pink), var(--baby-pink)),
+    radial-gradient(circle at 7px 7px, var(--lace) 0 6px, transparent 6.5px);
+  background-size: auto, auto, 14px 14px;
+  background-clip: content-box, content-box, border-box;
+  background-origin: content-box, content-box, border-box;
+  filter: drop-shadow(0 3px 0 rgba(48, 36, 59, 0.35)) drop-shadow(0 12px 18px rgba(10, 6, 16, 0.4));
+}
+
+/* stitching + lace holes */
+.title-menu::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 2px dashed color-mix(in srgb, var(--plum) 55%, transparent);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.title-screen.is-intro .title-menu {
+  opacity: 0;
+  transform: translateY(-40%) rotate(4deg);
+  pointer-events: none;
+}
+
+.title-menu-head {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  padding: 3px 18px 2px;
+  font-size: var(--fs-ui);
+  color: var(--ink);
+  background: var(--tape);
+  clip-path: polygon(0 10%, 5% 0, 95% 6%, 100% 0, 98% 90%, 100% 100%, 4% 94%, 0 100%);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.btn-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font-size: clamp(15px, 0.6rem + 0.75vw, 22px);
+  padding: 9px 14px 8px;
+  background: var(--paper);
+}
+
+.is-entering .btn-menu {
+  animation: menu-in 420ms cubic-bezier(0.2, 0.8, 0.3, 1.3) both;
+  animation-delay: calc(500ms + var(--i) * 70ms);
+}
+
+.btn-menu-mark {
+  width: 10px;
+  height: 9px;
+  flex: none;
+  /* pixel heart */
+  background: var(--accent);
+  clip-path: polygon(0 20%, 20% 0, 40% 0, 50% 20%, 60% 0, 80% 0, 100% 20%, 100% 50%, 50% 100%, 0 50%);
+  opacity: 0.25;
+  transition: opacity var(--dur-fast), transform var(--dur-fast);
+}
+
+.btn-menu:hover:not(:disabled) .btn-menu-mark,
+.btn-menu:focus-visible .btn-menu-mark {
+  opacity: 1;
+  transform: scale(1.3);
+  animation: heart-beat 700ms steps(2) infinite;
+}
+
+.btn-menu:disabled .btn-menu-mark {
+  opacity: 0.1;
+}
+
+.title-footer {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: var(--fs-ui);
+  color: var(--plum);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px) rotate(2deg);
+  }
+}
+
+@keyframes heart-beat {
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Portrait phones: logo on top, menu below. */
+@media (max-aspect-ratio: 1 / 1) {
+  .title-screen:not(.is-intro) .logo-frame {
+    width: 94vw;
+    left: 3vw;
+    top: max(16px, 5vh);
+    transform: rotate(-1.6deg);
+  }
+
+  .title-menu {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: max(24px, 6vh);
+    transform: translateX(-50%) rotate(1deg);
+    width: min(84vw, 340px);
+  }
+
+  .title-screen.is-intro .title-menu {
+    transform: translate(-50%, 10%) rotate(4deg);
+  }
+
+  .logo-equation {
+    font-size: 3.2cqw;
+  }
+}
+
+.reduce-motion .logo-frame,
+.reduce-motion .title-menu,
+.reduce-motion .btn-menu {
+  transition: none;
+  animation: none;
+}

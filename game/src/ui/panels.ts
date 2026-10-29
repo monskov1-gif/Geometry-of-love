@@ -176,7 +176,7 @@ export function settingsView(store: SettingsStore): HTMLElement {
     });
     return el('label', { class: 'setting' }, el('span', {}, label), input, value);
   };
-  const toggle = (label: string, key: 'reduceMotion') =>
+  const toggle = (label: string, key: 'reduceMotion' | 'muted') =>
     el(
       'label',
       { class: 'setting setting-toggle' },
@@ -205,6 +205,10 @@ export function settingsView(store: SettingsStore): HTMLElement {
     el('label', { class: 'setting' }, el('span', {}, 'Пропуск (Skip)'), skip),
     range('Размер текста', 'textScale', 0.85, 1.5, 0.05, (v) => `${Math.round(v * 100)}%`),
     range('Непрозрачность окна диалога', 'dialogOpacity', 0.5, 1, 0.02, (v) => `${Math.round(v * 100)}%`),
+    el('h3', { class: 'pixel' }, 'Звук'),
+    range('Музыка', 'musicVolume', 0, 1, 0.05, (v) => `${Math.round(v * 100)}%`),
+    range('Звуки', 'sfxVolume', 0, 1, 0.05, (v) => `${Math.round(v * 100)}%`),
+    toggle('Выключить весь звук', 'muted'),
     el('h3', { class: 'pixel' }, 'Доступность'),
     toggle('Уменьшить движение', 'reduceMotion'),
     el(

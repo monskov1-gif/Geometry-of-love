@@ -6,6 +6,10 @@ export interface ContentIndex {
   characters: Record<string, readonly string[]>; // id -> pose ids
   backgrounds: readonly string[];
   episodes: readonly string[];
+  /** Lighting states each painted background supports (absent = CSS background, no lighting). */
+  lightings?: Record<string, readonly string[]>;
+  tracks?: readonly string[];
+  sounds?: readonly string[];
   endings: readonly string[];
   flags: readonly string[];
   relationships: readonly string[];
@@ -77,8 +81,19 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
         case 'hide':
           checkSpeaker(where, step.character);
           break;
-        case 'background':
+        case 'background': {
           if (!has(index.backgrounds, step.background)) problems.push(`${where}: unknown background "${step.background}"`);
+          const ls = index.lightings?.[step.background];
+          if (step.lighting && ls && !ls.includes(step.lighting)) problems.push(`${where}: "${step.background}" has no lighting "${step.lighting}"`);
+          break;
+        }
+        case 'music':
+          if (step.track && index.tracks && !has(index.tracks, step.track)) problems.push(`${where}: unknown music track "${step.track}"`);
+          break;
+        case 'sfx':
+          if (index.sounds && !has(index.sounds, step.sound)) problems.push(`${where}: unknown sound "${step.sound}"`);
+          break;
+        case 'light':
           break;
         case 'label':
           if (labels.has(step.name)) problems.push(`${where}: duplicate label "${step.name}"`);

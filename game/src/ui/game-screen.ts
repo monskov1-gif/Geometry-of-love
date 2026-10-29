@@ -4,7 +4,8 @@
 import { characters, endings, story } from '../content';
 import { StoryRuntime, StoryError } from '../core/runtime';
 import { SAVE_SCHEMA, type BacklogEntry, type SaveData, type SaveStore } from '../core/saves';
-import type { Presentation, StoryState } from '../core/types';
+import type { Presentation, SpaceId, StoryState, VisualPhase } from '../core/types';
+import type { AudioEngine } from '../audio/engine';
 import type { InputManager } from '../platform/input';
 import type { MetaStore } from '../platform/meta';
 import type { SettingsStore } from '../platform/settings';
@@ -20,6 +21,14 @@ const BACKLOG_LIMIT = 200;
 const SKIP_INTERVAL_MS = 60;
 const REVISION_DELAY_MS = 1100;
 
+/** Music when a scene names none: each space has its own theme (art brief §7). */
+function spaceTrack(space: SpaceId, phase: VisualPhase): string {
+  if (space === 'reality') return 'reality';
+  if (space === 'code') return 'tension';
+  if (space === 'game') return phase >= 'D' ? 'tension' : 'sandbox';
+  return phase >= 'C' ? 'app-uneasy' : 'app';
+}
+
 export interface GameServices {
   input: InputManager;
   overlays: Overlays;
@@ -30,6 +39,7 @@ export interface GameServices {
   loadSave: (data: SaveData) => void;
   /** Element whose data-space/data-phase drive the theme (the whole app, so panels follow it). */
   themeRoot: HTMLElement;
+  audio: AudioEngine;
 }
 
 export interface GameInit {
@@ -128,8 +138,13 @@ export class GameScreen {
     this.presentation = p;
     window.clearTimeout(this.revisionTimer);
     this.pendingRevision = null;
-    this.stage.render(this.runtime.state.stage, this.services.themeRoot);
-    this.effects.play(this.runtime.takeEffects(), this.services.settings.get().reduceMotion);
+    const reduceMotion = this.services.settings.get().reduceMotion;
+    const stage = this.runtime.state.stage;
+    this.stage.render(stage, this.services.themeRoot, reduceMotion);
+    this.effects.play(this.runtime.takeEffects(), reduceMotion);
+    // Music follows the stage (restored on load); one-shot sounds play once.
+    this.services.audio.music(stage.music ?? spaceTrack(stage.space, stage.phase));
+    for (const s of this.runtime.takeSounds()) this.services.audio.sfx(s);
     this.choiceLayer.replaceChildren();
     this.root.dataset.mode = p.kind;
 
@@ -141,16 +156,31 @@ export class GameScreen {
         if (this.backlog.length > BACKLOG_LIMIT) this.backlog.splice(0, this.backlog.length - BACKLOG_LIMIT);
         const speed = this.skipping ? 0 : this.services.settings.get().textSpeed;
         const name = speakerName(p.speaker, this.runtime.state.flags);
-        this.dialogue.show({ speaker: name, accent, text: p.text, kind: p.textKind }, speed, () => {
-          if (!p.revision) return this.onLineShown();
-          this.pendingRevision = p.revision;
-          this.revisionTimer = window.setTimeout(() => this.applyRevision(), this.skipping ? 0 : REVISION_DELAY_MS);
-        });
+        this.stage.setSpeaking(p.speaker);
+        const blip = p.textKind === 'narration' || p.textKind === 'thought' ? null : 'text';
+        this.dialogue.show(
+          { speaker: name, accent, text: p.text, kind: p.textKind },
+          speed,
+          () => {
+            this.stage.setSpeaking(null);
+            if (!p.revision) return this.onLineShown();
+            this.services.audio.sfx('glitch');
+            this.pendingRevision = p.revision;
+            this.revisionTimer = window.setTimeout(() => this.applyRevision(), this.skipping ? 0 : REVISION_DELAY_MS);
+          },
+          blip ? () => this.services.audio.sfx(blip) : undefined,
+        );
         break;
       }
       case 'choice':
         this.setSkip(false);
-        this.choiceLayer.append(choicePanel(p.prompt, p.options, (id) => this.act(() => this.runtime.choose(id))));
+        this.stage.setSpeaking(null);
+        this.choiceLayer.append(
+          choicePanel(p.prompt, p.options, (id) => {
+            this.services.audio.sfx('choice');
+            this.act(() => this.runtime.choose(id));
+          }),
+        );
         this.choiceLayer.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
         break;
       case 'episode':

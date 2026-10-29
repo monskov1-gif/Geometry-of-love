@@ -89,6 +89,14 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
   }
 }
 
+/** Opening logo: one key starts it (and unlocks audio), the next one skips it. */
+async function passIntro(page: Page) {
+  await expect(page.getByTestId('intro-gate')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await page.getByTestId('intro-skip').click();
+  await expect(page.getByTestId('new-game')).toBeFocused();
+}
+
 test.beforeEach(async ({ page }) => {
   poses = new Set();
   await page.goto('./');
@@ -98,6 +106,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem('gol:settings', JSON.stringify({ textSpeed: 0 }));
   });
   await page.reload();
+  await passIntro(page);
 });
 
 test('ending 1 «Самоучка»: refuse to install the app', async ({ page }) => {
@@ -255,6 +264,7 @@ test('manual save survives a page reload and loads the same line', async ({ page
   await expect(page.locator('[data-slot="slot-1"]')).toContainText('Глава 1');
   await shot(page, '11-save');
   await page.reload();
+  await passIntro(page);
   await page.getByTestId('load').click();
   await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Загрузить' }).click();
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
@@ -272,7 +282,27 @@ test('settings persist across reloads', async ({ page }) => {
   await page.getByLabel('Пропуск').selectOption('all');
   await page.getByLabel('Уменьшить движение').check();
   await page.reload();
+  // Reduced motion: the logo is shown finished, no intro to sit through.
+  await expect(page.getByTestId('intro-gate')).toHaveCount(0);
   await page.getByTestId('settings').click();
   await expect(page.getByLabel('Пропуск')).toHaveValue('all');
   await expect(page.getByLabel('Уменьшить движение')).toBeChecked();
+});
+
+test('opening logo plays to the end by itself and is not replayed on return', async ({ page }) => {
+  const errors = trackErrors(page);
+  await page.reload();
+  await expect(page.getByTestId('intro-gate')).toBeVisible();
+  await expect(page.getByTestId('new-game')).not.toBeFocused();
+  await page.mouse.click(10, 10);
+  await expect(page.getByTestId('intro-gate')).toHaveCount(0);
+  await expect(page.getByTestId('new-game')).toBeFocused({ timeout: 15_000 });
+  await shot(page, 'logo-final');
+  await page.getByTestId('new-game').click();
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Главное меню', exact: true }).click();
+  await page.getByRole('button', { name: 'Выйти', exact: true }).click();
+  await expect(page.getByTestId('title-screen')).toBeVisible();
+  await expect(page.getByTestId('intro-gate')).toHaveCount(0);
+  expect(errors).toEqual([]);
 });

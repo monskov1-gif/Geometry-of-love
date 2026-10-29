@@ -27,7 +27,7 @@ export const chapter1 = defineScene({
   chapter: 1,
   steps: [
     space('reality', 'A'),
-    background('dameo-room'),
+    background('dameo-room', 'evening'),
     system('ТОМ I. ЗА ЭКРАНОМ'),
     system('Глава 1. «Достойный кандидат»'),
     narrate('Дамео только что съехал от матери. Новая комната пахнет пылью и чужими обоями. Коробки до сих пор не разобраны.'),
@@ -79,7 +79,7 @@ export const endingSelfTaught = defineScene({
     say('satsuki', 'Спасибо, Дамео, правда. Но я уже нашла репетитора.'),
     say('satsuki', 'И… я не заинтересована в отношениях. Ты ведь это понимаешь?'),
     hide('satsuki'),
-    background('dameo-room'),
+    background('dameo-room', 'night'),
     narrate('Дамео возвращается домой, открывает очередной учебник и вздыхает.'),
     say('dameo', '«Ну хотя бы геометрию я победил».'),
     ending('self-taught'),

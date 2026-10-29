@@ -15,7 +15,7 @@ export function initialState(story: Story): StoryState {
     relationships: {},
     traits: {},
     decisions: [],
-    stage: { background: null, space: 'app', phase: 'A', characters: [] },
+    stage: { background: null, lighting: null, variant: null, music: null, space: 'app', phase: 'A', characters: [] },
     ending: null,
   };
 }
@@ -33,6 +33,7 @@ export class StoryRuntime {
   private s: StoryState;
   private checkpoint = true;
   private effects: ScreenEffect[] = [];
+  private sounds: string[] = [];
 
   constructor(
     private readonly story: Story,
@@ -68,6 +69,13 @@ export class StoryRuntime {
   takeEffects(): ScreenEffect[] {
     const list = this.effects;
     this.effects = [];
+    return list;
+  }
+
+  /** Sound effects passed since the last call (one-shot, not saved). */
+  takeSounds(): string[] {
+    const list = this.sounds;
+    this.sounds = [];
     return list;
   }
 
@@ -169,6 +177,17 @@ export class StoryRuntime {
           break;
         case 'background':
           stage.background = step.background;
+          stage.lighting = step.lighting ?? null;
+          stage.variant = step.variant ?? null;
+          break;
+        case 'light':
+          stage.lighting = step.lighting;
+          break;
+        case 'music':
+          stage.music = step.track;
+          break;
+        case 'sfx':
+          this.sounds.push(step.sound);
           break;
         case 'space':
           stage.space = step.space;

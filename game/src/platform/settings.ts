@@ -1,8 +1,8 @@
 import type { KeyValueStore } from '../core/saves';
 import { readJson, writeJson } from './storage';
 
-// Only settings that change behaviour today. Audio, flashes and key
-// rebinding are added together with the features they control.
+// Only settings that change behaviour today. Key rebinding is added together
+// with the feature it controls.
 export interface Settings {
   /** Characters per second; 0 = show instantly. */
   textSpeed: number;
@@ -11,6 +11,9 @@ export interface Settings {
   textScale: number;
   dialogOpacity: number;
   reduceMotion: boolean;
+  musicVolume: number;
+  sfxVolume: number;
+  muted: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -20,6 +23,9 @@ export const DEFAULT_SETTINGS: Settings = {
   textScale: 1,
   dialogOpacity: 0.94,
   reduceMotion: false,
+  musicVolume: 0.6,
+  sfxVolume: 0.8,
+  muted: false,
 };
 
 const KEY = 'gol:settings';
