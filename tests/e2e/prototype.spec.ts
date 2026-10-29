@@ -112,13 +112,19 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
     await episode.getByRole('button', { name: /Далее|К задачам/ }).click();
   }
   for (const a of answers) {
-    if (typeof a === 'string') await episode.getByLabel('Ответ', { exact: true }).fill(a);
-    else await episode.getByRole('button', { name: a.choice, exact: true }).click();
-    await episode.getByRole('button', { name: 'Проверить' }).click();
-    await expect(episode.locator('.quiz-feedback')).toHaveText(/Правильно/);
-    // Wait until the next task (or the end of the episode) replaces this one.
+    // a slow software-rendered frame can swallow the first click: answer again until it is checked
+    await expect(async () => {
+      if (typeof a === 'string') await episode.getByLabel('Ответ', { exact: true }).fill(a);
+      else await episode.getByRole('button', { name: a.choice, exact: true }).click();
+      await episode.getByRole('button', { name: 'Проверить' }).click();
+      await expect(episode.locator('.quiz-feedback')).toHaveText(/Правильно/, { timeout: 8_000 });
+    }).toPass({ timeout: 40_000 });
+    // Wait until the next task replaces this one, or the story moves on past the episode.
     await expect
-      .poll(async () => (await episode.isVisible()) && /Правильно/.test((await episode.locator('.quiz-feedback').textContent()) ?? ''))
+      .poll(async () => {
+        if (await page.getByTestId('dialogue').isVisible()) return false;
+        return (await episode.isVisible()) && /Правильно/.test((await episode.locator('.quiz-feedback').textContent()) ?? '');
+      })
       .toBe(false);
   }
 }
