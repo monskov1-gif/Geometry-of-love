@@ -30,39 +30,51 @@ let poses = new Set<string>();
  * (regression: sprites were once squashed on phones).
  */
 async function advance(page: Page): Promise<Stop> {
-  const dialogue = page.getByTestId('dialogue');
-  for (let i = 0; i < 1500; i++) {
-    if (await page.getByTestId('ending').isVisible()) return 'ending';
-    if (await page.getByTestId('episode').isVisible()) return 'episode';
-    if (await page.locator('.choices').isVisible()) return 'choice';
-    // Chapter cards wait for a click; cutscenes are skipped (their own test watches one through).
-    if (await page.getByTestId('chapter-card').isVisible()) {
-      await page.getByTestId('chapter-card').click();
-      continue;
+  const width = page.viewportSize()!.width;
+  for (let i = 0; i < 3000; i++) {
+    // one round trip per step: the 3D scenes make every browser call slow on a software rasteriser
+    const st = await page.evaluate(() => {
+      const shown = (sel: string) => {
+        const n = document.querySelector(sel) as HTMLElement | null;
+        if (!n) return false;
+        const r = n.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && getComputedStyle(n).visibility !== 'hidden';
+      };
+      // Story effects (chapter 14 distortion, erasing) deform sprites on purpose; skip them.
+      const sprites = [...document.querySelectorAll('.cast-slot:not([data-fx="distorted"]):not([data-fx="erasing"]) .sprite-sheet')].map((n) => {
+        const r = n.getBoundingClientRect();
+        return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, height: r.height, bg: (n as HTMLElement).style.backgroundPosition };
+      });
+      return {
+        ending: shown('[data-testid="ending"]'),
+        episode: shown('[data-testid="episode"]'),
+        choice: shown('.choices'),
+        card: shown('[data-testid="chapter-card"]'),
+        skip: shown('[data-testid="cutscene-skip"]'),
+        dialogue: shown('[data-testid="dialogue"]'),
+        sprites,
+      };
+    });
+    if (st.ending) return 'ending';
+    if (st.episode) return 'episode';
+    if (st.choice) return 'choice';
+    for (const m of st.sprites) {
+      if (!m.height) continue; // portraits hidden while their character is silent (3D scenes)
+      poses.add(m.bg);
+      expect(Math.abs(m.ratio - m.expected) / m.expected, `pose ${m.bg}`).toBeLessThan(0.01);
+      expect(m.width).toBeLessThanOrEqual(width);
     }
-    if (await page.getByTestId('cutscene-skip').isVisible()) {
+    // Chapter cards wait for a click; cutscenes are skipped (their own test watches one through).
+    if (st.card) await page.getByTestId('chapter-card').click();
+    else if (st.skip) {
       await page.getByTestId('cutscene-skip').click();
       await page.waitForTimeout(100);
-      continue;
     }
-    {
-      // Story effects (chapter 14 distortion, erasing) deform sprites on purpose; skip them.
-      for (const m of await page.locator('.cast-slot:not([data-fx="distorted"]):not([data-fx="erasing"]) .sprite-sheet').evaluateAll((ns) =>
-        ns.map((n) => {
-          const r = n.getBoundingClientRect();
-          return { ratio: r.width / r.height, expected: Number((n as HTMLElement).dataset.frameRatio), width: r.width, height: r.height, bg: (n as HTMLElement).style.backgroundPosition };
-        }),
-      )) {
-        if (!m.height) continue; // portraits hidden while their character is silent (3D scenes)
-        poses.add(m.bg);
-        expect(Math.abs(m.ratio - m.expected) / m.expected, `pose ${m.bg}`).toBeLessThan(0.01);
-        expect(m.width).toBeLessThanOrEqual(page.viewportSize()!.width);
-      }
-    }
-    if (await dialogue.isVisible()) await dialogue.click();
+    // the line may end (and the band hide) between the check and the click: the next step re-reads the state
+    else if (st.dialogue) await page.getByTestId('dialogue').click({ timeout: 5_000 }).catch(() => undefined);
     else await page.waitForTimeout(50);
   }
-  throw new Error('advance(): nothing blocking reached after 1500 clicks');
+  throw new Error('advance(): nothing blocking reached after 3000 steps');
 }
 
 /** Advances to the choice that offers `name` (smaller choices on the way take their first option). */
@@ -80,7 +92,9 @@ async function choose(page: Page, name: RegExp | string) {
 }
 
 async function startEpisode(page: Page, title: string) {
-  expect(await advance(page)).toBe('episode');
+  // smaller choices on the way to the episode take their first option
+  for (let i = 0; i < 10 && (await advance(page)) === 'choice'; i++) await page.locator('.choices button:not(:disabled)').first().click();
+  await expect(page.getByTestId('episode')).toBeVisible();
   await expect(page.getByTestId('episode').getByRole('heading', { name: title })).toBeVisible();
   await page.getByRole('button', { name: 'Начать' }).click();
 }
@@ -139,7 +153,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('ending 1 «Самоучка»: refuse to install the app', async ({ page }) => {
-  test.setTimeout(300_000);
+  test.setTimeout(600_000);
   const errors = trackErrors(page);
   await expect(page.getByTestId('continue')).toBeDisabled();
   await shot(page, '00-title');
@@ -156,7 +170,7 @@ test('ending 1 «Самоучка»: refuse to install the app', async ({ page }
 });
 
 test('ending 3 «За пределами экрана»: the whole story with every mini-game', async ({ page }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(600_000);
   const errors = trackErrors(page);
   await page.getByTestId('new-game').click();
   await choose(page, /Установить/);
@@ -255,7 +269,7 @@ test('ending 3 «За пределами экрана»: the whole story with ev
 });
 
 test('ending 2 «Мой любимый ученик»: stay with Melody; all four sprite poses keep their proportions', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(900_000);
   await page.getByTestId('new-game').click();
   await choose(page, /Установить/);
   await startEpisode(page, 'Геометрические задачи');

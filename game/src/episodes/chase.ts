@@ -160,7 +160,7 @@ export const chase: EpisodeDefinition = {
       runner.fade = s.invulnerable > 0 && Math.floor(s.invulnerable * 12) % 2 ? 0.35 : 1;
       car?.update(x - 0.3, time);
       // on screen the gap is compressed: at the full gap her reaching hands are already in frame
-      monster.x = x - 2.4 - s.gap * 0.45;
+      monster.x = x - 1.0 - s.gap * 0.45;
       monster.update(dt, config.speed);
       world.current?.track?.(x);
       // side-on camera running with him, a little ahead; it shakes when she is close

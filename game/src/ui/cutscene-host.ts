@@ -33,6 +33,7 @@ function makeProp(name: string, world: World3D): Prop {
     m.x = (mark?.x ?? 0) - 0.5;
     m.rise = 0;
     m.glitch = 0.8;
+    m.crawling = false; // rises through the big poses; the chase starts her crawl
     let anim: { t: number; dur: number; from: number; to: number; resolve: () => void } | null = null;
     const stop = world.addUpdater((dt) => {
       if (anim) {
