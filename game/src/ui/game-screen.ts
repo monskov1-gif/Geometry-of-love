@@ -4,7 +4,7 @@
 import { characters, endings, story } from '../content';
 import { StoryRuntime, StoryError } from '../core/runtime';
 import { SAVE_SCHEMA, type BacklogEntry, type SaveData, type SaveStore } from '../core/saves';
-import type { Presentation, SpaceId, StoryState, VisualPhase } from '../core/types';
+import type { Presentation, StoryState } from '../core/types';
 import type { AudioEngine } from '../audio/engine';
 import type { InputManager } from '../platform/input';
 import type { MetaStore } from '../platform/meta';
@@ -19,18 +19,11 @@ import { Stage } from './stage';
 import { chapterCardView } from './chapter-card';
 import { CutsceneLayer, type CutsceneRun } from './cutscene-host';
 import { getWorld } from '../world/instance';
+import { musicFor } from '../content/music-map';
 
 const BACKLOG_LIMIT = 200;
 const SKIP_INTERVAL_MS = 60;
 const REVISION_DELAY_MS = 1100;
-
-/** Music when a scene names none: each space has its own theme (art brief §7). */
-function spaceTrack(space: SpaceId, phase: VisualPhase): string {
-  if (space === 'reality') return 'reality';
-  if (space === 'code') return 'tension';
-  if (space === 'game') return phase >= 'D' ? 'tension' : 'sandbox';
-  return phase >= 'C' ? 'app-uneasy' : 'app';
-}
 
 export interface GameServices {
   input: InputManager;
@@ -157,8 +150,9 @@ export class GameScreen {
     const stage = this.runtime.state.stage;
     this.stage.render(stage, this.services.themeRoot, reduceMotion);
     this.effects.play(this.runtime.takeEffects(), reduceMotion);
-    // Music follows the stage (restored on load); one-shot sounds play once.
-    this.services.audio.music(stage.music ?? spaceTrack(stage.space, stage.phase));
+    // Music follows the scene, place and music() steps (content/music-map.ts), so it is
+    // restored on load; the engine crossfades and keeps a theme that already plays.
+    this.services.audio.music(musicFor(story, this.runtime.state));
     for (const s of this.runtime.takeSounds()) this.services.audio.sfx(s);
     this.choiceLayer.replaceChildren();
     if (p.kind !== 'card') this.cardLayer.replaceChildren();
