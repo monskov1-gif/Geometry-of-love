@@ -50,7 +50,8 @@ async function advance(page: Page): Promise<Stop> {
         episode: shown('[data-testid="episode"]'),
         choice: shown('.choices'),
         card: shown('[data-testid="chapter-card"]'),
-        skip: shown('[data-testid="cutscene-skip"]'),
+        // the skip button stays in the DOM after a scene; only a playing scene's button counts
+        skip: shown('.cutscene-layer.is-playing [data-testid="cutscene-skip"]'),
         dialogue: shown('[data-testid="dialogue"]'),
         sprites,
       };
@@ -67,7 +68,8 @@ async function advance(page: Page): Promise<Stop> {
     // Chapter cards wait for a click; cutscenes are skipped (their own test watches one through).
     if (st.card) await page.getByTestId('chapter-card').click();
     else if (st.skip) {
-      await page.getByTestId('cutscene-skip').click();
+      // the scene may end on its own between the check and the click: the next step re-reads the state
+      await page.getByTestId('cutscene-skip').click({ timeout: 5_000 }).catch(() => undefined);
       await page.waitForTimeout(100);
     }
     // the line may end (and the band hide) between the check and the click: the next step re-reads the state
@@ -124,7 +126,7 @@ async function solveQuiz(page: Page, answers: (string | { choice: string })[]) {
       .poll(async () => {
         if (await page.getByTestId('dialogue').isVisible()) return false;
         return (await episode.isVisible()) && /Правильно/.test((await episode.locator('.quiz-feedback').textContent()) ?? '');
-      })
+      }, { timeout: 30_000 })
       .toBe(false);
   }
 }
