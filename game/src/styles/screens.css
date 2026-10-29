@@ -5,14 +5,46 @@
 }
 
 /* ======================================================================
-   Stage: painted scene + cast
+   Stage: 3D world or painted scene + cast
    ====================================================================== */
 .stage,
 .stage-bg,
 .stage-cast,
-.scene-view {
+.scene-view,
+.world-view {
   position: absolute;
   inset: 0;
+}
+
+/* The 3D scene renders at ~360 lines and is scaled up without smoothing. */
+.world-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* In 3D, people stand inside the scene; only portraits (Melody) stay in the DOM,
+   shown beside the dialogue while their character speaks. */
+.stage[data-mode='3d'] .cast-slot[data-kind='pixel'] {
+  display: none;
+}
+
+.stage[data-mode='3d'] .cast-slot[data-kind='sheet'] {
+  left: auto;
+  right: 3%;
+  height: 78%;
+  translate: 0 0;
+  opacity: 0;
+  transform: translateY(6%);
+  transition:
+    opacity var(--dur-med) ease,
+    transform var(--dur-med) ease;
+}
+
+.stage[data-mode='3d'] .cast-slot[data-kind='sheet'][data-speaking='true'] {
+  opacity: 1;
+  transform: none;
 }
 
 .scene-layer {
@@ -111,8 +143,8 @@
 
 /* Generated pixel characters: whole-number scale (set by Stage) keeps pixels square. */
 .sprite-pixel {
-  width: calc(24px * var(--px-scale, 4));
-  height: calc(48px * var(--px-scale, 4));
+  width: calc(var(--sw, 24) * 1px * var(--px-scale, 4));
+  height: calc(var(--sh, 48) * 1px * var(--px-scale, 4));
   image-rendering: pixelated;
   flex-shrink: 0;
 }

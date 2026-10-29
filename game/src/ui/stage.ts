@@ -1,14 +1,19 @@
-// Draws StageState: painted location (SceneView), space/phase theme and the
-// cast. Melody's VN poses come from her sprite sheets; everyone else is a
-// generated pixel character, scaled by a whole number so pixels stay square,
-// animated (breathing, talking) and grounded with a contact shadow.
+// Draws StageState. Locations with a 3D scene (world/locations) are shown by
+// the shared World3D: every character stands inside it as an animated pixel
+// figure, and Melody's portrait appears beside the dialogue while she speaks.
+// Other locations fall back to the painted 2D view (SceneView) with the cast as
+// DOM sprites: Melody's portraits from her sheets, the rest generated pixel
+// characters scaled by a whole number so pixels stay square.
 import { backgrounds, characters } from '../content';
 import type { SheetPose } from '../content/characters';
 import type { StageState, StagedCharacter } from '../core/types';
 import { loadImage } from '../platform/assets';
-import { SPRITE_H, SPRITE_W, spriteFrame, type Emotion } from '../render/sprites';
+import { SPRITE_H, SPRITE_W, spriteFrame, spriteSize, type Emotion } from '../render/sprites';
 import { el } from './dom';
 import { SceneView } from './scene-view';
+import { poseEmotion } from '../content/poses';
+import { getWorld, peekWorld } from '../world/instance';
+import { locations3D } from '../world/locations';
 import { VIEW_W } from '../render/painter';
 
 function sheetSprite(pose: SheetPose, referenceHeight: number, maxFrameWidth: number): HTMLElement {
@@ -52,7 +57,10 @@ class PixelActor {
     readonly id: string,
     public emotion: Emotion,
   ) {
-    this.node = el('canvas', { class: 'sprite sprite-pixel', width: SPRITE_W, height: SPRITE_H, dataset: { character: id } });
+    const size = spriteSize(id);
+    this.node = el('canvas', { class: 'sprite sprite-pixel', width: size.w, height: size.h, dataset: { character: id } });
+    this.node.style.setProperty('--sw', String(size.w));
+    this.node.style.setProperty('--sh', String(size.h));
     this.ctx = this.node.getContext('2d')!;
     this.ctx.imageSmoothingEnabled = false;
     this.draw();
@@ -68,7 +76,7 @@ class PixelActor {
   }
 
   draw(): void {
-    this.ctx.clearRect(0, 0, SPRITE_W, SPRITE_H);
+    this.ctx.clearRect(0, 0, this.node.width, this.node.height);
     this.ctx.drawImage(spriteFrame(this.id, { facing: 'front', emotion: this.emotion, walk: -1, breath: this.breath, mouthOpen: this.mouth }), 0, 0);
   }
 }
@@ -106,19 +114,47 @@ export class Stage {
     window.clearInterval(this.ticker);
     this.resize.disconnect();
     this.scene.destroy();
+    // The world outlives screens (one WebGL context per page): detach and pause it.
+    const world = peekWorld();
+    if (world?.root.parentElement === this.root) {
+      world.root.remove();
+      world.stop();
+    }
   }
 
   /** Marks who is talking (mouth animation) while the line is typed. */
   setSpeaking(id: string | null): void {
     this.speaker = id;
-    for (const [cid, entry] of this.nodes) if (entry.actor) entry.actor.talking = cid === id;
+    for (const [cid, entry] of this.nodes) {
+      if (entry.actor) entry.actor.talking = cid === id;
+      entry.node.dataset.speaking = String(cid === id);
+    }
+    if (this.in3D) peekWorld()?.setSpeaker(id);
+  }
+
+  /** True while the current location is a 3D scene. */
+  get in3D(): boolean {
+    return this.root.dataset.mode === '3d';
   }
 
   render(stage: Readonly<StageState>, themeRoot: HTMLElement, reduceMotion = false): void {
     themeRoot.dataset.space = stage.space;
     themeRoot.dataset.phase = stage.phase;
-    const bg = stage.background ? backgrounds[stage.background] : undefined;
-    this.scene.show(stage.background, stage.lighting, stage.variant, reduceMotion, bg?.placeholder);
+    const use3D = !!stage.background && stage.background in locations3D;
+    this.root.dataset.mode = use3D ? '3d' : '2d';
+    if (use3D) {
+      const world = getWorld();
+      if (world.root.parentElement !== this.root) this.scene.root.after(world.root);
+      world.reduceMotion = reduceMotion;
+      world.show(stage.background!, stage.lighting, stage.variant);
+      world.setCast(stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })));
+      this.scene.show(null, null, null, true);
+    } else {
+      peekWorld()?.root.remove();
+      peekWorld()?.stop();
+      const bg = stage.background ? backgrounds[stage.background] : undefined;
+      this.scene.show(stage.background, stage.lighting, stage.variant, reduceMotion, bg?.placeholder);
+    }
 
     const present = new Set(stage.characters.map((c) => c.id));
     for (const [id, entry] of this.nodes) {
@@ -131,7 +167,7 @@ export class Stage {
       let entry = this.nodes.get(c.id);
       if (!entry || entry.pose !== c.pose) {
         const made = this.makeSprite(c.id, c.pose);
-        const slot = el('div', { class: 'cast-slot', dataset: { character: c.id, kind: made.actor ? 'pixel' : 'sheet' } }, made.node);
+        const slot = el('div', { class: 'cast-slot', dataset: { character: c.id, kind: made.actor ? 'pixel' : 'sheet', speaking: String(this.speaker === c.id) } }, made.node);
         if (entry) entry.node.replaceWith(slot);
         else this.cast.append(slot);
         entry = { pose: c.pose, node: slot, ...(made.actor ? { actor: made.actor } : {}) };
