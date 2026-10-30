@@ -116,9 +116,12 @@ _analysis: dict[tuple, tuple] = {}
 
 
 def analyse(o: Oto):
-    """WORLD analysis of one oto sample, cached: the same syllable recurs in many lines."""
+    """WORLD analysis of one oto sample, cached: the same syllable recurs in many lines.
+    The cache is bounded: the spectra of a few hundred samples would fill the memory."""
     key = (o.wav, o.offset, o.cutoff)
     if key not in _analysis:
+        if len(_analysis) >= 160:
+            _analysis.pop(next(iter(_analysis)))
         x, sr = read_wav(o.wav)
         start = o.offset / 1000
         end = (len(x) / sr - o.cutoff / 1000) if o.cutoff >= 0 else start + (-o.cutoff) / 1000

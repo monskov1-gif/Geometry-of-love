@@ -77,6 +77,8 @@ def render(job: tuple[str, dict]) -> tuple[str, dict]:
         _banks[folder] = load_bank(BANKS / folder)
     shift, rf, tf, energy = EMOTION.get(line.get('emotion', 'calm'), EMOTION['calm'])
     v = Voice(_banks[folder], suffix, base_hz=base * 2 ** (shift / 12), range_st=rng * rf, mora_ms=mora * tf)
+    if not any(not m.startswith('_') for m in morae(line['yomi'])):
+        return lid, {'status': 'silent'}  # a wordless line («…»): nothing to say
     y = speak(v, line['yomi'], energy=energy)
     seconds = len(y) / SR
     if seconds < 0.25 or not any(not m.startswith('_') for m in morae(line['yomi'])):
@@ -102,17 +104,24 @@ def main() -> int:
                     lines[lid]['status'] = 'prepared'
     only = set(sys.argv[sys.argv.index('--only') + 1].split(',')) if '--only' in sys.argv else None
     force = '--force' in sys.argv
+    # --missing: keep every file already rendered (after an interrupted run) and render the rest
+    missing = '--missing' in sys.argv
+    if missing:
+        for lid, l in lines.items():
+            if l.get('yomi') and (OUT / f'{lid}.mp3').exists() and l['status'] in ('prepared', 'not-prepared'):
+                l['status'] = 'synthesized'
     jobs = [(lid, l) for lid, l in lines.items() if l.get('yomi') and (only is None or lid in only)
-            and (force or l['status'] in ('prepared', 'needs-fix') or not (OUT / f'{lid}.mp3').exists())]
+            and (force or (not (OUT / f'{lid}.mp3').exists() if missing else l['status'] in ('prepared', 'needs-fix') or not (OUT / f'{lid}.mp3').exists()))]
     jobs.sort(key=lambda j: voice_for(j[1]['speaker'], j[1].get('phase', 'A')))
     print(f'{len(jobs)} lines to render')
-    with Pool(4) as pool:
+    with Pool(4, maxtasksperchild=40) as pool:
         for i, (lid, res) in enumerate(pool.imap_unordered(render, jobs, chunksize=8), 1):
             lines[lid].update(res)
             if res['status'] != 'synthesized':
                 print(f'  {lid}: {res}', file=sys.stderr)
             if i % 25 == 0:
-                print(f'  {i}/{len(jobs)}')
+                print(f'  {i}/{len(jobs)}', flush=True)
+                REGISTRY.write_text(json.dumps(reg, ensure_ascii=False, indent=1) + '\n')  # progress survives a crash
     REGISTRY.write_text(json.dumps(reg, ensure_ascii=False, indent=1) + '\n')
     done = sum(1 for l in lines.values() if l['status'] in ('synthesized', 'checked', 'integrated'))
     print(f'{done}/{len(lines)} lines have audio')
