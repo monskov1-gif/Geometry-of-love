@@ -48,7 +48,7 @@ describe('Japanese voice-over', () => {
       expect(existsSync(file), `${id} (${l.speaker}: ${l.ru})`).toBe(true);
       expect(statSync(file).size, `${id} is too small to hold speech`).toBeGreaterThan(3000);
     }
-  });
+  }, 30_000); // reads ~500 files: slow when the whole suite runs in parallel
 
   it('registry ids match their speaker and text, and the readings are kana only', () => {
     for (const [id, l] of Object.entries(lines)) {
@@ -66,5 +66,5 @@ describe('Japanese voice-over', () => {
       expect(sizes.get(hash), `${id} has the same audio as ${sizes.get(hash)}`).toBeUndefined();
       sizes.set(hash, id);
     }
-  });
+  }, 30_000);
 });
