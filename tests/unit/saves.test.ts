@@ -100,7 +100,7 @@ describe('migrate', () => {
     const in2 = (scene: string, index: number) =>
       story.scenes[scene]!.steps[migrate({ ...current, schema: 3, state: { ...current.state, position: { scene, index }, stage: stage3 as typeof current.state.stage } }).state.position.index];
     expect(in2('ch02-day2', 4)).toMatchObject({ type: 'say', kind: 'narration' });
-    expect((in2('ch02-day2', 4) as { text: string }).text).toMatch(/^Задача простая/);
+    expect((in2('ch02-day2', 4) as { text: string }).text).toMatch(/^Преподаватель стучит мелом по первой задаче/);
     expect(in2('ch02-day2', 6)).toMatchObject({ type: 'show', character: 'dameo', pose: 'angry' });
     expect(in2('ch02-day4', 4)).toMatchObject({ type: 'show', character: 'melody', pose: 'neutral' });
     // other scenes keep their indices
