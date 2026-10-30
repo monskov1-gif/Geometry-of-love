@@ -355,6 +355,35 @@ test('manual save survives a page reload and loads the same line', async ({ page
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
 });
 
+test('«Рука из монитора» plays in the 3D room, not over the painted app view (regression)', async ({ page }) => {
+  // A save on the last line before the cutscene: the CRT shows the exit dialog (ch03).
+  await page.evaluate(() => {
+    const stage = {
+      background: 'app-notebook', lighting: 'night', variant: null, music: 'app-uneasy', shot: null,
+      screen: { view: 'close-dialog', notices: [] }, space: 'app', phase: 'B',
+      characters: [{ id: 'dameo', pose: 'tired', position: 'desk' }, { id: 'melody', pose: 'angry', position: 'center' }],
+    };
+    const state = { position: { scene: 'ch03', index: 87 }, flags: {}, relationships: {}, traits: {}, decisions: [], stage, ending: null };
+    localStorage.setItem('gol:save:slot-1', JSON.stringify({ schema: 5, savedAt: new Date().toISOString(), playTimeMs: 0, sceneTitle: 'ch03', chapter: 3, state, backlog: [] }));
+  });
+  await page.getByTestId('load').click();
+  await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(page.getByTestId('dialogue')).toContainText('Дамео тянется к мышке.');
+  await page.getByTestId('dialogue').click();
+  await expect(page.locator('.cutscene-layer.is-playing')).toBeVisible();
+  // the world (Dameo's room) is on screen while the scene plays — it once ran detached, unseen
+  const world = page.locator('.stage .world-view');
+  await expect(world).toBeVisible();
+  const box = await world.boundingBox();
+  expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
+  await shot(page, '03b-pulled-in');
+  // skipping ends inside the game, with nobody from the room left on the stage
+  await page.getByTestId('cutscene-skip').click();
+  await expect(page.getByTestId('dialogue')).toContainText('Пол под ногами');
+  await expect(page.locator('#app')).toHaveAttribute('data-space', 'game');
+  await expect(page.locator('.cast-slot')).toHaveCount(0);
+});
+
 test('corrupted save is reported, not loaded', async ({ page }) => {
   await page.evaluate(() => localStorage.setItem('gol:save:slot-2', '{oops'));
   await page.getByTestId('load').click();

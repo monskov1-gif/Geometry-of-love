@@ -401,7 +401,11 @@
   animation: rage-jerk 1.5s steps(1, end) infinite;
 }
 
-/* the dialogue band corrupts, step by step */
+/* the dialogue band corrupts, step by step — but stays above the darkness, so it can be read */
+[data-rage] .hud {
+  z-index: 6;
+}
+
 [data-rage] .dialogue {
   transition: border-color 600ms ease;
 }
@@ -453,7 +457,7 @@
 }
 
 [data-rage='5'] .dialogue-text {
-  color: color-mix(in srgb, var(--error-red) 35%, var(--paper));
+  color: color-mix(in srgb, var(--error-red) 18%, var(--paper));
   animation: rage-text 1.2s steps(1, end) infinite;
 }
 

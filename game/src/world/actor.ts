@@ -42,6 +42,7 @@ export class Actor {
   readonly group = new THREE.Group();
   private readonly plane: THREE.Mesh;
   private readonly material: THREE.MeshLambertMaterial;
+  private readonly shadowMaterial: THREE.MeshBasicMaterial;
   private readonly canvas: HTMLCanvasElement;
   private readonly ctx: CanvasRenderingContext2D;
   private readonly texture: THREE.CanvasTexture;
@@ -90,10 +91,8 @@ export class Actor {
     const geo = new THREE.PlaneGeometry(w, this.height);
     geo.translate(0, this.height / 2, 0);
     this.plane = new THREE.Mesh(geo, this.material);
-    const shadow = new THREE.Mesh(
-      new THREE.PlaneGeometry(w * 1.1, w * 0.45),
-      new THREE.MeshBasicMaterial({ map: contactShadow(), transparent: true, depthWrite: false }),
-    );
+    this.shadowMaterial = new THREE.MeshBasicMaterial({ map: contactShadow(), transparent: true, depthWrite: false });
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(w * 1.1, w * 0.45), this.shadowMaterial);
     shadow.rotation.x = -Math.PI / 2;
     shadow.position.y = 0.006;
     shadow.renderOrder = 1;
@@ -194,6 +193,8 @@ export class Actor {
       this.material.transparent = this.fade < 1;
       this.material.needsUpdate = true;
     }
+    // the shadow goes with the body: an erased figure leaves no trace on the floor
+    this.shadowMaterial.opacity = Math.min(this.fade, 1 - this.eraseCut);
     // erasing: clip the figure from the feet up with a plane in world space
     if (this.eraseCut > 0) {
       this.clip.constant = -(this.group.position.y + this.eraseCut * this.height * 1.02);
@@ -315,6 +316,7 @@ export class Actor {
     this.target?.resolve();
     this.texture.dispose();
     this.material.dispose();
+    this.shadowMaterial.dispose();
     this.plane.geometry.dispose();
   }
 }

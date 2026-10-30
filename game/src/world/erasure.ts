@@ -23,7 +23,8 @@ type Rect = [number, number, number, number];
 /** Where things are on a sprite (base 24×48 units), measured from the drawing code. */
 interface Layout {
   details: Rect[];
-  face: { area: Rect; eyes: [number, number][]; mouth: Rect; skin: [number, number] };
+  /** `area` is rubbed into the colour at `skin`; `under` (optional) into the colour at `underSkin`. */
+  face: { area: Rect; eyes: [number, number][]; mouth: Rect; skin: [number, number]; under?: Rect; underSkin?: [number, number] };
   limbs: Rect;
 }
 
@@ -44,7 +45,8 @@ function eraserLayout(f: Frame): Layout {
       [17, top + 11, 2, 2],
       [5, top + 10, 1, 3],
     ],
-    face: { area: [7, top + 1, 10, 5], eyes: [[10, top + 3], [14, top + 3]], mouth: [10, top + 5, 5, 1], skin: [16, top + 2] },
+    // the mouth (dotFace) hangs into the sleeve below the face: rubbed into the sleeve colour
+    face: { area: [7, top + 1, 10, 5], eyes: [[10, top + 3], [14, top + 3]], mouth: [10, top + 6, 4, 1], skin: [16, top + 2], under: [9, top + 6, 6, 2], underSkin: [16, top + 9] },
     limbs: [6, top + 13, 12, 48 - (top + 13)],
   };
 }
@@ -79,14 +81,22 @@ export function drawErasure(ctx: CanvasRenderingContext2D, s: number, id: string
   for (let i = 0; i < n; i++) clear(L.details[i]!);
   // 2. the face: features rubbed into the body colour, eyes left as blots, the mouth a pale strip
   if (e.face > 0) {
-    const [sx, sy] = L.face.skin;
-    const px = ctx.getImageData(Math.floor((sx + 0.5) * s), Math.floor((sy + 0.5) * s), 1, 1).data;
-    const skin = `rgb(${px[0]}, ${px[1]}, ${px[2]})`;
-    const [ax, ay, aw, ah] = L.face.area;
+    const colourAt = ([x, y]: [number, number]) => {
+      const px = ctx.getImageData(Math.floor((x + 0.5) * s), Math.floor((y + 0.5) * s), 1, 1).data;
+      return `rgb(${px[0]}, ${px[1]}, ${px[2]})`;
+    };
+    const skin = colourAt(L.face.skin);
+    const under = L.face.under && L.face.underSkin ? colourAt(L.face.underSkin) : null;
     ctx.save();
     ctx.globalAlpha = Math.min(1, e.face * 1.4);
+    const [ax, ay, aw, ah] = L.face.area;
     ctx.fillStyle = skin;
     ctx.fillRect(ax * s, ay * s, aw * s, ah * s);
+    if (under && L.face.under) {
+      const [ux, uy, uw, uh] = L.face.under;
+      ctx.fillStyle = under;
+      ctx.fillRect(ux * s, uy * s, uw * s, uh * s);
+    }
     // blots where the eyes were: soft, wider than the eyes, fading out as the stroke finishes
     ctx.globalAlpha = 0.45 * Math.min(1, e.face * 2) * (1 - Math.max(0, e.face - 0.7));
     ctx.fillStyle = 'rgb(120, 70, 96)';

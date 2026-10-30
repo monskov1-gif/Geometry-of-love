@@ -29,19 +29,20 @@ const REACH: [number, number] = [-1.05, -0.35];
 /** Off the story stage she comes in from (and goes back to) the front right, clear of the brothers. */
 const ASIDE: [number, number] = [0.9, 0.25];
 
+/** `fit`: the subject stays whole on tall phone screens (the camera backs off along its line). */
 const shots = {
   /** Over Melody's shoulder down at him. */
-  over: { pos: [-0.35, 1.2, 1.05], look: [-1.6, 0.3, -0.6], fov: 44 } satisfies Shot,
+  over: { pos: [-0.35, 1.2, 1.05], look: [-1.6, 0.3, -0.6], fov: 44, fit: [2.2, 1.3] } satisfies Shot,
   /** Low and close on his body: what is gone shows as holes. */
-  body: { pos: [-1.5, 0.32, 0.45], look: [-1.7, 0.24, -0.6], fov: 34 } satisfies Shot,
+  body: { pos: [-1.5, 0.32, 0.45], look: [-1.7, 0.24, -0.6], fov: 34, fit: [0.6, 0.5] } satisfies Shot,
   /** His face. */
-  face: { pos: [-1.62, 0.36, 0.2], look: [-1.7, 0.33, -0.6], fov: 30 } satisfies Shot,
+  face: { pos: [-1.62, 0.36, 0.2], look: [-1.7, 0.33, -0.6], fov: 30, fit: [0.45, 0.3] } satisfies Shot,
   /** Down at his legs, the brothers' hands at the sides. */
-  legs: { pos: [-1.4, 0.45, 0.75], look: [-1.7, 0.12, -0.6], fov: 40 } satisfies Shot,
+  legs: { pos: [-1.4, 0.45, 0.75], look: [-1.7, 0.12, -0.6], fov: 40, fit: [1.3, 0.6] } satisfies Shot,
   /** The three of them and her, from where Dameo stands. */
-  group: { pos: [-0.9, 0.95, 2.1], look: [-1.3, 0.35, -0.6], fov: 46 } satisfies Shot,
+  group: { pos: [-0.9, 0.95, 2.1], look: [-1.3, 0.35, -0.6], fov: 46, fit: [2.4, 1.2] } satisfies Shot,
   /** The empty floor where he stood. */
-  floor: { pos: [-1.45, 0.55, 0.9], look: [-1.7, 0.15, -0.6], fov: 38 } satisfies Shot,
+  floor: { pos: [-1.45, 0.55, 0.9], look: [-1.7, 0.15, -0.6], fov: 38, fit: [0.9, 0.5] } satisfies Shot,
 };
 
 /** Melody steps up to him and raises the eraser. */
