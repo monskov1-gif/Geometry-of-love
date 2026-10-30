@@ -1,7 +1,7 @@
 import type { StoryState, TextKind } from './types';
 
 /** Bump when the save format changes incompatibly; add a migration in `migrate`. */
-export const SAVE_SCHEMA = 4;
+export const SAVE_SCHEMA = 5;
 export const MANUAL_SLOT_COUNT = 6;
 
 export type SlotId = 'auto' | 'quick' | `slot-${number}`;
@@ -77,6 +77,13 @@ const INSERTED_STEPS: Record<number, { scene: string; before: number[] }[]> = {
     { scene: 'ch02-day2', before: [4, 6] },
     { scene: 'ch02-day4', before: [4, 4, 4] },
   ],
+  // 5: ch03 clears the stage before «Рука из монитора»; ch08 escalates Melody's anger line by
+  // line and stages her leaving; ch09 keeps two people off one spot (core/validate.ts).
+  5: [
+    { scene: 'ch03', before: [88, 88] },
+    { scene: 'ch08', before: [72, 72, 73, 73, 74, 74, 75, 75, 75, 77, 77, 77, 78, 83] },
+    { scene: 'ch09', before: [37, 48] },
+  ],
 };
 
 /** Moves a saved step index past the steps inserted in front of it. */
@@ -111,6 +118,19 @@ export function migrate(data: SaveData): SaveData {
         position: { scene, index: shiftIndex(4, scene, index) },
         decisions: d.state.decisions.map((x) => ({ ...x, index: shiftIndex(4, x.scene, x.index) })),
         stage: { ...d.state.stage, screen: old.screen ?? { view: null, notices: [] } },
+      },
+    };
+  }
+  if (d.schema === 4) {
+    // 5: steps inserted into ch03, ch08 and ch09; the state's shape is unchanged.
+    const { scene, index } = d.state.position;
+    d = {
+      ...d,
+      schema: 5,
+      state: {
+        ...d.state,
+        position: { scene, index: shiftIndex(5, scene, index) },
+        decisions: d.state.decisions.map((x) => ({ ...x, index: shiftIndex(5, x.scene, x.index) })),
       },
     };
   }

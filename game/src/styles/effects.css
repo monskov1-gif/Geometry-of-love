@@ -286,3 +286,301 @@
     opacity: 1;
   }
 }
+
+/* ---------- Rage (ch08): a lasting darkness that grows with her anger ---
+   ui/effects.ts sets data-rage="1…5" on the game screen. Every level is
+   darker, redder, greyer and more broken than the one before; the dialogue
+   band itself starts to corrupt. Reduce motion keeps the darkness and the
+   colour, drops all movement and pulsing (see the end of this block). */
+.fx-rage,
+.fx-rage > div {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fx-rage > div {
+  opacity: 0;
+  transition: opacity 1100ms ease;
+}
+
+[data-rage] {
+  --rage-dark: 0;
+  --rage-vignette: 0;
+  --rage-sat: 1;
+  --rage-contrast: 1;
+}
+
+[data-rage='1'] {
+  --rage-dark: 0.16;
+  --rage-vignette: 0.35;
+  --rage-sat: 0.8;
+  --rage-contrast: 1.05;
+}
+
+[data-rage='2'] {
+  --rage-dark: 0.28;
+  --rage-vignette: 0.55;
+  --rage-sat: 0.6;
+  --rage-contrast: 1.12;
+}
+
+[data-rage='3'] {
+  --rage-dark: 0.4;
+  --rage-vignette: 0.72;
+  --rage-sat: 0.4;
+  --rage-contrast: 1.2;
+}
+
+[data-rage='4'] {
+  --rage-dark: 0.52;
+  --rage-vignette: 0.86;
+  --rage-sat: 0.2;
+  --rage-contrast: 1.3;
+}
+
+[data-rage='5'] {
+  --rage-dark: 0.62;
+  --rage-vignette: 1;
+  --rage-sat: 0.05;
+  --rage-contrast: 1.45;
+}
+
+/* darkness over everything */
+[data-rage] .rage-dark {
+  background: var(--terminal-black);
+  opacity: var(--rage-dark);
+}
+
+/* the frame closes in: red at the edges, black in the corners */
+[data-rage] .rage-vignette {
+  background:
+    radial-gradient(ellipse 75% 70% at 50% 45%, transparent 35%, color-mix(in srgb, var(--blood-dark) 85%, transparent) 78%, var(--terminal-black) 100%);
+  opacity: var(--rage-vignette);
+}
+
+/* colour drains out of the room, contrast goes hard */
+[data-rage] .stage {
+  filter: saturate(var(--rage-sat)) contrast(var(--rage-contrast));
+  transition: filter 1100ms ease;
+}
+
+/* tearing: bands of the picture flare and slip sideways (level 2+) */
+.rage-tear {
+  background:
+    linear-gradient(180deg, transparent 0 18%, color-mix(in srgb, var(--error-red) 30%, transparent) 18% 19%, transparent 19% 61%, color-mix(in srgb, var(--terminal-black) 70%, transparent) 61% 63%, transparent 63%);
+  backdrop-filter: contrast(1.6) brightness(1.25);
+  clip-path: inset(18% 0 79% 0);
+}
+
+[data-rage='2'] .rage-tear {
+  opacity: 1;
+  animation: rage-tear 3.4s steps(1, end) infinite;
+}
+
+[data-rage='3'] .rage-tear,
+[data-rage='4'] .rage-tear,
+[data-rage='5'] .rage-tear {
+  opacity: 1;
+  animation: rage-tear 1.7s steps(1, end) infinite;
+}
+
+/* her heartbeat in the red (level 5) */
+[data-rage='5'] .rage-pulse {
+  opacity: 1;
+  background: radial-gradient(ellipse 90% 85% at 50% 45%, transparent 45%, color-mix(in srgb, var(--blood) 55%, transparent) 100%);
+  animation: rage-pulse 1.1s ease-in-out infinite;
+}
+
+/* the picture itself starts to jerk (level 4+) */
+[data-rage='4'] .stage {
+  animation: rage-jerk 2.9s steps(1, end) infinite;
+}
+
+[data-rage='5'] .stage {
+  animation: rage-jerk 1.5s steps(1, end) infinite;
+}
+
+/* the dialogue band corrupts, step by step */
+[data-rage] .dialogue {
+  transition: border-color 600ms ease;
+}
+
+[data-rage] .dialogue-text {
+  text-shadow: 1px 0 0 color-mix(in srgb, var(--error-red) 70%, transparent);
+}
+
+[data-rage='2'] .dialogue,
+[data-rage='3'] .dialogue,
+[data-rage='4'] .dialogue,
+[data-rage='5'] .dialogue {
+  border-color: var(--correction-red);
+}
+
+[data-rage='2'] .dialogue-text {
+  text-shadow: 2px 0 0 color-mix(in srgb, var(--error-red) 75%, transparent), -1px 0 0 color-mix(in srgb, var(--rainbow-blue) 55%, transparent);
+}
+
+[data-rage='3'] .dialogue,
+[data-rage='4'] .dialogue,
+[data-rage='5'] .dialogue {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, var(--terminal-black) 40%, transparent) 3px 4px),
+    color-mix(in srgb, var(--terminal-black) calc(var(--dialog-opacity) * 100%), transparent);
+}
+
+[data-rage='3'] .dialogue-text,
+[data-rage='4'] .dialogue-text,
+[data-rage='5'] .dialogue-text {
+  text-shadow: 3px 0 0 color-mix(in srgb, var(--error-red) 80%, transparent), -2px 0 0 color-mix(in srgb, var(--rainbow-blue) 60%, transparent);
+}
+
+[data-rage='3'] .nameplate,
+[data-rage='4'] .nameplate,
+[data-rage='5'] .nameplate {
+  border-color: var(--correction-red);
+  background: var(--terminal-black);
+}
+
+[data-rage='4'] .dialogue-text {
+  animation: rage-text 2.3s steps(1, end) infinite;
+}
+
+[data-rage='5'] .dialogue {
+  border-style: double;
+  border-width: 5px;
+  box-shadow: inset 0 0 28px color-mix(in srgb, var(--blood) 70%, transparent);
+}
+
+[data-rage='5'] .dialogue-text {
+  color: color-mix(in srgb, var(--error-red) 35%, var(--paper));
+  animation: rage-text 1.2s steps(1, end) infinite;
+}
+
+[data-rage='5'] .nameplate {
+  color: var(--error-red);
+  letter-spacing: 0.22em;
+}
+
+@keyframes rage-tear {
+  0%,
+  100% {
+    clip-path: inset(18% 0 79% 0);
+    translate: 0 0;
+  }
+  12% {
+    clip-path: inset(57% 0 36% 0);
+    translate: -18px 0;
+  }
+  14% {
+    clip-path: inset(31% 0 66% 0);
+    translate: 26px 0;
+  }
+  16% {
+    clip-path: inset(100% 0 0 0);
+  }
+  58% {
+    clip-path: inset(72% 0 22% 0);
+    translate: 12px 0;
+  }
+  61% {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes rage-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes rage-jerk {
+  0%,
+  100% {
+    translate: 0 0;
+    skew: 0deg;
+  }
+  41% {
+    translate: -7px 2px;
+    skew: -2deg;
+  }
+  43% {
+    translate: 9px -1px;
+    skew: 1.5deg;
+  }
+  45% {
+    translate: 0 0;
+    skew: 0deg;
+  }
+  86% {
+    translate: 4px 0;
+  }
+  88% {
+    translate: 0 0;
+  }
+}
+
+@keyframes rage-text {
+  0%,
+  100% {
+    translate: 0 0;
+    letter-spacing: normal;
+  }
+  37% {
+    translate: 3px 0;
+    letter-spacing: 0.08em;
+  }
+  40% {
+    translate: -2px 0;
+  }
+  42% {
+    translate: 0 0;
+    letter-spacing: normal;
+  }
+}
+
+/* reduce motion: the same darkness and colour, nothing moves or pulses */
+.reduce-motion [data-rage] .stage,
+.reduce-motion [data-rage] .dialogue-text,
+.reduce-motion [data-rage] .rage-tear,
+.reduce-motion [data-rage] .rage-pulse {
+  animation: none;
+}
+
+.reduce-motion [data-rage] .rage-tear {
+  opacity: 0;
+}
+
+.reduce-motion [data-rage='5'] .rage-pulse {
+  opacity: 0.6;
+}
+
+/* ---------- Cutscene: a name rubbed out of the interface (ch09) -------- */
+.cs-name-erase {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  translate: -50% 0;
+  padding: 4px 14px;
+  font: var(--fs-ui) var(--font-pixel);
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  background: color-mix(in srgb, var(--terminal-black) 88%, transparent);
+  border: 2px solid var(--system-gray);
+  box-shadow: inset 0 -3px 0 var(--accent, var(--tape));
+  opacity: 0;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+
+.cs-name-erase.is-visible {
+  opacity: 1;
+}
+
+.cs-letter.is-gone {
+  color: var(--system-gray);
+}

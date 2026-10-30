@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { characters, contentIndex, story } from '../../game/src/content';
 import { taskSets } from '../../game/src/content/geometry-tasks';
 import { StoryRuntime } from '../../game/src/core/runtime';
-import { validateStory } from '../../game/src/core/validate';
+import { findStagingClashes, validateStory } from '../../game/src/core/validate';
+import type { Story } from '../../game/src/core/types';
 
 describe('game content', () => {
   it('story passes static validation', () => {
@@ -80,5 +81,82 @@ describe('validateStory', () => {
       contentIndex,
     );
     expect(problems).toEqual(['scene "s" must end with goto, ending, or a choice whose options all jump']);
+  });
+});
+
+/**
+ * Clashes still in scenes owned elsewhere (reported to the lead, ch10/ch12/ch13):
+ * listed per scene and pair so a new clash anywhere fails at once. Remove an
+ * entry when its scene is fixed.
+ */
+const KNOWN_CLASHES = [
+  'ch10: eraser-2, eraser-3 at "left"',
+  'ch12: calculator, dameo at "center"',
+  'ch12: calculator, melody at "center"',
+  'ch12: eraser-2, calculator at "left"',
+  'ch13: eraser-2, dameo at "left"',
+];
+
+describe('staging: two people never stand on one spot', () => {
+  it('holds for the whole story (the final chase, ch14–ch15, excepted)', () => {
+    const clashes = findStagingClashes(story).filter((c) => !KNOWN_CLASHES.includes(c.replace(/:\d+ \(\w+\)/, '')));
+    expect(clashes).toEqual([]);
+  });
+
+  const scene = (steps: Story['scenes'][string]['steps']): Story => ({ startScene: 's', scenes: { s: { id: 's', title: 's', chapter: null, steps } } });
+
+  it('reports two visible characters on one mark at a shown step', () => {
+    const clashes = findStagingClashes(
+      scene([
+        { type: 'show', character: 'melody', pose: 'neutral', position: 'center' },
+        { type: 'show', character: 'eraser-2', pose: 'default' }, // no position = center
+        { type: 'say', text: 'x' },
+        { type: 'ending', ending: 'e' },
+      ]),
+    );
+    expect(clashes).toEqual(['s:2 (say): melody, eraser-2 at "center"']);
+  });
+
+  it('ignores a clash that is resolved before anything is shown, and follows moves and hides', () => {
+    const clashes = findStagingClashes(
+      scene([
+        { type: 'show', character: 'dameo', pose: 'neutral', position: 'left' },
+        { type: 'show', character: 'eraser-1', pose: 'default', position: 'left' },
+        { type: 'show', character: 'dameo', pose: 'neutral', position: 'right' },
+        { type: 'say', text: 'x' },
+        { type: 'hide', character: 'dameo' },
+        { type: 'show', character: 'melody', pose: 'neutral', position: 'right' },
+        { type: 'say', text: 'y' },
+        { type: 'ending', ending: 'e' },
+      ]),
+    );
+    expect(clashes).toEqual([]);
+  });
+
+  it('follows both ways of a branch and every option of a choice', () => {
+    const story: Story = {
+      startScene: 'a',
+      scenes: {
+        a: {
+          id: 'a',
+          title: 'a',
+          chapter: null,
+          steps: [
+            { type: 'show', character: 'dameo', pose: 'neutral', position: 'left' },
+            { type: 'branch', if: { flag: 'f' }, goto: 'a#x' },
+            { type: 'choice', options: [{ id: 'p', text: 'p', goto: 'b' }, { id: 'q', text: 'q' }] },
+            { type: 'goto', target: 'b' },
+            { type: 'label', name: 'x' },
+            { type: 'show', character: 'melody', pose: 'neutral', position: 'left' },
+            { type: 'goto', target: 'b' },
+          ],
+        },
+        // the stage carries over into the next scene
+        b: { id: 'b', title: 'b', chapter: null, steps: [{ type: 'say', text: 'z' }, { type: 'ending', ending: 'e' }] },
+      },
+    };
+    expect(findStagingClashes(story)).toEqual(['b:0 (say): dameo, melody at "left"']);
+    // exempt scenes (by default the final chase, ch14 and ch15) are not checked
+    expect(findStagingClashes(story, ['b'])).toEqual([]);
   });
 });

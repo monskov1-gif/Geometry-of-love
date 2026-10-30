@@ -161,3 +161,72 @@ export function validateStory(story: Story, index: ContentIndex): string[] {
   }
   return problems;
 }
+
+/** Scenes where people may share a spot: the final chase (ch14, ch15), where Melody catches up. */
+export const SHARED_SPOT_SCENES: readonly string[] = ['ch14', 'ch15'];
+
+/** Steps at which the player looks at the stage (the ending screen covers it). */
+const SHOWN = new Set<Step['type']>(['say', 'choice', 'episode', 'card', 'cutscene']);
+
+/**
+ * Staging check: two visible characters must never stand on the same spot
+ * (the same stage position or named mark) while the player looks at the
+ * stage. Walks every path through the story from its start — the stage
+ * carries over from scene to scene, branches and choices are followed both
+ * ways — and reports each clash once, as «scene:index (type): a, b at "mark"».
+ * Scenes in `exempt` (the final chase) are not checked.
+ *
+ * Marks are compared by name; a show without a position stands at "center"
+ * (as the runtime does).
+ */
+export function findStagingClashes(story: Story, exempt: readonly string[] = SHARED_SPOT_SCENES): string[] {
+  const problems = new Set<string>();
+  const seen = new Set<string>();
+  type Cast = [string, string][]; // [character, mark], in stage order
+  const queue: { scene: string; index: number; cast: Cast }[] = [{ scene: story.startScene, index: 0, cast: [] }];
+  const go = (target: string, cast: Cast) => {
+    let to: { scene: string; index: number };
+    try {
+      to = resolveTarget(story, target);
+    } catch {
+      return; // broken targets are reported by validateStory
+    }
+    queue.push({ ...to, cast });
+  };
+  while (queue.length) {
+    let { scene, index, cast } = queue.pop()!;
+    for (;;) {
+      const step = story.scenes[scene]?.steps[index];
+      if (!step) break;
+      const key = `${scene}:${index}|${cast.map((c) => c.join('@')).join(',')}`;
+      if (seen.has(key)) break;
+      seen.add(key);
+      if (SHOWN.has(step.type) && !exempt.includes(scene)) {
+        const at = new Map<string, string[]>();
+        for (const [id, mark] of cast) at.set(mark, [...(at.get(mark) ?? []), id]);
+        for (const [mark, ids] of at) {
+          if (ids.length > 1) problems.add(`${scene}:${index} (${step.type}): ${ids.join(', ')} at "${mark}"`);
+        }
+      }
+      if (step.type === 'show') {
+        const mark = step.position ?? 'center';
+        const i = cast.findIndex(([id]) => id === step.character);
+        cast = i >= 0 ? cast.map((c, k): [string, string] => (k === i ? [c[0], mark] : c)) : [...cast, [step.character, mark]];
+      } else if (step.type === 'hide') {
+        cast = cast.filter(([id]) => id !== step.character);
+      } else if (step.type === 'goto') {
+        go(step.target, cast);
+        break;
+      } else if (step.type === 'branch') {
+        go(step.goto, cast);
+      } else if (step.type === 'choice') {
+        for (const o of step.options) if (o.goto) go(o.goto, cast);
+        if (step.options.every((o) => o.goto)) break;
+      } else if (step.type === 'ending') {
+        break;
+      }
+      index += 1;
+    }
+  }
+  return [...problems];
+}
