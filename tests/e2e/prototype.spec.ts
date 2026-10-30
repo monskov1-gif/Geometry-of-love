@@ -187,14 +187,14 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await expect(page.locator('#app')).toHaveAttribute('data-space', 'app');
   await shot(page, '02-app-lesson');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
-  // The second and third evenings with Melody: isosceles triangles, areas.
+  // The second and third evenings with Melody: vectors (the board problem), planes and volumes.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
+  await solveQuiz(page, ['7', '12', { choice: '(6, −3, 1)' }, '7/3']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7', '32', '84']);
-  // A week later: the university lecture material, in the app.
+  await solveQuiz(page, [{ choice: '(3, −1, 2)' }, '6', '4/√6', '3,5', '3/2']);
+  // A week later: conics, integrals, curvature.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
+  await solveQuiz(page, ['8', { choice: 'Гипербола' }, '4/3', '32/5', '4/25']);
   await choose(page, /честно/);
   await shot(page, '03-choice');
   await choose(page, /Ты права/);
@@ -206,6 +206,8 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await startEpisode(page, 'Геометрические задачи');
   const quiz = page.getByTestId('episode');
   await solveQuiz(page, [{ choice: '70°' }, '20', { choice: 'Да' }]);
+  // the impossible task: the given angles in the condition itself flicker
+  await expect(quiz.locator('.quiz-prompt .quiz-glitch')).toHaveCount(2);
   await quiz.getByLabel('Ответ', { exact: true }).fill('-20');
   await quiz.getByRole('button', { name: 'Проверить' }).click();
   await expect(quiz.locator('.quiz-feedback')).toHaveText(/Неверно/);
@@ -285,12 +287,12 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
+  await solveQuiz(page, ['7', '12', { choice: '(6, −3, 1)' }, '7/3']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7', '32', '84']);
-  // A week later: the university lecture material, in the app.
+  await solveQuiz(page, [{ choice: '(3, −1, 2)' }, '6', '4/√6', '3,5', '3/2']);
+  // A week later: conics, integrals, curvature.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
+  await solveQuiz(page, ['8', { choice: 'Гипербола' }, '4/3', '32/5', '4/25']);
   await choose(page, /Отшутиться/);
   await choose(page, /Ревнуешь/);
   await winByHook(page, 'Выход');

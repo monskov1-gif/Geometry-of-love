@@ -7,6 +7,7 @@
 // episode, so the story can continue with Dameo's escape.
 import { checkAnswer, taskSets, type FigureSpec, type GeometryTask } from '../content/geometry-tasks';
 import { el } from '../ui/dom';
+import { glitchNumbers } from './quiz-glitch';
 import type { EpisodeDefinition, EpisodeOutcome } from './types';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -69,6 +70,11 @@ export const geometryQuiz: EpisodeDefinition = {
     const walls = el('div', { class: 'quiz-walls', 'aria-hidden': 'true' });
     const sheet = el('div', { class: 'quiz notebook-sheet' });
     root.replaceChildren(el('div', { class: 'quiz-room' }, walls, sheet, el('aside', { class: 'quiz-side' }, el('h3', { class: 'pixel' }, 'Ответы'), historyList, exitButton)));
+    /** A new article or task opens at its first line (the sheet and the CRT screen both scroll). */
+    const toTop = () => {
+      sheet.scrollTop = 0;
+      sheet.scrollIntoView({ block: 'start' });
+    };
 
     const renderHistory = () =>
       historyList.replaceChildren(...solved.map((s) => el('li', { dataset: { task: s.task.id } }, `${s.task.prompt.slice(0, 28)}… → ${s.answer}`)));
@@ -92,7 +98,8 @@ export const geometryQuiz: EpisodeDefinition = {
     };
 
     // The impossible task (гл. 5): huge numbers flash over the room, too big and too fast
-    // to read, like a lesson that has stopped making sense. The task text stays legible.
+    // to read, like a lesson that has stopped making sense (the condition's own numbers
+    // flicker too, see quiz-glitch.ts).
     const noise = (room: HTMLElement) => {
       const layer = el('div', { class: 'quiz-noise', 'aria-hidden': 'true' });
       room.append(layer);
@@ -128,6 +135,8 @@ export const geometryQuiz: EpisodeDefinition = {
       const showHint = () => {
         hintText.hidden = false;
         hintButton.disabled = true;
+        // long university hints open below the fold of the sheet
+        hintText.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
       };
       const hintButton = el('button', { class: 'btn quiz-hint-button', type: 'button', onclick: showHint }, 'Подсказка');
 
@@ -206,18 +215,27 @@ export const geometryQuiz: EpisodeDefinition = {
       }
       const checkButton = el('button', { class: 'btn btn-primary', type: 'button', onclick: submit }, 'Проверить');
 
-      if (task.impossible) noise(root.querySelector('.quiz-room') as HTMLElement);
+      const prompt = el('p', { class: 'quiz-prompt' }, task.prompt);
+      const figure = task.figure ? renderFigure(task.figure) : null;
+      if (task.impossible) {
+        noise(root.querySelector('.quiz-room') as HTMLElement);
+        const tick = glitchNumbers(prompt, figure);
+        tick();
+        timers.push(window.setInterval(tick, reduceMotion ? 700 : 90));
+      }
       sheet.replaceChildren(
         el('div', { class: 'quiz-progress pixel' }, `${set.title} · Задача ${i + 1} / ${tasks.length}`),
-        el('p', { class: 'quiz-prompt' }, task.prompt),
-        ...(task.figure ? [renderFigure(task.figure)] : []),
+        prompt,
+        ...(figure ? [figure] : []),
         answerArea,
         el('div', { class: 'row quiz-actions' }, checkButton, task.hint && !task.impossible ? hintButton : null),
         hintText,
         feedback,
         extra,
       );
-      input?.focus();
+      // open at the top of the condition: focusing must not scroll the sheet down
+      input?.focus({ preventScroll: true });
+      toTop();
     };
 
     const showArticle = (i: number) => {
@@ -235,7 +253,8 @@ export const geometryQuiz: EpisodeDefinition = {
         el('p', { class: 'quiz-prompt' }, article.body),
         next,
       );
-      next.focus();
+      next.focus({ preventScroll: true });
+      toTop();
     };
 
     return {
