@@ -192,6 +192,9 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['18', '20', '7', '32', '84']);
+  // A week later: the university lecture material, in the app.
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
   await choose(page, /честно/);
   await shot(page, '03-choice');
   await choose(page, /Ты права/);
@@ -285,6 +288,9 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
   await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['18', '20', '7', '32', '84']);
+  // A week later: the university lecture material, in the app.
+  await startEpisode(page, 'Геометрические задачи');
+  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
   await choose(page, /Отшутиться/);
   await choose(page, /Ревнуешь/);
   await winByHook(page, 'Выход');

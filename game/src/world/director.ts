@@ -221,7 +221,8 @@ export class Director {
         return;
       }
       case 'screen':
-        w.setScreen(cue.state);
+        // the scene directs the monitor itself: the story's cover view steps aside
+        w.setScreen({ cover: null, ...cue.state });
         return;
       case 'light':
         w.show(w.locationName!, cue.state, w.currentVariant);

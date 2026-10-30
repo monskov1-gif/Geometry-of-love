@@ -23,6 +23,7 @@ export const backgrounds: Record<string, BackgroundDef> = Object.fromEntries(
     bg('dameo-desk', 'reality', 'стол Дамео, монитор'),
     bg('university-library', 'reality', 'библиотека университета'),
     bg('university-hall', 'reality', 'коридор университета'),
+    bg('university-classroom', 'reality', 'аудитория 308'),
     bg('street-dusk', 'reality', 'улица вечером'),
     bg('desktop', 'reality', 'рабочий стол компьютера'),
     bg('app-splash', 'app', 'заставка приложения'),

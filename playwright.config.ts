@@ -3,7 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 // Browser tests run against the built game served under the same subpath
 // GitHub Pages uses, so broken asset paths fail here first.
 const BASE_PATH = '/Geometry-of-love/';
-const PORT = 4173;
+// E2E_PORT lets parallel checkouts run their own server instead of reusing another one's.
+const PORT = Number(process.env.E2E_PORT ?? 4173);
 
 export default defineConfig({
   testDir: 'tests/e2e',

@@ -45,6 +45,11 @@ const SCREEN_ROOM = 'dameo-room';
 /** How broken the app looks in each visual phase of the story. */
 const PHASE_UNEASE: Record<string, number> = { A: 0, B: 0.15, C: 0.45, D: 0.8, E: 1 };
 
+/** What the story put on Dameo's monitor: the cover view and Melody's pop-ups. */
+function monitor(stage: Readonly<StageState>, calm: boolean) {
+  return { cover: stage.screen?.view ?? null, notices: stage.screen?.notices ?? [], calm };
+}
+
 function widestFrame(charId: string): number {
   const poses = Object.values(characters[charId]?.poses ?? {});
   return Math.max(1, ...poses.map((p) => (p.kind === 'sheet' ? p.frame.w : 0)));
@@ -118,7 +123,44 @@ export class Stage {
     this.resize.observe(this.cast);
   }
 
+  /**
+   * While the app plays on the CRT, publishes where its screen is on the view
+   * (--crt-x/y/w/h on the theme root, data-crt="on"), so episodes shown "on the
+   * monitor" sit inside its glass instead of covering the room.
+   */
+  private followScreen(themeRoot: HTMLElement | null): void {
+    if (themeRoot === this.crtRoot) return;
+    this.stopFollow?.();
+    this.stopFollow = null;
+    if (this.crtRoot) {
+      delete this.crtRoot.dataset.crt;
+      for (const k of ['x', 'y', 'w', 'h']) this.crtRoot.style.removeProperty(`--crt-${k}`);
+    }
+    this.crtRoot = themeRoot;
+    if (!themeRoot) return;
+    const world = getWorld();
+    const last = { x: NaN, y: NaN, w: NaN, h: NaN };
+    const update = () => {
+      const r = world.screenRect();
+      if (!r) return;
+      const origin = world.root.getBoundingClientRect();
+      const base = themeRoot.getBoundingClientRect();
+      const box = { x: r.x + origin.left - base.left, y: r.y + origin.top - base.top, w: r.w, h: r.h };
+      for (const k of ['x', 'y', 'w', 'h'] as const) {
+        if (Math.abs(box[k] - last[k]) < 0.5) continue;
+        last[k] = box[k];
+        themeRoot.style.setProperty(`--crt-${k}`, `${box[k].toFixed(1)}px`);
+      }
+      themeRoot.dataset.crt = 'on';
+    };
+    this.stopFollow = world.onFrame(update);
+  }
+
+  private crtRoot: HTMLElement | null = null;
+  private stopFollow: (() => void) | null = null;
+
   destroy(): void {
+    this.followScreen(null);
     window.clearInterval(this.ticker);
     this.resize.disconnect();
     this.scene.destroy();
@@ -172,15 +214,19 @@ export class Stage {
           view: stage.background === 'app-splash' ? 'splash' : stage.variant === 'quiz' ? 'quiz' : 'lesson',
           melody: melody?.pose ?? null,
           unease: PHASE_UNEASE[stage.phase] ?? 0,
+          ...monitor(stage, reduceMotion),
         });
         world.setStoryShot(stage.shot ?? 'crt');
       } else {
         world.show(stage.background!, stage.lighting, stage.variant);
         world.setCast(stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })));
+        world.setScreen(monitor(stage, reduceMotion));
         world.setStoryShot(stage.shot);
       }
+      this.followScreen(onScreen ? themeRoot : null);
       this.scene.show(null, null, null, true);
     } else {
+      this.followScreen(null);
       peekWorld()?.root.remove();
       peekWorld()?.stop();
       const bg = stage.background ? backgrounds[stage.background] : undefined;

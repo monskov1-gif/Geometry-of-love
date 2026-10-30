@@ -5,6 +5,7 @@ import './styles/base.css';
 import './styles/screens.css';
 import './styles/title.css';
 import './styles/episodes.css';
+import './styles/crt.css';
 import './styles/backgrounds.css';
 import './styles/effects.css';
 

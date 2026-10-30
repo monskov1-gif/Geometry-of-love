@@ -58,6 +58,9 @@ export class World3D {
   private variant: string | null = null;
   private readonly actors = new Map<string, Actor>();
   private shot: Shot = { pos: [0, 1.5, 5], look: [0, 1.2, -1], fov: 40 };
+  /** The shot as asked for (before fitting), refitted when the view changes shape. */
+  private shotDef: Shot | null = null;
+  private readonly frameListeners = new Set<() => void>();
   private move: CameraMove | null = null;
   /** Camera follows the speaker slightly (auto-direction for dialogue). */
   private speaker: string | null = null;
@@ -274,8 +277,10 @@ export class World3D {
 
   /** Jumps or glides to a named shot of the location (or an explicit one). */
   setShot(shot: string | Shot, duration = 0.9): Promise<void> {
-    const to = typeof shot === 'string' ? this.build?.shots[shot] ?? this.build?.shots.wide : shot;
-    if (!to) return Promise.resolve();
+    const def = typeof shot === 'string' ? this.build?.shots[shot] ?? this.build?.shots.wide : shot;
+    if (!def) return Promise.resolve();
+    this.shotDef = def;
+    const to = this.fitted(def);
     // Asking for the shot we are already in (or gliding to) changes nothing.
     const key = JSON.stringify(to);
     if (key === JSON.stringify(this.move?.to ?? this.shot)) return Promise.resolve();
@@ -289,6 +294,57 @@ export class World3D {
     return new Promise((resolve) => {
       this.move = { from: this.currentShot(), to, t: 0, dur: duration, resolve };
     });
+  }
+
+  /** Resolves a shot's `fit` box into a camera distance for the current aspect. */
+  private fitted(s: Shot): Shot {
+    if (!s.fit) return s;
+    const look = new THREE.Vector3(...s.look);
+    const dir = new THREE.Vector3(...s.pos).sub(look);
+    if (dir.lengthSq() < 1e-8) return s;
+    dir.normalize();
+    const t = Math.tan(THREE.MathUtils.degToRad((s.fov ?? 40) / 2));
+    const fy = Math.min(0.9, Math.max(0.1, s.frameY ?? 0.5));
+    // visible height needed: the box fits above and below its centre, and across
+    const height = Math.max(s.fit[1] / (2 * Math.min(fy, 1 - fy)), s.fit[0] / Math.max(0.1, this.camera.aspect));
+    const p = look.clone().addScaledVector(dir, height / 2 / t);
+    // aim below the box centre so the centre lands at frameY
+    const aim = look.clone();
+    aim.y -= (0.5 - fy) * height;
+    return { ...s, pos: [p.x, p.y, p.z], look: [aim.x, aim.y, aim.z] };
+  }
+
+  /** Called after every rendered frame (overlays that follow something in the scene). */
+  onFrame(fn: () => void): () => void {
+    this.frameListeners.add(fn);
+    return () => this.frameListeners.delete(fn);
+  }
+
+  /**
+   * Where the location's computer screen is on the view, in CSS pixels of
+   * `root` (bounding box of its four corners), or null if there is none or it
+   * is behind the camera.
+   */
+  screenRect(): { x: number; y: number; w: number; h: number } | null {
+    const corners = this.build?.screen?.corners;
+    if (!corners) return null;
+    const w = this.root.clientWidth;
+    const h = this.root.clientHeight;
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (const c of corners) {
+      const p = c.clone().project(this.camera);
+      if (p.z > 1) return null;
+      const x = ((p.x + 1) / 2) * w;
+      const y = ((1 - p.y) / 2) * h;
+      x0 = Math.min(x0, x);
+      y0 = Math.min(y0, y);
+      x1 = Math.max(x1, x);
+      y1 = Math.max(y1, y);
+    }
+    return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   }
 
   /** Lets the camera drift toward whoever speaks; cutscenes turn this off. */
@@ -364,7 +420,8 @@ export class World3D {
     const target = this.follow ?? (this.autoFrame && this.speaker ? this.actors.get(this.speaker) : undefined);
     if (target && !this.move) ox = (target.position.x - base.look[0]) * (this.follow ? 1 : 0.18);
     this.panX = lerp(this.panX, ox, Math.min(1, dt * (this.follow ? 4 : 1.6)));
-    const sway: Vec3 = this.reduceMotion ? [0, 0, 0] : [Math.sin(this.time * 0.31) * 0.025, Math.sin(this.time * 0.23) * 0.015, 0];
+    const still = this.reduceMotion || (!this.move && this.shot.still) || (this.move && this.move.to.still);
+    const sway: Vec3 = still ? [0, 0, 0] : [Math.sin(this.time * 0.31) * 0.025, Math.sin(this.time * 0.23) * 0.015, 0];
     this.applyCamera(base, [this.panX + sway[0], sway[1], sway[2]]);
     for (const u of this.updaters) u(dt);
     for (const a of this.actors.values()) a.update(dt, this.camera);
@@ -373,6 +430,7 @@ export class World3D {
     this.look.apply();
     if (this.composer) this.composer.render(dt);
     else this.gl.render(this.scene, this.camera);
+    for (const fn of this.frameListeners) fn();
   }
 
   private panX = 0;
@@ -390,6 +448,12 @@ export class World3D {
     this.composer?.setSize(rw, rh);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    // a fitted shot keeps its subject in frame when the view changes shape
+    if (this.shotDef?.fit) {
+      const to = this.fitted(this.shotDef);
+      if (this.move) this.move.to = to;
+      else this.shot = to;
+    }
   }
 
   /** Renders one frame to a data URL (save thumbnails). */

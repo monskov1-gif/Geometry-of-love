@@ -9,6 +9,7 @@ import type {
   LightingId,
   Scene,
   ScreenEffect,
+  ScreenView,
   SpaceId,
   StagePosition,
   Step,
@@ -70,5 +71,12 @@ export const card = (label: string, title: string, style: ChapterCard['style'], 
   card: { label, title, style, ...extra },
 });
 export const cutscene = (id: string): Step => ({ type: 'cutscene', cutscene: id });
+
+/** What the monitor shows over the app: 'desktop' (program closed), 'close-dialog', or null (the app again). */
+export const screen = (view: ScreenView | null): Step => ({ type: 'screen', view });
+/** Pop-up notifications slide onto Dameo's monitor (the dialogue line saying them is a separate step). */
+export const notify = (...texts: string[]): Step => ({ type: 'screen', notify: texts });
+/** Removes every notification from the monitor. */
+export const clearNotices = (): Step => ({ type: 'screen', clear: true });
 
 export const defineScene = (scene: Scene): Scene => scene;

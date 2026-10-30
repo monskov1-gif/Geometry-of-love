@@ -49,6 +49,7 @@ export const LOCATION_MUSIC: Record<string, string> = {
   'dameo-desk': 'home-night',
   'university-hall': 'university',
   'university-library': 'university',
+  'university-classroom': 'university',
 };
 
 export const SPACE_MUSIC: Record<SpaceId, Record<VisualPhase, string>> = {

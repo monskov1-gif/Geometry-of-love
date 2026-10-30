@@ -353,8 +353,31 @@ export const dameoRoom3D: LocationDef3D = {
       screen: { app, corners: crt.corners },
       shots: {
         wide: { pos: [0.0, 1.6, 1.5], look: [0.05, 1.05, -1.6], fov: 62 },
-        // Dameo's view of the monitor: the app fills most of the frame, the desk around it
-        crt: { pos: [screenCenter.x, screenCenter.y - 0.02, screenCenter.z + 0.8], look: [screenCenter.x, screenCenter.y - 0.13, screenCenter.z - 0.5], fov: 34 },
+        // The app on the monitor (lessons, quizzes): the whole beige CRT with its
+        // bezel, the case under it, the wall notes and the dark room around. The
+        // fit box keeps all of it in frame on a phone held upright, too.
+        crt: {
+          // (a wide lens keeps the camera in front of his office chair even on a phone)
+          pos: [screenCenter.x, screenCenter.y + 0.1, screenCenter.z + 1],
+          look: [screenCenter.x, screenCenter.y - 0.03, screenCenter.z],
+          fov: 60,
+          fit: [0.45, 0.56],
+          frameY: 0.42,
+          still: true,
+        },
+        // Melody's pop-ups stacked on the right edge of the screen, close enough to read
+        'crt-notice': {
+          pos: [screenCenter.x + 0.06, screenCenter.y + 0.05, screenCenter.z + 1],
+          look: [screenCenter.x + 0.075, screenCenter.y, screenCenter.z],
+          fov: 60,
+          fit: [0.26, 0.36],
+          frameY: 0.38,
+          still: true,
+        },
+        // first person: Dameo in his chair, looking at the monitor (chapter 3 cutscene)
+        pov: { pos: [crtX + 0.02, 1.22, -1.05], look: [screenCenter.x, screenCenter.y - 0.02, screenCenter.z], fov: 50 },
+        // he jerks back from the glass
+        'pov-recoil': { pos: [crtX + 0.06, 1.3, -0.97], look: [screenCenter.x, screenCenter.y + 0.02, screenCenter.z], fov: 54 },
         desk: { pos: [crtX - 0.9, 1.45, -0.4], look: [crtX + 0.1, 0.95, BACK + 0.2], fov: 42 },
         bed: { pos: [0.2, 1.4, 0.9], look: [-1.5, 0.6, -1.3], fov: 46 },
         window: { pos: [0.3, 1.45, 0.8], look: [-0.15, 1.45, BACK], fov: 44 },
@@ -368,9 +391,9 @@ export const dameoRoom3D: LocationDef3D = {
         },
         // the camera falls into the tube after him
         'into-screen': {
-          pos: [screenCenter.x, screenCenter.y, screenCenter.z + 0.06],
+          pos: [screenCenter.x, screenCenter.y, screenCenter.z + 0.09],
           look: [screenCenter.x, screenCenter.y, screenCenter.z - 1],
-          fov: 18,
+          fov: 16,
         },
       },
       marks: {
@@ -393,11 +416,13 @@ export const dameoRoom3D: LocationDef3D = {
           p.setX(i, p.getX(i) + Math.sin(t * 0.7 + i) * dt * 0.01);
         }
         p.needsUpdate = true;
-        if (Math.floor(t * 8) !== Math.floor((t - dt) * 8)) app.draw(t);
+        const fps = app.fps;
+        if (Math.floor(t * fps) !== Math.floor((t - dt) * fps)) app.draw(t);
         // the screen light follows what the screen shows
-        const v = app.current.view;
-        screenLight.color.setHex(v === 'desktop' ? 0x8ab8d8 : app.current.unease > 0.6 ? 0xff4a7a : 0xffb8f0);
-        screenLight.intensity = v === 'off' ? 0 : 1.6 * (app.current.unease > 0.6 ? 0.7 + Math.random() * 0.6 : 1);
+        const v = app.shown;
+        const dark = v === 'off' || v === 'void';
+        screenLight.color.setHex(v === 'desktop' ? 0x8ab8d8 : v === 'static' ? 0xc8c8d0 : app.current.unease > 0.6 ? 0xff4a7a : 0xffb8f0);
+        screenLight.intensity = dark ? (v === 'void' ? 0.25 : 0) : 1.6 * (app.current.unease > 0.6 ? 0.7 + Math.random() * 0.6 : 1);
       },
       setVariant(v) {
         // variant names used by scripts: 'app' / 'app-dark' / 'off' / null (desktop)
