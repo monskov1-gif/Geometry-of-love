@@ -1176,7 +1176,7 @@
 .speaker-portrait {
   position: absolute;
   bottom: 0;
-  height: 74%;
+  height: calc(74% * var(--portrait-scale, 1));
   max-width: 46%;
   background: center bottom / contain no-repeat;
   opacity: 0;
@@ -1197,6 +1197,10 @@
   right: 2%;
 }
 
+.speaker-portrait[data-small] {
+  bottom: var(--hud-height);
+}
+
 .speaker-portrait.is-on {
   opacity: 1;
   transform: none;
@@ -1210,6 +1214,6 @@
   /* phones: stand on top of the dialogue band, not behind the text */
   .speaker-portrait {
     bottom: var(--hud-height);
-    height: 34%;
+    height: calc(34% * var(--portrait-scale, 1));
   }
 }

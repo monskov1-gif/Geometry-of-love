@@ -196,6 +196,9 @@ export class Stage {
     if (on && this.portraitOf !== id) {
       this.portraitOf = id;
       Object.assign(this.portrait.style, { backgroundImage: `url("${p.src}")`, aspectRatio: `${p.w} / ${p.h}` });
+      this.portrait.style.setProperty('--portrait-scale', String(p.scale ?? 1));
+      // small figures (the tools) stand on top of the dialogue band instead of hiding behind it
+      this.portrait.toggleAttribute('data-small', (p.scale ?? 1) < 0.8);
       this.portrait.dataset.side = p.side;
       loadImage(p.src).catch(() => {
         this.portrait.textContent = 'Портрет не загрузился';

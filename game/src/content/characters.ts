@@ -5,6 +5,11 @@ import { EMOTIONS, type Emotion } from '../render/sprites';
 import melodySheet01 from '../assets/characters/melody/melody-sheet-01.png';
 import melodySheet02 from '../assets/characters/melody/melody-sheet-02.png';
 import dameoBust from '../assets/characters/dameo/dameo-bust.png';
+import calculatorArt from '../assets/characters/npc/calculator.png';
+import rulerArt from '../assets/characters/npc/ruler.png';
+import eraser1Art from '../assets/characters/npc/eraser-1.png';
+import eraser2Art from '../assets/characters/npc/eraser-2.png';
+import eraser3Art from '../assets/characters/npc/eraser-3.png';
 
 export interface SheetPose {
   kind: 'sheet';
@@ -34,7 +39,7 @@ export interface CharacterDef {
   accent: string;
   /** The author's painted portrait, shown beside the dialogue while this character speaks
    * in 3D and monitor scenes (where their pixel figure is small or off screen). */
-  portrait?: { src: string; w: number; h: number; side: 'left' | 'right' };
+  portrait?: { src: string; w: number; h: number; side: 'left' | 'right'; /** height against a person's portrait (1) */ scale?: number };
   poses: Record<string, Pose>;
 }
 
@@ -95,12 +100,13 @@ export const characters: Record<string, CharacterDef> = {
     portrait: { src: dameoBust, w: 933, h: 1304, side: 'left' },
   },
   satsuki: { id: 'satsuki', name: 'Сацуки', accent: 'var(--reality-olive)', poses: pixel() },
-  calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: pixel() },
-  ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: pixel() },
+  calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: pixel(), portrait: { src: calculatorArt, w: 706, h: 872, side: 'right', scale: 0.62 } },
+  ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: pixel(), portrait: { src: rulerArt, w: 642, h: 1331, side: 'right', scale: 0.92 } },
   compass: { id: 'compass', name: 'Циркулёнок', accent: 'var(--lavender)', poses: pixel() },
   // The synopsis never names the three eraser twins: the numbers are technical
   // labels, not names. Melody's use of a name in chapter 9 is shown erased.
-  'eraser-1': { id: 'eraser-1', name: 'Ластик №1', accent: 'var(--baby-pink)', poses: pixel() },
-  'eraser-2': { id: 'eraser-2', name: 'Ластик №2', accent: 'var(--baby-pink)', poses: pixel() },
-  'eraser-3': { id: 'eraser-3', name: 'Ластик №3', accent: 'var(--baby-pink)', poses: pixel() },
+  // painted portraits: author art 2026-10-30 (materials/characters/npc-sprites-2026-10-30.png); which eraser is which is the lead's guess
+  'eraser-1': { id: 'eraser-1', name: 'Ластик №1', accent: 'var(--baby-pink)', poses: pixel(), portrait: { src: eraser1Art, w: 496, h: 388, side: 'right', scale: 0.42 } },
+  'eraser-2': { id: 'eraser-2', name: 'Ластик №2', accent: 'var(--baby-pink)', poses: pixel(), portrait: { src: eraser2Art, w: 518, h: 901, side: 'right', scale: 0.55 } },
+  'eraser-3': { id: 'eraser-3', name: 'Ластик №3', accent: 'var(--baby-pink)', poses: pixel(), portrait: { src: eraser3Art, w: 377, h: 517, side: 'right', scale: 0.48 } },
 };
