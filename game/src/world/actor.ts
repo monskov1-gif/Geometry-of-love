@@ -5,6 +5,7 @@
 // mirrored for the other direction), turn, talk (mouth flaps) and emotion.
 import * as THREE from 'three';
 import { hdScale, spriteFrameHD, spriteSize, type Emotion } from '../render/sprites';
+import { drawErasure, erasureKey, noErasure, type Erasure } from './erasure';
 
 export type ActorFacing = 'front' | 'left' | 'right' | 'back';
 
@@ -41,6 +42,7 @@ export class Actor {
   readonly group = new THREE.Group();
   private readonly plane: THREE.Mesh;
   private readonly material: THREE.MeshLambertMaterial;
+  private readonly shadowMaterial: THREE.MeshBasicMaterial;
   private readonly canvas: HTMLCanvasElement;
   private readonly ctx: CanvasRenderingContext2D;
   private readonly texture: THREE.CanvasTexture;
@@ -59,6 +61,11 @@ export class Actor {
   running = false;
   /** 0..1 erase/fade used by cutscenes (deaths). */
   fade = 1;
+  /** What the eraser has already taken from the figure (ch09); kept between scenes of the same stage. */
+  readonly erasure: Erasure = noErasure();
+  /** 0…1 the figure is warped (her anger, ch08): jerks, skews and stretches every frame. */
+  warp = 0;
+  private warpT = 0;
 
   constructor(readonly id: string) {
     this.height = HEIGHTS[id] ?? 1.6;
@@ -84,10 +91,8 @@ export class Actor {
     const geo = new THREE.PlaneGeometry(w, this.height);
     geo.translate(0, this.height / 2, 0);
     this.plane = new THREE.Mesh(geo, this.material);
-    const shadow = new THREE.Mesh(
-      new THREE.PlaneGeometry(w * 1.1, w * 0.45),
-      new THREE.MeshBasicMaterial({ map: contactShadow(), transparent: true, depthWrite: false }),
-    );
+    this.shadowMaterial = new THREE.MeshBasicMaterial({ map: contactShadow(), transparent: true, depthWrite: false });
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(w * 1.1, w * 0.45), this.shadowMaterial);
     shadow.rotation.x = -Math.PI / 2;
     shadow.position.y = 0.006;
     shadow.renderOrder = 1;
@@ -182,11 +187,14 @@ export class Actor {
     const cam = camera.position;
     this.plane.rotation.y = Math.atan2(cam.x - this.group.position.x, cam.z - this.group.position.z);
     this.plane.scale.x = this.facing === 'left' ? -1 : 1;
+    this.applyWarp(dt);
     this.material.opacity = this.fade;
     if (this.material.transparent !== this.fade < 1) {
       this.material.transparent = this.fade < 1;
       this.material.needsUpdate = true;
     }
+    // the shadow goes with the body: an erased figure leaves no trace on the floor
+    this.shadowMaterial.opacity = Math.min(this.fade, 1 - this.eraseCut);
     // erasing: clip the figure from the feet up with a plane in world space
     if (this.eraseCut > 0) {
       this.clip.constant = -(this.group.position.y + this.eraseCut * this.height * 1.02);
@@ -208,11 +216,13 @@ export class Actor {
     };
     // in the air: the passing frame (legs tucked)
     if (this.driven && this.group.position.y > 0.05) frame.walk = 1;
-    const key = `${frame.facing}|${frame.emotion}|${frame.walk}|${frame.breath}|${frame.mouthOpen}|${frame.pose ?? ''}`;
+    const erased = erasureKey(this.erasure);
+    const key = `${frame.facing}|${frame.emotion}|${frame.walk}|${frame.breath}|${frame.mouthOpen}|${frame.pose ?? ''}|${erased}|${this.talking}`;
     if (key === this.frameKey) return;
     this.frameKey = key;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.drawImage(spriteFrameHD(this.id, frame), 0, 0);
+    if (erased !== '0.0.0') drawErasure(this.ctx, this.canvas.width / spriteSize(this.id).w, this.id, frame, this.erasure, frame.mouthOpen);
     this.texture.needsUpdate = true;
   }
 
@@ -257,7 +267,45 @@ export class Actor {
         });
       case 'stretch':
         return done((k) => (this.group.scale.y = start.s * (1 + Math.sin(k * Math.PI) * 0.6)));
+      case 'erase-details':
+      case 'erase-face':
+      case 'erase-limbs': {
+        const part = fx === 'erase-details' ? 'details' : fx === 'erase-face' ? 'face' : 'limbs';
+        const from = this.erasure[part];
+        // a stroke: quick at first, then the last of it goes
+        return done((k) => (this.erasure[part] = from + (1 - from) * Math.sqrt(k)));
+      }
+      case 'warp': {
+        // rises fast, holds, and leaves the figure as it was
+        const from = this.warp;
+        return done((k) => (this.warp = k < 1 ? Math.max(from, Math.min(1, k * 4), Math.sin(k * Math.PI)) : 0));
+      }
     }
+  }
+
+  /** Her body jerks out of shape: random skews, a stretched neck, a twitching width. Back to normal at warp 0. */
+  private applyWarp(dt: number): void {
+    if (this.warp <= 0) {
+      if (this.warpT) {
+        this.warpT = 0;
+        this.plane.rotation.z = 0;
+        this.plane.scale.y = 1;
+        this.plane.position.x = 0;
+      }
+      return;
+    }
+    this.warpT += dt;
+    const w = this.warp;
+    // stepped, not smooth: the figure snaps between wrong shapes
+    const step = Math.floor(this.warpT * 14);
+    const r = (n: number) => {
+      const x = Math.sin(step * 12.9898 + n * 78.233) * 43758.5453;
+      return x - Math.floor(x) - 0.5;
+    };
+    this.plane.rotation.z = r(1) * 0.22 * w;
+    this.plane.scale.y = 1 + (0.18 + r(2) * 0.3) * w;
+    this.plane.scale.x *= 1 + r(3) * 0.35 * w;
+    this.plane.position.x = r(4) * 0.12 * w;
   }
 
   private anim: { t: number; dur: number; apply: (k: number) => void; resolve: () => void } | null = null;
@@ -268,6 +316,7 @@ export class Actor {
     this.target?.resolve();
     this.texture.dispose();
     this.material.dispose();
+    this.shadowMaterial.dispose();
     this.plane.geometry.dispose();
   }
 }

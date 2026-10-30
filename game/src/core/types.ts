@@ -26,8 +26,13 @@ export type LightingId = 'day' | 'evening' | 'night';
 /** Persistent visual state of a staged character (saved with the stage). */
 export type CharacterFx = 'distorted' | 'erasing' | 'frozen';
 
-/** One-shot screen effects; presentational only, never saved. */
-export type ScreenEffect = 'shake' | 'flash' | 'glitch' | 'blood' | 'fade-black' | 'fade-white' | 'hand';
+/**
+ * Screen effects; presentational only, never saved. Most are one-shot;
+ * `rage-1`…`rage-5` set a lasting, escalating darkness over the scene (her
+ * anger, ch08) until `rage-end` or the screen is rebuilt (loading a save).
+ */
+export type ScreenEffect = 'shake' | 'flash' | 'glitch' | 'blood' | 'fade-black' | 'fade-white' | 'hand' | RageLevel | 'rage-end';
+export type RageLevel = 'rage-1' | 'rage-2' | 'rage-3' | 'rage-4' | 'rage-5';
 
 /** `"sceneId"` (scene start) or `"sceneId#label"`. */
 export type Target = string;

@@ -108,6 +108,39 @@ describe('migrate', () => {
     const other = migrate({ ...current, schema: 3, state: { ...current.state, position: { scene: 'ch02', index: 60 }, stage: stage3 as typeof current.state.stage } });
     expect(other.state.position.index).toBe(60);
   });
+
+  it('keeps schema-4 positions in ch03, ch08 and ch09 on the same line', () => {
+    const current = save('x');
+    const step = (scene: string, index: number) => {
+      const up = migrate({ ...current, schema: 4, state: { ...current.state, position: { scene, index }, decisions: [{ scene, index, option: 'x' }] } });
+      expect(up.schema).toBe(SAVE_SCHEMA);
+      expect(up.state.decisions[0]!.index).toBe(up.state.position.index);
+      return story.scenes[scene]!.steps[up.state.position.index] as { type: string; text?: string; cutscene?: string };
+    };
+    // ch03: before the cleared stage nothing moves; the cutscene and the first line inside follow it
+    expect(step('ch03', 87)).toMatchObject({ type: 'say', text: 'Дамео тянется к мышке.' });
+    expect(step('ch03', 89)).toMatchObject({ type: 'cutscene', cutscene: 'pulled-in' });
+    expect(step('ch03', 93).text).toMatch(/^Пол под ногами/);
+    // ch08: every line of her anger, the calculator after it, the hunt
+    expect(step('ch08', 69).text).toMatch(/^Спасибо, Пушин/);
+    expect(step('ch08', 72)).toMatchObject({ type: 'say', text: 'А это — предательство.' });
+    expect(step('ch08', 73).text).toMatch(/^Я дала им всё/);
+    expect(step('ch08', 74).text).toMatch(/^Он думает, что ему есть куда идти/);
+    expect(step('ch08', 75).text).toMatch(/^Если ему некуда будет идти/);
+    expect(step('ch08', 76).text).toMatch(/^Что… что ты имеешь в виду/);
+    expect(step('ch08', 77)).toMatchObject({ type: 'say', text: 'Я поговорю с ним. Потом. Сначала — с ними.' });
+    expect(step('ch08', 79).text).toMatch(/^Она уходит/);
+    expect(step('ch08', 87).text).toMatch(/^Внимание! Внеплановый урок/);
+    // ch09: Dameo's plea, the strokes, the brothers, what is left
+    expect(step('ch09', 36).text).toMatch(/^Он похож на школьный ластик/);
+    expect(step('ch09', 38).text).toMatch(/^Мелоди, не надо!/);
+    expect(step('ch09', 43).text).toMatch(/^Она проводит ластиком/);
+    expect(step('ch09', 47).text).toMatch(/^Братья! Помогите!/);
+    expect(step('ch09', 50)).toMatchObject({ type: 'say', text: 'Держись! Держись за меня!' });
+    expect(step('ch09', 60).text).toMatch(/^Ластик исчезает полностью/);
+    // other scenes keep their indices
+    expect(migrate({ ...current, schema: 4, state: { ...current.state, position: { scene: 'ch10', index: 12 } } }).state.position.index).toBe(12);
+  });
 });
 
 describe('save slots (author bug 18: every slot must work on its own, not only the quick one)', () => {

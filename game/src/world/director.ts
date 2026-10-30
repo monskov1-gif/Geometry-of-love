@@ -37,11 +37,29 @@ export type Cue = (
   | { do: 'actorFx'; actor: string; fx: ActorEffect; dur?: number; to?: Place }
   | { do: 'prop'; name: string; action: string; dur?: number; target?: string }
   | { do: 'letterbox'; on: boolean }
+  /** The character's name tag appears over the scene and is rubbed out letter by letter (ch09). */
+  | { do: 'eraseName'; actor: string; dur?: number }
   | { do: 'par'; cues: Cue[] }
 ) & { async?: boolean };
 
-/** Effects on an actor's figure: shrinking into a screen, being erased, dissolving, appearing. */
-export type ActorEffect = 'shrink' | 'grow' | 'erase' | 'dissolve' | 'appear' | 'tremble' | 'fall' | 'stretch';
+/**
+ * Effects on an actor's figure: shrinking into a screen, being erased, dissolving, appearing.
+ * `erase-details` → `erase-face` → `erase-limbs` → `erase` are the four strokes of ch09
+ * (world/erasure.ts); `warp` jerks the figure out of shape for the duration (ch08).
+ */
+export type ActorEffect =
+  | 'shrink'
+  | 'grow'
+  | 'erase'
+  | 'dissolve'
+  | 'appear'
+  | 'tremble'
+  | 'fall'
+  | 'stretch'
+  | 'erase-details'
+  | 'erase-face'
+  | 'erase-limbs'
+  | 'warp';
 
 export interface Cutscene {
   id: string;
@@ -59,6 +77,8 @@ export interface DirectorHost {
   music(track: string | null): void;
   /** Story-level props (e.g. the hand from the monitor) live in the world module. */
   prop(name: string, action: string, dur: number, target?: string): Promise<void>;
+  /** Shows a character's name and rubs it out; resolves when it is gone (dur 0 = at once). */
+  eraseName(actor: string, dur: number): Promise<void>;
 }
 
 const wait = (s: number) => new Promise<void>((r) => window.setTimeout(r, s * 1000));
@@ -235,6 +255,9 @@ export class Director {
       }
       case 'prop':
         await this.host.prop(cue.name, cue.action, d(cue.dur, 1), cue.target);
+        return;
+      case 'eraseName':
+        await this.host.eraseName(cue.actor, d(cue.dur, 2.4));
         return;
       case 'par':
         await Promise.all(cue.cues.map((c) => this.run(c)));

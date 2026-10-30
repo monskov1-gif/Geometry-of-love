@@ -11,7 +11,7 @@
 // незаменимым), выбор «доверяю тебе» (флаг ch8.trusted-calculator, отзывается
 // в гл. 10 и 15), разговор Пушина с Мелоди с его точки зрения, «внеплановый
 // урок» по громкой связи.
-import { background, branch, card, choice, defineScene, fx, goto, hide, label, music, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, cutscene, defineScene, fx, goto, hide, label, music, narrate, say, sfx, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter8 = defineScene({
   id: 'ch08',
@@ -98,17 +98,32 @@ export const chapter8 = defineScene({
     say('melody', 'Спасибо, Пушин. Ты хороший. Ты всегда был хорошим.'),
     show('melody', 'angry', 'right'),
     music('tension'),
+    // ---- her anger: every line darker and more broken than the one before (rage-1…5, ui/effects.ts)
+    fx('rage-1'),
+    sfx('slam'),
     say('melody', 'А это — предательство.'),
+    fx('rage-2'),
+    sfx('glitch'),
     say('melody', 'Я дала им всё. Класс, небо, солнце на сорока процентах. Я дала им место, где не надо бояться звонков и мокнуть под дождём. А они учат его уходить.'),
+    fx('rage-3'),
+    sfx('rumble'),
     say('melody', 'Он думает, что ему есть куда идти. Потому что они рядом. Потому что они ему помогают.'),
+    fx('rage-4'),
+    show('melody', 'angry', 'right', 'distorted'),
+    sfx('heartbeat'),
     say('melody', 'Если ему некуда будет идти и не с кем — он останется. Значит, рядом с ним никого не будет. Никого, кроме меня.'),
     say('calculator', 'Что… что ты имеешь в виду? Мелоди. Ты же просто поговоришь с ним? Ты сказала…'),
+    fx('rage-5'),
+    fx('blood'),
+    sfx('slam'),
     say('melody', 'Я поговорю с ним. Потом. Сначала — с ними.'),
+    cutscene('melody-leaves'),
     hide('melody'),
     narrate('Она уходит, и класс становится темнее, как будто кто-то убавил свет. Солнце за нарисованным окном опускается до двадцати процентов. Пушин этого не делал.'),
     say('calculator', 'Нет… нет, я не это… Мелоди, подожди! Мелоди!'),
     narrate('Калькулятор понимает, что совершил ошибку. Это первое вычисление в его жизни, в котором он уверен полностью. И уже ничего не может с ним сделать.'),
     hide('calculator'),
+    fx('rage-end'),
 
     // ---- the hunt begins
     space('game', 'D'),
