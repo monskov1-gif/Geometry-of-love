@@ -239,10 +239,10 @@ export function noodleCup(kit: LocationKit, x: number, y: number, z: number, see
     const a = r() * Math.PI * 2;
     kit.torus(0.012 + r() * 0.008, 0.0025, noodle, x + Math.cos(a) * 0.014, y + 0.081, z + Math.sin(a) * 0.014, { rx: Math.PI / 2, ts: 14, rs: 5 });
   }
-  // the foil lid, torn back and standing up at the far edge
+  // the foil lid, still hinged at the back rim and lifted at the front
   const lid = kit.M(`cupLid-${c}`, 0xf2eee6, { roughness: 0.4, metalness: 0.2 });
   const ry = r() * Math.PI * 2;
-  kit.withT(x, z, ry, () => kit.cy(0.05, 0.05, 0.002, lid, 0, y + 0.154, -0.069, { rx: 1.15, seg: 20 }));
+  kit.withT(x, z, ry, () => kit.cy(0.05, 0.05, 0.002, lid, 0, y + 0.125, -0.002, { rx: -0.35, seg: 20 }));
   if (r() < 0.6) kit.cy(0.002, 0.002, 0.2, kit.M('chopstick', 0xd8c090), x + 0.01, y + 0.13, z, { rz: 0.3 + r() * 0.3, seg: 6 });
 }
 
