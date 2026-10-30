@@ -85,7 +85,9 @@ def morae(kana: str) -> list[str]:
             out.append('_q')
         elif ch == 'ー':
             out.append('_long')
-        elif ch in '、,…・ 　':
+        elif ch in ' 　':
+            out.append('_space')  # a word gap: the voice keeps going
+        elif ch in '、,…・':
             out.append('_pause')
         elif ch in '。.！!？?':
             out.append('_end')
@@ -110,19 +112,29 @@ def read_wav(p: Path) -> tuple[np.ndarray, int]:
     return _cache[p]
 
 
+_analysis: dict[tuple, tuple] = {}
+
+
+def analyse(o: Oto):
+    """WORLD analysis of one oto sample, cached: the same syllable recurs in many lines."""
+    key = (o.wav, o.offset, o.cutoff)
+    if key not in _analysis:
+        x, sr = read_wav(o.wav)
+        start = o.offset / 1000
+        end = (len(x) / sr - o.cutoff / 1000) if o.cutoff >= 0 else start + (-o.cutoff) / 1000
+        seg = x[int(start * sr): max(int(start * sr) + 1, int(end * sr))]
+        if len(seg) < sr * 0.02:
+            seg = x[int(start * sr): int(start * sr) + int(0.1 * sr)]
+        f0, t = pyworld.harvest(seg, sr, frame_period=FRAME_MS, f0_floor=70, f0_ceil=900)
+        _analysis[key] = (f0, pyworld.cheaptrick(seg, f0, t, sr), pyworld.d4c(seg, f0, t, sr), sr)
+    return _analysis[key]
+
+
 def render_note(o: Oto, k: float, total_ms: float, f0_hz: np.ndarray, sr_out: int) -> np.ndarray:
     """One sample rendered to exactly `total_ms`: its consonant part sped up by `k`
     (UTAU's consonant velocity, needed for speech tempo), its vowel part stretched
     or shortened to fill the rest, its pitch set to `f0_hz`."""
-    x, sr = read_wav(o.wav)
-    start = o.offset / 1000
-    end = (len(x) / sr - o.cutoff / 1000) if o.cutoff >= 0 else start + (-o.cutoff) / 1000
-    seg = x[int(start * sr): max(int(start * sr) + 1, int(end * sr))]
-    if len(seg) < sr * 0.02:
-        seg = x[int(start * sr): int(start * sr) + int(0.1 * sr)]
-    f0, t = pyworld.harvest(seg, sr, frame_period=FRAME_MS, f0_floor=70, f0_ceil=900)
-    sp = pyworld.cheaptrick(seg, f0, t, sr)
-    ap = pyworld.d4c(seg, f0, t, sr)
+    f0, sp, ap, sr = analyse(o)
     n = len(f0)
     fixed = min(n - 1, max(1, int(o.consonant / FRAME_MS)))
     fixed_out = max(1, int(o.consonant * k / FRAME_MS))
@@ -151,12 +163,19 @@ class Voice:
     gain: float = 0.9
 
 
+# sounds some banks lack, read as the kana they are pronounced like
+FALLBACK = {'を': 'お', 'ぢ': 'じ', 'づ': 'ず', 'ゐ': 'い', 'ゑ': 'え', 'ゔ': 'ぶ', 'てぃ': 'ち', 'でぃ': 'じ', 'とぅ': 'つ', 'どぅ': 'ず'}
+
+
 def pick_alias(v: Voice, prev_v: str | None, m: str) -> Oto | None:
-    cands = ([f'{prev_v} {m}'] if prev_v else []) + [f'- {m}', m, f'* {m}']
-    for c in cands:
-        for a in (c + v.suffix, c):
-            if a in v.bank:
-                return v.bank[a]
+    for mm in (m, FALLBACK.get(m)):
+        if not mm:
+            continue
+        cands = ([f'{prev_v} {mm}'] if prev_v else []) + [f'- {mm}', mm, f'* {mm}']
+        for c in cands:
+            for a in (c + v.suffix, c):
+                if a in v.bank:
+                    return v.bank[a]
     return None
 
 
@@ -170,6 +189,9 @@ def speak(v: Voice, kana: str, question: bool | None = None, energy: float = 1.0
     prev_v: str | None = None
     k = 0
     for i, m in enumerate(ms):
+        if m == '_space':
+            clock += 40
+            continue
         if m in ('_pause', '_end'):
             clock += 180 if m == '_pause' else 320
             prev_v = None

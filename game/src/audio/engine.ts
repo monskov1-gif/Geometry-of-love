@@ -20,6 +20,8 @@ export type { NoiseOptions, ToneOptions, Voice } from './voice';
 export interface AudioSettings {
   musicVolume: number;
   sfxVolume: number;
+  /** Japanese voice-over (0 = off). */
+  voiceVolume: number;
   muted: boolean;
 }
 
@@ -44,6 +46,10 @@ export class AudioEngine {
   private master!: GainNode;
   private musicBus!: GainNode;
   private sfxBus!: GainNode;
+  private voiceBus!: GainNode;
+  /** The voice line playing now; a new line or stopSpeech() cuts it. */
+  private speech: { src: AudioBufferSourceNode; ends: number } | null = null;
+  private speechToken = 0;
   private voices!: (dest: AudioNode) => Voice;
   private current: Player | null = null;
   /** Themes still sounding while they fade out under the new one. */
@@ -52,7 +58,7 @@ export class AudioEngine {
   /** The recorded theme playing now (null while a synthesised track or silence plays). */
   private recorded: { id: string; url: string; src: AudioBufferSourceNode; gain: GainNode } | null = null;
   private readonly buffers = new Map<string, Promise<AudioBuffer>>();
-  private settings: AudioSettings = { musicVolume: 0.55, sfxVolume: 0.8, muted: false };
+  private settings: AudioSettings = { musicVolume: 0.55, sfxVolume: 0.8, voiceVolume: 0.9, muted: false };
   private lastText = 0;
   /** 0..1: chance that the music "sticks" on a step (Mini-game 1 «Выход»). */
   private instability = 0;
@@ -87,6 +93,48 @@ export class AudioEngine {
     this.master.gain.setTargetAtTime(settings.muted ? 0 : 1, t, 0.05);
     this.musicBus.gain.setTargetAtTime(settings.musicVolume * 0.5, t, 0.05);
     this.sfxBus.gain.setTargetAtTime(settings.sfxVolume * 0.6, t, 0.05);
+    this.voiceBus.gain.setTargetAtTime(settings.voiceVolume, t, 0.05);
+  }
+
+  /**
+   * Plays a voice line (stopping the one before). Resolves with its length in seconds,
+   * or 0 when the voice is off, audio is locked or the file failed (reported).
+   */
+  async speak(url: string): Promise<number> {
+    this.stopSpeech();
+    if (!this.ctx || this.settings.muted || this.settings.voiceVolume <= 0) return 0;
+    const token = ++this.speechToken;
+    let buffer: AudioBuffer;
+    try {
+      buffer = await this.loadBuffer(url);
+    } catch (e) {
+      console.error(`[audio] voice line failed to load: ${url}`, e);
+      return 0;
+    }
+    if (token !== this.speechToken || !this.ctx) return 0; // the player moved on while it loaded
+    const src = this.ctx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(this.voiceBus);
+    src.start();
+    this.speech = { src, ends: this.ctx.currentTime + buffer.duration };
+    src.onended = () => {
+      if (this.speech?.src === src) this.speech = null;
+    };
+    return buffer.duration;
+  }
+
+  /** Seconds left of the voice line playing now. */
+  get speechLeft(): number {
+    return this.speech && this.ctx ? Math.max(0, this.speech.ends - this.ctx.currentTime) : 0;
+  }
+
+  stopSpeech(): void {
+    this.speechToken++;
+    if (!this.speech) return;
+    const { src } = this.speech;
+    this.speech = null;
+    src.onended = null;
+    src.stop();
   }
 
   /** Crossfades to a theme (aliases accepted); null fades to silence; the playing theme is kept. */
@@ -131,6 +179,9 @@ export class AudioEngine {
     this.master.connect(ctx.destination);
     this.musicBus = ctx.createGain();
     this.sfxBus = ctx.createGain();
+    // the voice skips the music low-pass: consonants need their highs
+    this.voiceBus = ctx.createGain();
+    this.voiceBus.connect(this.master);
     // Gentle low-pass: tames the harshest square-wave harmonics.
     const tone = ctx.createBiquadFilter();
     tone.type = 'lowpass';

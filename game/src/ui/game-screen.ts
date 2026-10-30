@@ -19,6 +19,7 @@ import { Stage } from './stage';
 import { chapterCardView } from './chapter-card';
 import { CutsceneLayer, type CutsceneRun } from './cutscene-host';
 import { getWorld } from '../world/instance';
+import { voiceFor } from '../content/voice';
 import { musicFor } from '../content/music-map';
 
 const BACKLOG_LIMIT = 200;
@@ -109,6 +110,8 @@ export class GameScreen {
 
     this.cutsceneLayer = new CutsceneLayer(this.stage.root, services.audio, (speaker, text) => {
       this.backlog.push({ speaker: speaker ? speakerName(speaker, this.runtime.state.flags) : null, text, kind: speaker ? 'speech' : 'narration' });
+      const voice = this.skipping ? null : voiceFor(speaker, text);
+      if (voice) void services.audio.speak(voice);
     });
     this.root = el(
       'div',
@@ -144,6 +147,8 @@ export class GameScreen {
 
   private show(p: Presentation): void {
     this.presentation = p;
+    // one voice at a time: whatever was being said stops when the story moves on
+    this.services.audio.stopSpeech();
     window.clearTimeout(this.revisionTimer);
     this.pendingRevision = null;
     const reduceMotion = this.services.settings.get().reduceMotion;
@@ -181,6 +186,11 @@ export class GameScreen {
           },
           blip ? () => this.services.audio.sfx(blip) : undefined,
         );
+        // Japanese voice-over under the Russian text (none while skipping)
+        if (p.textKind === 'speech' && !this.skipping) {
+          const voice = voiceFor(p.speaker, p.text);
+          if (voice) void this.services.audio.speak(voice);
+        }
         break;
       }
       case 'choice':
@@ -266,9 +276,11 @@ export class GameScreen {
     if (this.presentation.kind === 'line') this.services.meta.markRead(this.presentation.key);
     if (this.auto && !this.skipping) {
       window.clearTimeout(this.autoTimer);
+      // Auto waits for the voice to finish its line
+      const wait = Math.max(this.services.settings.get().autoDelayMs, this.services.audio.speechLeft * 1000 + 400);
       this.autoTimer = window.setTimeout(() => {
         if (this.auto && this.uiFocused && !this.dialogue.typing) this.advance();
-      }, this.services.settings.get().autoDelayMs);
+      }, wait);
     }
   }
 

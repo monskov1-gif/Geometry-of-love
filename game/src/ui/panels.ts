@@ -208,6 +208,7 @@ export function settingsView(store: SettingsStore): HTMLElement {
     el('h3', { class: 'pixel' }, 'Звук'),
     range('Музыка', 'musicVolume', 0, 1, 0.05, (v) => `${Math.round(v * 100)}%`),
     range('Звуки', 'sfxVolume', 0, 1, 0.05, (v) => `${Math.round(v * 100)}%`),
+    range('Голос (японский)', 'voiceVolume', 0, 1, 0.05, (v) => (v === 0 ? 'выкл.' : `${Math.round(v * 100)}%`)),
     toggle('Выключить весь звук', 'muted'),
     el('h3', { class: 'pixel' }, 'Доступность'),
     toggle('Уменьшить движение', 'reduceMotion'),

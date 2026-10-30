@@ -8,3 +8,4 @@ playwright-report/
 .claude/settings.local.json
 dist-e2e/
 .claude/worktrees/
+__pycache__/

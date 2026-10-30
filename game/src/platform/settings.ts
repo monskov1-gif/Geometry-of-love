@@ -13,6 +13,8 @@ export interface Settings {
   reduceMotion: boolean;
   musicVolume: number;
   sfxVolume: number;
+  /** Japanese voice-over volume; 0 turns the voice off (the text always stays). */
+  voiceVolume: number;
   muted: boolean;
 }
 
@@ -25,6 +27,7 @@ export const DEFAULT_SETTINGS: Settings = {
   reduceMotion: false,
   musicVolume: 0.6,
   sfxVolume: 0.8,
+  voiceVolume: 0.9,
   muted: false,
 };
 
