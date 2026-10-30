@@ -7,8 +7,10 @@ import { cutscenes } from '../content/cutscenes';
 import { Director, type DirectorHost } from '../world/director';
 import { MonitorHand } from '../world/monitor-hand';
 import { MelodyMonster } from '../world/melody-monster';
+import { EraserTool } from '../world/eraser-tool';
 import type { World3D } from '../world/world';
 import { el } from './dom';
+import { ERASED_NAME } from './panels';
 
 export interface CutsceneRun {
   done: Promise<void>;
@@ -25,6 +27,12 @@ function makeProp(name: string, world: World3D): Prop {
     const hand = new MonitorHand(world);
     const stop = world.addUpdater((dt) => hand.update(dt));
     return { act: (a, d, t) => hand.act(a, d, t), dispose: () => (stop(), hand.dispose()) };
+  }
+  if (name === 'eraser') {
+    // гл. 9: Melody's erasing tool
+    const tool = new EraserTool(world);
+    const stop = world.addUpdater((dt) => tool.update(dt));
+    return { act: (a, d, t) => tool.act(a, d, t), dispose: () => (stop(), tool.dispose()) };
   }
   if (name === 'melody-monster') {
     // гл. 14: she rises out of the floor where her figure stood
@@ -72,6 +80,7 @@ export class CutsceneLayer {
   private readonly flash: HTMLElement;
   private readonly bars: HTMLElement;
   private readonly caption: HTMLElement;
+  private readonly nameTag: HTMLElement;
   private readonly skipBtn: HTMLButtonElement;
   private director: Director | null = null;
 
@@ -84,6 +93,7 @@ export class CutsceneLayer {
     this.flash = el('div', { class: 'cs-flash' });
     this.bars = el('div', { class: 'cs-bars' }, el('div', { class: 'cs-bar cs-bar-top' }), el('div', { class: 'cs-bar cs-bar-bottom' }));
     this.caption = el('div', { class: 'cs-caption', 'aria-live': 'polite' });
+    this.nameTag = el('div', { class: 'cs-name-erase', 'aria-hidden': 'true' });
     this.skipBtn = el(
       'button',
       {
@@ -104,6 +114,7 @@ export class CutsceneLayer {
       this.fade,
       this.flash,
       this.caption,
+      this.nameTag,
       this.skipBtn,
     );
   }
@@ -114,11 +125,69 @@ export class CutsceneLayer {
     this.fade.style.opacity = '0';
     this.root.classList.remove('is-playing', 'has-bars');
     this.caption.replaceChildren();
+    this.nameTag.replaceChildren();
+    this.nameTag.classList.remove('is-visible');
+  }
+
+  /**
+   * гл. 9: «Имя погибшего исчезает из интерфейса». The name tag shows the
+   * character's name, then the letters are rubbed out one by one into the
+   * blank the rest of the interface shows from now on, and the tag fades.
+   */
+  private eraseName(actor: string, dur: number): Promise<void> {
+    const name = characters[actor]?.name ?? actor;
+    if (dur <= 0) {
+      this.nameTag.classList.remove('is-visible');
+      return Promise.resolve();
+    }
+    const letters = [...name].map((ch) => el('span', { class: 'cs-letter' }, ch));
+    this.nameTag.replaceChildren(...letters);
+    this.nameTag.style.setProperty('--accent', characters[actor]?.accent ?? 'var(--tape)');
+    this.nameTag.classList.add('is-visible');
+    const blank = [...ERASED_NAME][0] ?? '▒';
+    const hold = dur * 0.3;
+    const per = (dur * 0.5) / Math.max(1, letters.length);
+    letters.forEach((node, i) =>
+      window.setTimeout(() => {
+        node.textContent = blank;
+        node.classList.add('is-gone');
+      }, (hold + per * i) * 1000),
+    );
+    return new Promise((resolve) =>
+      window.setTimeout(() => {
+        this.nameTag.classList.remove('is-visible');
+        resolve();
+      }, dur * 1000),
+    );
+  }
+
+  /**
+   * Every scene plays on the 3D world. When the story stage behind it is a
+   * painted 2D view (ch03: the step before «Рука из монитора» leaves the app's
+   * notebook background in the reality space), the stage has detached and
+   * paused the world — the scene would direct an invisible room. Borrow it for
+   * the scene: lay it over the stage, run it, and hand it back after (the next
+   * Stage.render puts it in its own place or detaches it again).
+   */
+  private borrowWorld(world: World3D, reduceMotion: boolean): () => void {
+    if (world.root.isConnected) return () => {};
+    world.reduceMotion = reduceMotion;
+    world.root.dataset.borrowed = 'cutscene';
+    this.shakeTarget.append(world.root);
+    world.start();
+    return () => {
+      delete world.root.dataset.borrowed;
+      if (world.root.parentElement === this.shakeTarget) {
+        world.root.remove();
+        world.stop();
+      }
+    };
   }
 
   play(id: string, world: World3D, reduceMotion: boolean): CutsceneRun {
     const scene = cutscenes[id];
     if (!scene) throw new Error(`Неизвестная кат-сцена «${id}»`);
+    const giveBack = this.borrowWorld(world, reduceMotion);
     const props = new Map<string, Prop>();
     const host: DirectorHost = {
       world,
@@ -165,6 +234,7 @@ export class CutsceneLayer {
       },
       sfx: (s) => this.audio.sfx(s),
       music: (t) => this.audio.music(t),
+      eraseName: (actor, dur) => this.eraseName(actor, dur),
       prop: (name, action, dur, target) => {
         let p = props.get(name);
         if (!p) {
@@ -179,11 +249,13 @@ export class CutsceneLayer {
     this.root.classList.add('is-playing');
     const done = director.play(scene).finally(() => {
       for (const p of props.values()) p.dispose();
+      giveBack();
       // a scene may end on black or white: the next story step fades in from it
       this.fade.style.transition = 'opacity 700ms ease';
       this.fade.style.opacity = '0';
       this.root.classList.remove('is-playing', 'has-bars');
       this.caption.classList.remove('is-visible');
+      this.nameTag.classList.remove('is-visible');
       if (this.director === director) this.director = null;
     });
     return { done, skip: () => director.skip(), next: () => director.next(), stop: () => director.stop() };

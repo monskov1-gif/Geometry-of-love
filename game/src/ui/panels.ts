@@ -1,7 +1,7 @@
 // Panels opened over the game or title screen: choices, backlog,
 // save/load slots and settings. All of them only call back into the owner;
 // none of them changes story state on its own.
-import { characters } from '../content';
+import { characters, story } from '../content';
 import { ALL_SLOTS, type BacklogEntry, type SaveData, type SaveStore, type SlotId } from '../core/saves';
 import type { PresentedOption } from '../core/types';
 import type { Settings, SettingsStore } from '../platform/settings';
@@ -66,6 +66,24 @@ export function backlogView(entries: BacklogEntry[], flags: Readonly<Record<stri
 const SLOT_NAMES: Record<string, string> = { auto: 'Автосохранение', quick: 'Быстрое сохранение' };
 const slotName = (slot: SlotId) => SLOT_NAMES[slot] ?? `Слот ${slot.replace('slot-', '')}`;
 
+/**
+ * The line a save stops at (or the last one before it), so slots saved in the
+ * same chapter can be told apart. Read from the scene data, not stored in the save.
+ */
+export function savePreview(data: SaveData): string | null {
+  const { scene, index } = data.state.position;
+  const steps = story.scenes[scene]?.steps ?? [];
+  for (let i = Math.min(index, steps.length - 1); i >= 0; i--) {
+    const step = steps[i]!;
+    if (step.type !== 'say') continue;
+    const text = step.revision ?? step.text;
+    const short = text.length > 90 ? `${text.slice(0, 89).trimEnd()}…` : text;
+    const who = speakerName(step.speaker ?? null, data.state.flags);
+    return who ? `${who}: ${short}` : short;
+  }
+  return null;
+}
+
 function formatPlayTime(ms: number): string {
   const total = Math.floor(ms / 1000);
   const h = Math.floor(total / 3600);
@@ -95,11 +113,14 @@ export function saveLoadView(opts: SaveLoadOptions): HTMLElement {
         let info: HTMLElement;
         if (read.status === 'ok') {
           const d = read.data;
+          const chapter = d.chapter === null ? 'Вне глав' : `Глава ${d.chapter}`;
+          const preview = savePreview(d);
           info = el(
             'div',
             { class: 'slot-info' },
             el('strong', {}, d.sceneTitle),
-            el('span', {}, d.chapter === null ? 'Вне глав' : `Глава ${d.chapter}`),
+            d.sceneTitle.startsWith(chapter) ? null : el('span', {}, chapter),
+            preview ? el('span', { class: 'slot-preview', 'data-testid': 'slot-preview' }, `«${preview}»`) : null,
             el('span', {}, new Date(d.savedAt).toLocaleString('ru-RU')),
             el('span', {}, `Время игры: ${formatPlayTime(d.playTimeMs)}`),
           );

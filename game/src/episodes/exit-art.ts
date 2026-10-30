@@ -296,6 +296,16 @@ export interface PieceArt {
   oy: number;
 }
 
+/**
+ * Image box of a piece relative to its collision box: one outline pixel on
+ * each side, the standing surface on the collision top (toppings of cakes
+ * and blocks rise above it), the body hanging below.
+ */
+export function artFrame(p: Piece): { ox: number; oy: number; w: number; h: number } {
+  const top = (p.look === 'cake' || p.look === 'block' ? 3 : 0) + 1; // toppings + outline
+  return { ox: -1, oy: -top, w: p.w + 2, h: artDepth(p) + top + 1 };
+}
+
 const cache = new Map<string, PieceArt>();
 
 /** Cached art for a piece. `crack` (0..1) only matters for triangle tiles. */
@@ -304,9 +314,9 @@ export function pieceArt(p: Piece, P: Pal, crack = 0): PieceArt {
   const key = `${p.look}|${p.w}|${p.h}|${p.variant}|${stage}`;
   const hit = cache.get(key);
   if (hit) return hit;
-  const top = (p.look === 'cake' || p.look === 'block' ? 3 : 0) + 1; // toppings + outline
-  const { c, ctx } = canvas(p.w + 2, artDepth(p) + top + 1);
-  ctx.translate(1, top);
+  const frame = artFrame(p);
+  const { c, ctx } = canvas(frame.w, frame.h);
+  ctx.translate(-frame.ox, -frame.oy);
   switch (p.look) {
     case 'ground':
       ground(ctx, p.w, P);
@@ -341,7 +351,7 @@ export function pieceArt(p: Piece, P: Pal, crack = 0): PieceArt {
   }
   // dark edges for everything you can stand on (stickers in the sky have light ones)
   if (p.look !== 'ground' && p.look !== 'glass') outline(c, P.ink);
-  const art = { img: c, ox: -1, oy: -top };
+  const art = { img: c, ox: frame.ox, oy: frame.oy };
   cache.set(key, art);
   return art;
 }

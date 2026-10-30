@@ -4,5 +4,9 @@
 import type { Cutscene } from '../../world/director';
 import { pulledIn } from './pulled-in';
 import { melodyTransforms } from './melody-transforms';
+import { melodyLeaves } from './melody-leaves';
+import { erasureDetails, erasureFace, erasureGone, erasureLimbs } from './erasure';
 
-export const cutscenes: Record<string, Cutscene> = Object.fromEntries([pulledIn, melodyTransforms].map((c) => [c.id, c]));
+export const cutscenes: Record<string, Cutscene> = Object.fromEntries(
+  [pulledIn, melodyTransforms, melodyLeaves, erasureDetails, erasureFace, erasureLimbs, erasureGone].map((c) => [c.id, c]),
+);

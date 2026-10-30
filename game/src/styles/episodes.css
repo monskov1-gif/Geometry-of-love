@@ -562,3 +562,53 @@
   max-height: calc(100dvh - 8 * var(--space-4));
   overflow-y: auto;
 }
+
+/* Impossible task: the condition's own numbers flicker (episodes/quiz-glitch.ts).
+   Each number keeps a fixed slot; only its transform changes, so nothing reflows. */
+.quiz-prompt .quiz-glitch {
+  display: inline-block;
+  width: 4ch;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  position: relative;
+  z-index: 4;
+  pointer-events: none;
+  font-family: var(--font-pixel);
+  transform-origin: center;
+}
+
+.quiz-figure text.quiz-glitch {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.quiz-glitch[data-tone='red'] {
+  color: var(--correction-red);
+  fill: var(--correction-red);
+}
+
+.quiz-glitch[data-tone='ink'] {
+  color: var(--geometry-ink);
+  fill: var(--geometry-ink);
+}
+
+.quiz-glitch[data-tone='blue'] {
+  color: var(--geometry-line);
+  fill: var(--geometry-line);
+}
+
+.quiz-glitch[data-tone='pink'] {
+  color: var(--pink);
+  fill: var(--pink);
+}
+
+/* Read by screen readers only (the real condition behind the flicker). */
+.quiz-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

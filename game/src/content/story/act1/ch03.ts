@@ -119,6 +119,9 @@ export const chapter3 = defineScene({
     screen('close-dialog'),
     system('Закрыть «メロディのまほう»? [Да] [Нет]'),
     narrate('Дамео тянется к мышке.'),
+    // the cutscene empties the room; nobody from the CRT scenes may follow him inside
+    hide('melody'),
+    hide('dameo'),
     space('reality', 'C'),
     cutscene('pulled-in'),
 

@@ -187,14 +187,14 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await expect(page.locator('#app')).toHaveAttribute('data-space', 'app');
   await shot(page, '02-app-lesson');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
-  // The second and third evenings with Melody: isosceles triangles, areas.
+  // The second and third evenings with Melody: vectors (the board problem), planes and volumes.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
+  await solveQuiz(page, ['7', '12', { choice: '(6, −3, 1)' }, '7/3']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7', '32', '84']);
-  // A week later: the university lecture material, in the app.
+  await solveQuiz(page, [{ choice: '(3, −1, 2)' }, '6', '4/√6', '3,5', '3/2']);
+  // A week later: conics, integrals, curvature.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
+  await solveQuiz(page, ['8', { choice: 'Гипербола' }, '4/3', '32/5', '4/25']);
   await choose(page, /честно/);
   await shot(page, '03-choice');
   await choose(page, /Ты права/);
@@ -206,6 +206,8 @@ test('ending 3 «За пределами экрана»: the whole story with ev
   await startEpisode(page, 'Геометрические задачи');
   const quiz = page.getByTestId('episode');
   await solveQuiz(page, [{ choice: '70°' }, '20', { choice: 'Да' }]);
+  // the impossible task: the given angles in the condition itself flicker
+  await expect(quiz.locator('.quiz-prompt .quiz-glitch')).toHaveCount(2);
   await quiz.getByLabel('Ответ', { exact: true }).fill('-20');
   await quiz.getByRole('button', { name: 'Проверить' }).click();
   await expect(quiz.locator('.quiz-feedback')).toHaveText(/Неверно/);
@@ -285,12 +287,12 @@ test('ending 2 «Мой любимый ученик»: stay with Melody; all fou
   await startEpisode(page, 'Геометрические задачи');
   await solveQuiz(page, ['90', { choice: '3' }, '8']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['70', '50', { choice: 'Углы при основании' }, '12']);
+  await solveQuiz(page, ['7', '12', { choice: '(6, −3, 1)' }, '7/3']);
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['18', '20', '7', '32', '84']);
-  // A week later: the university lecture material, in the app.
+  await solveQuiz(page, [{ choice: '(3, −1, 2)' }, '6', '4/√6', '3,5', '3/2']);
+  // A week later: conics, integrals, curvature.
   await startEpisode(page, 'Геометрические задачи');
-  await solveQuiz(page, ['3.5', '6', '1.5', '8', { choice: 'Гипербола' }, '4/3']);
+  await solveQuiz(page, ['8', { choice: 'Гипербола' }, '4/3', '32/5', '4/25']);
   await choose(page, /Отшутиться/);
   await choose(page, /Ревнуешь/);
   await winByHook(page, 'Выход');
@@ -353,6 +355,86 @@ test('manual save survives a page reload and loads the same line', async ({ page
   await page.getByTestId('load').click();
   await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Загрузить' }).click();
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
+});
+
+test('save slots 2 and 3 keep their own lines across a reload and load back independently', async ({ page }) => {
+  test.setTimeout(180_000); // four game starts; slow on a software rasteriser under parallel load
+  await page.getByTestId('new-game').click();
+  await expect(page.getByTestId('chapter-card')).toBeVisible();
+  await passCards(page);
+  const dialogue = page.getByTestId('dialogue');
+  const line = dialogue.locator('.dialogue-text');
+  const saveInto = async (slot: string) => {
+    await page.getByTestId('tool-save').click();
+    const panel = page.getByRole('dialog', { name: 'Сохранить' });
+    await panel.locator(`[data-slot="${slot}"]`).getByRole('button', { name: 'Сохранить' }).click();
+    await expect(panel.locator(`[data-slot="${slot}"]`)).toHaveAttribute('data-status', 'ok');
+    await panel.getByRole('button', { name: 'Закрыть' }).click();
+  };
+  for (let i = 0; i < 2; i++) await dialogue.click();
+  const second = await line.textContent();
+  await saveInto('slot-2');
+  for (let i = 0; i < 3; i++) await dialogue.click();
+  const third = await line.textContent();
+  expect(third).not.toBe(second);
+  await saveInto('slot-3');
+  // the quick slot is separate and stays untouched by manual saves
+  await page.getByTestId('tool-quicksave').click();
+  await page.getByTestId('tool-save').click();
+  await expect(page.locator('[data-slot="slot-2"]')).toContainText((second ?? '').slice(0, 20));
+  await expect(page.locator('[data-slot="slot-3"]')).toContainText((third ?? '').slice(0, 20));
+  await shot(page, '11-save-slots');
+  await page.reload();
+  await passIntro(page);
+  for (const [slot, text] of [
+    ['slot-2', second],
+    ['slot-3', third],
+  ] as const) {
+    await page.getByTestId('load').click();
+    await page.locator(`[data-slot="${slot}"]`).getByRole('button', { name: 'Загрузить' }).click();
+    await expect(line).toHaveText(text ?? '');
+    // back to the title for the next slot
+    await page.getByTestId('tool-menu').click();
+    await page.getByRole('dialog', { name: 'Меню' }).getByRole('button', { name: 'Главное меню' }).click();
+    await page.getByRole('dialog', { name: 'Подтверждение' }).getByRole('button', { name: 'Выйти' }).click();
+    await expect(page.getByTestId('new-game')).toBeVisible();
+  }
+  // loading in-game from the load panel works for a slot too
+  await page.getByTestId('load').click();
+  await page.locator('[data-slot="slot-3"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(line).toHaveText(third ?? '');
+  await page.getByTestId('tool-load').click();
+  await page.getByRole('dialog', { name: 'Загрузить' }).locator('[data-slot="slot-2"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(line).toHaveText(second ?? '');
+});
+
+test('«Рука из монитора» plays in the 3D room, not over the painted app view (regression)', async ({ page }) => {
+  // A save on the last line before the cutscene: the CRT shows the exit dialog (ch03).
+  await page.evaluate(() => {
+    const stage = {
+      background: 'app-notebook', lighting: 'night', variant: null, music: 'app-uneasy', shot: null,
+      screen: { view: 'close-dialog', notices: [] }, space: 'app', phase: 'B',
+      characters: [{ id: 'dameo', pose: 'tired', position: 'desk' }, { id: 'melody', pose: 'angry', position: 'center' }],
+    };
+    const state = { position: { scene: 'ch03', index: 87 }, flags: {}, relationships: {}, traits: {}, decisions: [], stage, ending: null };
+    localStorage.setItem('gol:save:slot-1', JSON.stringify({ schema: 5, savedAt: new Date().toISOString(), playTimeMs: 0, sceneTitle: 'ch03', chapter: 3, state, backlog: [] }));
+  });
+  await page.getByTestId('load').click();
+  await page.locator('[data-slot="slot-1"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(page.getByTestId('dialogue')).toContainText('Дамео тянется к мышке.');
+  await page.getByTestId('dialogue').click();
+  await expect(page.locator('.cutscene-layer.is-playing')).toBeVisible();
+  // the world (Dameo's room) is on screen while the scene plays — it once ran detached, unseen
+  const world = page.locator('.stage .world-view');
+  await expect(world).toBeVisible();
+  const box = await world.boundingBox();
+  expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
+  await shot(page, '03b-pulled-in');
+  // skipping ends inside the game, with nobody from the room left on the stage
+  await page.getByTestId('cutscene-skip').click();
+  await expect(page.getByTestId('dialogue')).toContainText('Пол под ногами');
+  await expect(page.locator('#app')).toHaveAttribute('data-space', 'game');
+  await expect(page.locator('.cast-slot')).toHaveCount(0);
 });
 
 test('corrupted save is reported, not loaded', async ({ page }) => {

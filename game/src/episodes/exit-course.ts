@@ -182,18 +182,59 @@ export function buildCourse(): Course {
 
 const cyc = (t: number, period: number, phase: number) => (((t / period + phase) % 1) + 1) % 1;
 
+export interface Point {
+  x: number;
+  y: number;
+}
+
+/** The point a trajectory follows: the top centre of the collision box (where the feet stand). */
+export const anchorOf = (r: Rect): Point => ({ x: r.x + r.w / 2, y: r.y });
+
+/** Where along its path (0..1) a moving piece is at time t; 0 for pieces that do not move. */
+export function pathParam(m: Motion, t: number): number {
+  if (m.kind === 'slide') return (1 - Math.cos(2 * Math.PI * cyc(t, m.period, m.phase))) / 2;
+  if (m.kind === 'orbit') return cyc(m.dir * t, m.period, m.phase);
+  return 0;
+}
+
+/**
+ * Anchor of a piece at path parameter s. The one definition of every path:
+ * the collision box (pieceRect) and the drawn track (trackPoints) both use it.
+ */
+export function pathPoint(p: Piece, s: number): Point {
+  const m = p.motion;
+  if (m.kind === 'slide') return { x: p.x + p.w / 2 + m.dx * s, y: p.y + m.dy * s };
+  if (m.kind === 'orbit') return { x: m.cx + m.r * Math.cos(2 * Math.PI * s), y: m.cy + m.r * Math.sin(2 * Math.PI * s) };
+  return { x: p.x + p.w / 2, y: p.y };
+}
+
 /** Where a piece is at time t. */
 export function pieceRect(p: Piece, t: number): Rect {
+  const a = pathPoint(p, pathParam(p.motion, t));
+  return { x: a.x - p.w / 2, y: a.y, w: p.w, h: p.h };
+}
+
+/** One full cycle of a moving piece, s (null for pieces that do not move). */
+export function motionPeriod(m: Motion): number | null {
+  return m.kind === 'slide' || m.kind === 'orbit' ? m.period : null;
+}
+
+/**
+ * Dots of the drawn trajectory, about `spacing` px apart: exactly the anchors
+ * the piece passes through (a segment for slides, a closed circle for orbits).
+ * Empty for pieces that do not move.
+ */
+export function trackPoints(p: Piece, spacing = 6): Point[] {
   const m = p.motion;
   if (m.kind === 'slide') {
-    const k = (1 - Math.cos(2 * Math.PI * cyc(t, m.period, m.phase))) / 2;
-    return { x: p.x + m.dx * k, y: p.y + m.dy * k, w: p.w, h: p.h };
+    const n = Math.max(1, Math.ceil(Math.hypot(m.dx, m.dy) / spacing));
+    return Array.from({ length: n + 1 }, (_, i) => pathPoint(p, i / n));
   }
   if (m.kind === 'orbit') {
-    const a = 2 * Math.PI * (m.dir * (t / m.period) + m.phase);
-    return { x: m.cx + m.r * Math.cos(a) - p.w / 2, y: m.cy + m.r * Math.sin(a), w: p.w, h: p.h };
+    const n = Math.max(12, Math.ceil((2 * Math.PI * m.r) / spacing));
+    return Array.from({ length: n }, (_, i) => pathPoint(p, i / n));
   }
-  return { x: p.x, y: p.y, w: p.w, h: p.h };
+  return [];
 }
 
 /** Is a blinking piece open at time t (always true for other motions)? */

@@ -17,7 +17,7 @@
 // Развитие: побег на рассвете без Пушина, «раз, два…» Ластика №2, список в
 // кармане (флаг ch7.memory-list), искушение Дамео — её слова звучат как то, о
 // чём он мечтал.
-import { background, branch, card, choice, defineScene, effects, fx, goto, hide, label, music, narrate, rewritten, say, sfx, shot, show, space, system, think } from '../../../core/script';
+import { background, branch, card, choice, cutscene, defineScene, effects, goto, hide, label, music, narrate, rewritten, say, shot, show, space, system, think } from '../../../core/script';
 
 export const chapter9 = defineScene({
   id: 'ch09',
@@ -63,28 +63,32 @@ export const chapter9 = defineScene({
     say('eraser-1', 'Он не твой. Мы — не твои. Никто не твой!'),
     narrate('Мелоди вздыхает, как вздыхают над тетрадью с одной и той же ошибкой. И достаёт из-за спины инструмент стирания.'),
     narrate('Он похож на школьный ластик — большой, белый, новый, с ещё острыми краями. В её руке он выглядит игрушечным. От этого только хуже.'),
-    show('dameo', 'scared', 'left'),
+    // two to a spot never (core/validate findStagingClashes): Dameo steps in where the third twin stood
+    hide('eraser-3'),
+    show('dameo', 'scared', 'right'),
     say('dameo', 'Мелоди, не надо! Я вернусь! Слышишь, я сам вернусь, не трогай его!'),
     say('melody', 'Ты вернёшься, конечно. Но сначала мне нужно навести порядок.'),
 
-    // ---- the erasure
-    sfx('erase'),
-    show('eraser-1', 'default', 'left', 'erasing'),
+    // ---- the erasure, staged on the corridor before each line that tells it (content/cutscenes/erasure.ts)
     hide('dameo'),
+    show('eraser-1', 'default', 'left', 'erasing'),
+    cutscene('erasure-details'),
     narrate('Она проводит ластиком один раз — коротко, аккуратно, как стирают лишнюю чёрточку. Сначала исчезают мелкие детали тела: уголок, шов на боку, надпись производителя, которую никто никогда не читал.'),
     say('eraser-1', 'Эй… эй, что…'),
-    sfx('erase'),
+    cutscene('erasure-face'),
     narrate('Второе движение. Пропадают черты лица. Глаза становятся пятнами. Рот — бледной полосой, которая ещё пытается двигаться.'),
     say('eraser-1', 'Братья! Помогите! Я не… я не чувствую…'),
+    // the brothers take the middle and the right: Melody steps out of the frame (the scenes bring her back to erase)
+    hide('melody'),
     show('eraser-2', 'scared', 'center'),
     show('eraser-3', 'scared', 'right'),
     say('eraser-3', 'Держись! Держись за меня!'),
     say('eraser-2', 'Отпусти его! Отпусти! Мелоди, мы больше не будем, слышишь, мы больше никогда…'),
     narrate('Братья вцепляются в него с двух сторон, тянут к себе. Их руки проходят насквозь там, где уже ничего нет.'),
-    sfx('erase'),
+    cutscene('erasure-limbs'),
     narrate('Третье движение. Конечности. Он больше не может держаться — нечем. Мелоди продолжает стирать его, не повышая голоса. Она говорит что-то тихое и ровное, как колыбельную.'),
     say('melody', 'Тш-ш. Не дёргайся. Будет криво.'),
-    fx('glitch'),
+    cutscene('erasure-gone'),
     hide('eraser-1'),
     effects({ setFlag: 'erased.eraser-1' }),
     system('Объект удалён. Ошибок не обнаружено.'),

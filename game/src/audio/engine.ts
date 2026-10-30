@@ -58,6 +58,8 @@ export class AudioEngine {
   /** The recorded theme playing now (null while a synthesised track or silence plays). */
   private recorded: { id: string; url: string; src: AudioBufferSourceNode; gain: GainNode } | null = null;
   private readonly buffers = new Map<string, Promise<AudioBuffer>>();
+  /** A one-shot song that has played to its end: asking for it again keeps its follow-up theme. */
+  private songDone: string | null = null;
   private settings: AudioSettings = { musicVolume: 0.55, sfxVolume: 0.8, voiceVolume: 0.9, muted: false };
   private lastText = 0;
   /** 0..1: chance that the music "sticks" on a step (Mini-game 1 «Выход»). */
@@ -139,7 +141,11 @@ export class AudioEngine {
 
   /** Crossfades to a theme (aliases accepted); null fades to silence; the playing theme is kept. */
   music(requestedId: string | null): void {
-    const id = requestedId === null ? null : resolveTrackId(requestedId);
+    let id = requestedId === null ? null : resolveTrackId(requestedId);
+    // the story keeps asking for the scene's music on every step: a finished song is not sung again
+    const follow = id ? RECORDED[id]?.then : undefined;
+    if (id && id === this.songDone && follow) id = resolveTrackId(follow);
+    else if (this.songDone && id !== resolveTrackId(RECORDED[this.songDone]?.then ?? '')) this.songDone = null; // the story moved on
     if (id === this.requested && (this.current?.id === id || this.recorded?.id === id || !this.ctx)) return;
     this.requested = id;
     if (!this.ctx) return; // will start on unlock
@@ -243,9 +249,18 @@ export class AudioEngine {
         if (this.requested !== id || !this.ctx) return; // something else was asked for meanwhile
         const src = ctx.createBufferSource();
         src.buffer = buffer;
-        src.loop = true;
+        src.loop = !spec.then;
         src.loopStart = spec.loopStart;
         src.loopEnd = spec.loopEnd ?? buffer.duration;
+        if (spec.then) {
+          const next = spec.then;
+          src.onended = () => {
+            if (this.recorded?.src !== src) return; // replaced or stopped meanwhile
+            this.songDone = id;
+            this.requested = null;
+            this.music(next);
+          };
+        }
         const gain = ctx.createGain();
         const t = ctx.currentTime;
         gain.gain.setValueAtTime(0.0001, t);

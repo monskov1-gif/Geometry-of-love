@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { initialState } from '../../game/src/core/runtime';
-import { migrate, SAVE_SCHEMA, SaveStore, type KeyValueStore, type SaveData } from '../../game/src/core/saves';
+import { ALL_SLOTS, MANUAL_SLOT_COUNT, migrate, SAVE_SCHEMA, SaveStore, type KeyValueStore, type SaveData, type SlotId } from '../../game/src/core/saves';
+import { savePreview } from '../../game/src/ui/panels';
 import { story } from '../../game/src/content';
 
 function memoryStore(): KeyValueStore & { map: Map<string, string> } {
@@ -100,11 +101,114 @@ describe('migrate', () => {
     const in2 = (scene: string, index: number) =>
       story.scenes[scene]!.steps[migrate({ ...current, schema: 3, state: { ...current.state, position: { scene, index }, stage: stage3 as typeof current.state.stage } }).state.position.index];
     expect(in2('ch02-day2', 4)).toMatchObject({ type: 'say', kind: 'narration' });
-    expect((in2('ch02-day2', 4) as { text: string }).text).toMatch(/^Задача простая/);
+    expect((in2('ch02-day2', 4) as { text: string }).text).toMatch(/^Преподаватель стучит мелом по первой задаче/);
     expect(in2('ch02-day2', 6)).toMatchObject({ type: 'show', character: 'dameo', pose: 'angry' });
     expect(in2('ch02-day4', 4)).toMatchObject({ type: 'show', character: 'melody', pose: 'neutral' });
     // other scenes keep their indices
     const other = migrate({ ...current, schema: 3, state: { ...current.state, position: { scene: 'ch02', index: 60 }, stage: stage3 as typeof current.state.stage } });
     expect(other.state.position.index).toBe(60);
+  });
+
+  it('keeps schema-4 positions in ch03, ch08 and ch09 on the same line', () => {
+    const current = save('x');
+    const step = (scene: string, index: number) => {
+      const up = migrate({ ...current, schema: 4, state: { ...current.state, position: { scene, index }, decisions: [{ scene, index, option: 'x' }] } });
+      expect(up.schema).toBe(SAVE_SCHEMA);
+      expect(up.state.decisions[0]!.index).toBe(up.state.position.index);
+      return story.scenes[scene]!.steps[up.state.position.index] as { type: string; text?: string; cutscene?: string };
+    };
+    // ch03: before the cleared stage nothing moves; the cutscene and the first line inside follow it
+    expect(step('ch03', 87)).toMatchObject({ type: 'say', text: 'Дамео тянется к мышке.' });
+    expect(step('ch03', 89)).toMatchObject({ type: 'cutscene', cutscene: 'pulled-in' });
+    expect(step('ch03', 93).text).toMatch(/^Пол под ногами/);
+    // ch08: every line of her anger, the calculator after it, the hunt
+    expect(step('ch08', 69).text).toMatch(/^Спасибо, Пушин/);
+    expect(step('ch08', 72)).toMatchObject({ type: 'say', text: 'А это — предательство.' });
+    expect(step('ch08', 73).text).toMatch(/^Я дала им всё/);
+    expect(step('ch08', 74).text).toMatch(/^Он думает, что ему есть куда идти/);
+    expect(step('ch08', 75).text).toMatch(/^Если ему некуда будет идти/);
+    expect(step('ch08', 76).text).toMatch(/^Что… что ты имеешь в виду/);
+    expect(step('ch08', 77)).toMatchObject({ type: 'say', text: 'Я поговорю с ним. Потом. Сначала — с ними.' });
+    expect(step('ch08', 79).text).toMatch(/^Она уходит/);
+    expect(step('ch08', 87).text).toMatch(/^Внимание! Внеплановый урок/);
+    // ch09: Dameo's plea, the strokes, the brothers, what is left
+    expect(step('ch09', 36).text).toMatch(/^Он похож на школьный ластик/);
+    expect(step('ch09', 38).text).toMatch(/^Мелоди, не надо!/);
+    expect(step('ch09', 43).text).toMatch(/^Она проводит ластиком/);
+    expect(step('ch09', 47).text).toMatch(/^Братья! Помогите!/);
+    expect(step('ch09', 50)).toMatchObject({ type: 'say', text: 'Держись! Держись за меня!' });
+    expect(step('ch09', 60).text).toMatch(/^Ластик исчезает полностью/);
+    // other scenes keep their indices
+    expect(migrate({ ...current, schema: 4, state: { ...current.state, position: { scene: 'ch10', index: 12 } } }).state.position.index).toBe(12);
+  });
+});
+
+describe('save slots (author bug 18: every slot must work on its own, not only the quick one)', () => {
+  const at = (slot: string, index: number): SaveData => {
+    const s = save(`2026-02-0${1 + (index % 9)}T00:00:00.000Z`);
+    return { ...s, sceneTitle: slot, state: { ...s.state, position: { scene: 'ch01', index } } };
+  };
+
+  it('every slot (auto, quick and all numbered ones) round-trips its own save under its own key', () => {
+    const store = memoryStore();
+    const saves = new SaveStore(store);
+    ALL_SLOTS.forEach((slot, k) => expect(saves.write(slot, at(slot, k + 1))).toEqual({ ok: true }));
+    expect(ALL_SLOTS.length).toBe(MANUAL_SLOT_COUNT + 2);
+    expect(new Set(store.map.keys()).size).toBe(ALL_SLOTS.length);
+    // a fresh store over the same storage (= a page reload) reads every slot back unchanged
+    const reloaded = new SaveStore(store);
+    ALL_SLOTS.forEach((slot, k) => {
+      const read = reloaded.read(slot);
+      expect(read.status).toBe('ok');
+      if (read.status === 'ok') {
+        expect(read.data.sceneTitle).toBe(slot);
+        expect(read.data.state.position).toEqual({ scene: 'ch01', index: k + 1 });
+      }
+    });
+  });
+
+  it('overwriting one slot leaves the others alone', () => {
+    const saves = new SaveStore(memoryStore());
+    saves.write('slot-2', at('slot-2', 2));
+    saves.write('slot-3', at('slot-3', 3));
+    saves.write('quick', at('quick', 4));
+    saves.write('slot-2', at('slot-2', 7));
+    const index = (slot: SlotId) => {
+      const r = saves.read(slot);
+      return r.status === 'ok' ? r.data.state.position.index : r.status;
+    };
+    expect([index('slot-2'), index('slot-3'), index('quick')]).toEqual([7, 3, 4]);
+  });
+
+  it('deleting one slot empties only that slot', () => {
+    const saves = new SaveStore(memoryStore());
+    for (const slot of ALL_SLOTS) saves.write(slot, at(slot, 1));
+    expect(saves.remove('slot-4')).toEqual({ ok: true });
+    for (const slot of ALL_SLOTS) expect(saves.read(slot).status).toBe(slot === 'slot-4' ? 'empty' : 'ok');
+  });
+
+  it('a corrupted slot is reported, leaves its neighbours alone, and can be overwritten or deleted', () => {
+    const store = memoryStore();
+    const saves = new SaveStore(store);
+    saves.write('slot-1', at('slot-1', 1));
+    saves.write('slot-3', at('slot-3', 3));
+    store.map.set('gol:save:slot-2', '{"schema":4,"savedAt":"x"');
+    expect(saves.read('slot-2')).toEqual({ status: 'corrupted', reason: 'invalid JSON' });
+    expect(saves.read('slot-1').status).toBe('ok');
+    expect(saves.read('slot-3').status).toBe('ok');
+    expect(saves.write('slot-2', at('slot-2', 2)).ok).toBe(true);
+    expect(saves.read('slot-2').status).toBe('ok');
+    store.map.set('gol:save:slot-2', 'garbage');
+    expect(saves.remove('slot-2')).toEqual({ ok: true });
+    expect(saves.read('slot-2').status).toBe('empty');
+  });
+
+  it('a slot shows the line it stopped at, so slots of one chapter can be told apart', () => {
+    const steps = story.scenes.ch01!.steps;
+    const i = steps.findIndex((s) => s.type === 'say');
+    const s = save('x');
+    const preview = savePreview({ ...s, state: { ...s.state, position: { scene: 'ch01', index: i } } });
+    expect(preview).toContain((steps[i] as { text: string }).text.slice(0, 30));
+    expect(savePreview({ ...s, state: { ...s.state, position: { scene: 'no-such-scene', index: 3 } } })).toBeNull();
   });
 });
