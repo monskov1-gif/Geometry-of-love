@@ -237,8 +237,8 @@ export const exitLevel3D: LocationDef3D = {
       }
       pixelText(ctx, 'СТАРТ', w / 2, 3, 11, '#30243b', { align: 'center' });
     });
-    ck.gloss.add(roundedBox(1.7, 0.48, 0.06, 0.03, 2), CANDY.cherry, 0, 2.72, PAD_BACK + 0.32);
-    kit.pl(1.6, 0.4, kit.texM('exitStart', banner, { roughness: 0.7, ...nt }), 0, 2.72, PAD_BACK + 0.355);
+    ck.gloss.add(roundedBox(1.7, 0.48, 0.06, 0.03, 2), CANDY.cherry, 0, 3.12, PAD_BACK + 0.32);
+    kit.pl(1.6, 0.4, kit.texM('exitStart', banner, { roughness: 0.7, ...nt }), 0, 3.12, PAD_BACK + 0.355);
     bunting(ck, [-2.6, 2.3, PAD_BACK + 0.4], [-6.2, 1.15, -4.2], 9, 0.3);
     bunting(ck, [2.6, 2.3, PAD_BACK + 0.4], [6.4, 1.8, PAD_BACK + 0.2], 10, 0.35);
     bunting(ck, [-2.4, 2.8, PAD_BACK + 0.38], [2.4, 2.8, PAD_BACK + 0.38], 12, 0.25);
@@ -317,8 +317,13 @@ export const exitLevel3D: LocationDef3D = {
     const roomPane = new THREE.Mesh(new THREE.PlaneGeometry(5.4, 3.6), roomMat);
     roomPane.position.set(1.2, 13.4, -11.45);
     root.add(roomPane);
-    const halo = kit.halo(0xffd8b0, 9, 0.22, 1.2, 13.4, -11.3);
-    kit.lamp('roomGlow', { glows: [halo], on: { day: 1, dim: 0.6, glitch: 0.8 } });
+    // a warm frame of light around the room seen through the glass (no additive halo: it bloomed white)
+    for (const [w, h, y] of [
+      [5.7, 0.12, 15.25],
+      [5.7, 0.12, 11.55],
+    ] as const)
+      ck.vc.add(new THREE.BoxGeometry(w, h, 0.04), 0x8a6a68, 1.2, y, -11.43);
+    for (const x of [-1.65, 4.05]) ck.vc.add(new THREE.BoxGeometry(0.12, 3.8, 0.04), 0x8a6a68, x, 13.4, -11.43);
 
     // ---- light: soft fill, pink and blue accents, the warm glow from above in the evening of the level
     kit.lamp('exitFill', { light: kit.pointLight(0xfff4f0, 2.4, 18, 0, 3.2, 3, 0.8), on: { day: 1, dim: 0.35, glitch: 0.15 } });

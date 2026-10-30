@@ -111,7 +111,7 @@ export const corridor3D: LocationDef3D = {
     // ---- ceiling: bunting swags and candy pendants
     for (let x = XL; x < XR - 0.1; x += 4) bunting(ck, [x, H - 0.08, -1.0], [x + 4, H - 0.08, -1.0], 9, 0.4);
     const pend = [CANDY.pink, CANDY.sunshine, CANDY.blue, CANDY.grass, CANDY.grape];
-    [-8, -4, 0, 4, 8].forEach((x, i) => kit.pendant(`corrPend${i}`, x, H, -0.8, { drop: 0.45, shade: pend[i]!, kind: 'dome', on: { day: 0.8, dim: 0.2, glitch: i % 2 ? 0.6 : 0 }, intensity: 2.6, color: 0xfff0e8 }));
+    [-8, -4, 0, 4, 8].forEach((x, i) => kit.pendant(`corrPend${i}`, x, H, -0.8, { drop: 0.45, shade: pend[i]!, kind: 'dome', on: { day: 0.8, dim: 0.2, glitch: i % 2 ? 0.6 : 0 }, intensity: 1.8, color: 0xfff0e8 }));
 
     // ---- stickers everywhere; eyes in the later phase
     stickerBomb(ck, XL, XR, 0.15, 0.85, BACK + 0.01, 90, { min: 0.1, max: 0.22 });
@@ -120,7 +120,63 @@ export const corridor3D: LocationDef3D = {
     sideStickers(ck, XL, BACK, 3, 0.3, 2.7, 1, 50, 0.03);
     sideStickers(ck, XR, BACK, 3, 0.3, 2.7, -1, 50, 0.03);
 
-    kit.lamp('corrFill', { light: kit.pointLight(0xfff4f0, 5, 16, 0, 2.6, 2, 0.8), on: { day: 1, dim: 0.3, glitch: 0.1 } });
+    // ---- the near side and the far ends: the corridor is furnished all around, so the
+    // long shot (and every glide to it) never turns onto a bare side. The near wall
+    // stands behind the dialogue camera (z = FRONT); in its own frame it faces the room.
+    const wallM = kit.texM('corrWall', stripeWall('corridor', CANDY.mint, CANDY.lavender, [CANDY.pink, CANDY.tangerine, CANDY.cobalt, CANDY.sunshine]), { roughness: 0.9, ...nt });
+    kit.withT(0, FRONT, Math.PI, () => {
+      kit.wall(XL, XR, H, 0, wallM, [], { tile: 1.0 });
+      kit.wainscot([[XL, XR]], 0, 0.9, kit.texM('corrWains', polkaWall('corrWains', CANDY.lilac), { roughness: 0.8, ...nt }), { railColor: CANDY.pink });
+      ck.gloss.add(new THREE.BoxGeometry(XR - XL, 0.12, 0.06, Math.round((XR - XL) * 6), 1, 1), (px) => (Math.floor((px + 50) * 3) % 2 ? CANDY.pink : CANDY.paper), 0, H - 0.06, 0.03, { perFace: true });
+      ck.gloss.add(new THREE.BoxGeometry(XR - XL, 0.16, 0.04, Math.round((XR - XL) * 5), 1, 1), (px) => RAINBOW[Math.floor((px + 50) * 2.5) % RAINBOW.length]!, 0, 0.08, 0.02, { perFace: true });
+      const near: [number, number, number][] = [
+        [-6.0, CANDY.sunshine, 3],
+        [-1.2, CANDY.magenta, 5],
+        [5.2, CANDY.aqua, 7],
+      ];
+      for (const [x, c, st] of near) {
+        candyDoor(ck, x, 0, 1.0, 2.1, c, { sticker: st });
+        RAINBOW.forEach((rc, i) => ck.gloss.add(new THREE.TorusGeometry(0.82 - i * 0.07, 0.04, 8, 28, Math.PI), rc, x, 2.15, 0.05, { sz: 0.5 }));
+        puffyShape(ck, 'heart', x, 2.62, 0.1, 0.15, CANDY.cherry);
+      }
+      lockers(ck, -9.2, 6, 0);
+      lockers(ck, -4.6, 6, 0);
+      lockers(ck, 1.0, 7, 0);
+      lockers(ck, 6.6, 6, 0);
+      for (const [x, c] of [
+        [-3.0, CANDY.grass],
+        [3.0, CANDY.cobalt],
+      ] as const) {
+        ck.gloss.add(new THREE.BoxGeometry(1.1, 0.7, 0.04), c, x, 2.35, 0.02);
+        ck.vc.add(new THREE.BoxGeometry(1.0, 0.6, 0.01), CANDY.paper, x, 2.35, 0.045);
+        stickerBomb(ck, x - 0.45, x + 0.45, 2.1, 2.6, 0.05, 14, { min: 0.1, max: 0.2, wrong: 0.05 });
+      }
+      smileClock(ck, 8.4, 2.5, 0, 0.22);
+      stickerBomb(ck, XL, XR, 1.95, 2.85, 0, 70, { wrong: 0.03 });
+      stickerBomb(ck, XL, XR, 0.15, 0.85, 0.01, 70, { min: 0.1, max: 0.22 });
+      for (let i = 0; i < 7; i++) block(ck, XL + 1.4 + i * 2.8 + r(), 0, 0.8 + r() * 0.3, 0.22 + r() * 0.1, { ry: r() * 2, seed: 960 + i });
+    });
+    // the far right end: a big double door with a rainbow, the way on; the left end: a mural board
+    kit.withT(XR, 0, -Math.PI / 2, () => {
+      candyDoor(ck, -0.4, 0, 0.9, 2.2, CANDY.grape, { sticker: 4 });
+      candyDoor(ck, 0.6, 0, 0.9, 2.2, CANDY.pink, { sticker: 6 });
+      RAINBOW.forEach((rc, i) => ck.gloss.add(new THREE.TorusGeometry(1.3 - i * 0.07, 0.045, 8, 32, Math.PI), rc, 0.1, 2.25, 0.05, { sz: 0.5 }));
+      lockers(ck, -2.2, 3, 0);
+      lockers(ck, 2.0, 4, 0);
+    });
+    kit.withT(XL, 0, Math.PI / 2, () => {
+      // local x runs from -FRONT (near) to -BACK (far)
+      ck.gloss.add(new THREE.BoxGeometry(3.4, 1.5, 0.05), CANDY.tangerine, -2.6, 1.7, 0.03);
+      ck.vc.add(new THREE.BoxGeometry(3.2, 1.3, 0.01), CANDY.babyPink, -2.6, 1.7, 0.06);
+      stickerBomb(ck, -4.1, -1.1, 1.15, 2.25, 0.065, 30, { min: 0.14, max: 0.3, wrong: 0.05 });
+      candyDoor(ck, -5.0, 0, 1.0, 2.1, CANDY.cobalt, { sticker: 2 });
+      lockers(ck, 0.6, 2, 0, 1.5);
+    });
+    // the ceiling over the near half: more bunting and pendants
+    for (let x = XL; x < XR - 0.1; x += 4) bunting(ck, [x, H - 0.08, 3.0], [x + 4, H - 0.08, 3.0], 9, 0.4);
+    for (let i = 0; i < 4; i++) bunting(ck, [XL + 2 + i * 5, H - 0.1, -2.0], [XL + 2 + i * 5, H - 0.1, 5.6], 14, 0.35);
+
+    kit.lamp('corrFill', { light: kit.pointLight(0xfff4f0, 3.6, 16, 0, 2.6, 2, 0.8), on: { day: 1, dim: 0.3, glitch: 0.1 } });
     kit.lamp('corrPink', { light: kit.pointLight(CANDY.pink, 2.5, 8, -6, 2.2, -1, 1.2), on: ACCENT_ON });
     kit.lamp('corrBlue', { light: kit.pointLight(CANDY.blue, 2.5, 8, 6, 2.2, -1, 1.2), on: ACCENT_ON });
     kit.lamp('corrCode', { light: kit.pointLight(0x39ff88, 4, 12, 0, 2.2, -1, 1.0), on: { day: 0, dim: 0, glitch: 1 } });
