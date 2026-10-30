@@ -356,6 +356,7 @@ test('manual save survives a page reload and loads the same line', async ({ page
 });
 
 test('save slots 2 and 3 keep their own lines across a reload and load back independently', async ({ page }) => {
+  test.setTimeout(180_000); // four game starts; slow on a software rasteriser under parallel load
   await page.getByTestId('new-game').click();
   await expect(page.getByTestId('chapter-card')).toBeVisible();
   await passCards(page);
