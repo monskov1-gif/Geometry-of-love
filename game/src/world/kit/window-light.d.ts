@@ -8,6 +8,8 @@ export interface LookRenderer {
 
 export class LookLayers implements LookRenderer {
   constructor(gl: THREE.WebGLRenderer, opts?: { bloomPass?: unknown; exposure?: number; bloom?: number });
+  /** Exposure and bloom strength the layers are added to. */
+  base: { exposure: number; bloom: number };
   setLayer(name: string, values: Record<string, number>): void;
   clearLayer(name: string): void;
   apply(): void;
@@ -16,6 +18,6 @@ export class LookLayers implements LookRenderer {
 export class WindowLight {
   constructor(opts: { renderer: LookRenderer; canvas: HTMLCanvasElement; low?: boolean; settings?: unknown });
   readonly canvas: HTMLCanvasElement;
-  update(dt: number, ctx: { world: { windowLights: unknown[] }; player: { position: THREE.Vector3 } | null; camera: THREE.Camera }): void;
+  update(dt: number, ctx: { world: { windowLights: unknown[] }; player: { position: THREE.Vector3 } | null; camera: THREE.Camera; keyScene?: boolean; active?: boolean }): void;
   dispose?(): void;
 }

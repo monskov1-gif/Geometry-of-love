@@ -66,6 +66,27 @@ export class Actor {
   /** 0…1 the figure is warped (her anger, ch08): jerks, skews and stretches every frame. */
   warp = 0;
   private warpT = 0;
+  /** Steady warp from the story's figure effect ('distorted'), under any cutscene warp. */
+  private baseWarp = 0;
+  private storyFxValue: string | null = null;
+  /** No jerking figure for players who asked for reduced motion. */
+  reduceMotion = false;
+
+  /**
+   * The story's figure effect (show(..., fx)): 'distorted' keeps her body slightly
+   * out of shape; 'erasing' makes sure the eraser has visibly taken something (the
+   * staged cutscenes take more; a save loaded mid-scene still shows a damaged figure).
+   */
+  set storyFx(fx: string | null) {
+    if (fx === this.storyFxValue) return;
+    this.storyFxValue = fx;
+    this.baseWarp = fx === 'distorted' ? 0.3 : 0;
+    if (fx === 'erasing' && this.erasure.details < 0.5) this.erasure.details = 0.5;
+  }
+
+  get storyFx(): string | null {
+    return this.storyFxValue;
+  }
 
   constructor(readonly id: string) {
     this.height = HEIGHTS[id] ?? 1.6;
@@ -285,7 +306,8 @@ export class Actor {
 
   /** Her body jerks out of shape: random skews, a stretched neck, a twitching width. Back to normal at warp 0. */
   private applyWarp(dt: number): void {
-    if (this.warp <= 0) {
+    const w = this.reduceMotion ? 0 : Math.max(this.warp, this.baseWarp);
+    if (w <= 0) {
       if (this.warpT) {
         this.warpT = 0;
         this.plane.rotation.z = 0;
@@ -295,7 +317,6 @@ export class Actor {
       return;
     }
     this.warpT += dt;
-    const w = this.warp;
     // stepped, not smooth: the figure snaps between wrong shapes
     const step = Math.floor(this.warpT * 14);
     const r = (n: number) => {

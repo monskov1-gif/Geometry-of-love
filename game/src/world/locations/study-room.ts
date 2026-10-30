@@ -14,6 +14,7 @@ import { binderRow, bunting, cubbies, kidChair, kidTable, mobile, ringRug, sideS
 import { floaters, glitchLayer, glitter, type Fx } from '../candy/fx';
 import { alphabetFrieze, checkerFloor, polkaWall, stripeWall } from '../candy/textures';
 import { CANDY, css, LOUD, RAINBOW } from '../candy/palette';
+import { CANDY_LOOK } from '../candy/look';
 import { ACCENT_ON, CANDY_AMBIENT, CANDY_STATES } from '../candy/states';
 import { candyRoom } from '../candy/room';
 import { fillTest, inCircle, pixelText } from '../candy/shapes';
@@ -200,7 +201,7 @@ export const studyRoom3D: LocationDef3D = {
     mobile(ck, 3.0, H, -1.4, 1.4);
     mobile(ck, -3.2, H, -1.0, 1.2);
     const pend = [CANDY.pink, CANDY.blue, CANDY.sunshine];
-    [-2.4, 0.4, 3.2].forEach((x, i) => kit.pendant(`studyPend${i}`, x, H, -0.6, { drop: 0.55, shade: pend[i]!, kind: 'dome', on: { day: 0.7, dim: 0.2, glitch: i === 1 ? 0.5 : 0 }, intensity: 3, color: 0xfff0e8 }));
+    [-2.4, 0.4, 3.2].forEach((x, i) => kit.pendant(`studyPend${i}`, x, H, -0.6, { drop: 0.55, shade: pend[i]!, kind: 'dome', on: { day: 0.7, dim: 0.2, glitch: i === 1 ? 0.5 : 0 }, intensity: 2.0, color: 0xfff0e8 }));
 
     // ---- stickers everywhere
     stickerBomb(ck, XL + 0.2, -1.9, 0.3, 2.6, BACK, 70, { wrong: 0.03 });
@@ -211,7 +212,7 @@ export const studyRoom3D: LocationDef3D = {
     sideStickers(ck, XR, BACK, 3, 0.3, 2.8, -1, 60, 0.03);
 
     // ---- light
-    kit.lamp('studyFill', { light: kit.pointLight(0xfff4f0, 5, 14, 0, 2.8, 1.5, 0.8), on: { day: 1, dim: 0.3, glitch: 0.15 } });
+    kit.lamp('studyFill', { light: kit.pointLight(0xfff4f0, 3.6, 14, 0, 2.8, 1.5, 0.8), on: { day: 1, dim: 0.3, glitch: 0.15 } });
     kit.lamp('studyPink', { light: kit.pointLight(CANDY.pink, 2.5, 7, -4.5, 2.2, -1.5, 1.2), on: ACCENT_ON });
     kit.lamp('studyBlue', { light: kit.pointLight(CANDY.blue, 2.5, 7, 4.5, 2.2, -1.5, 1.2), on: ACCENT_ON });
     kit.lamp('studyCode', { light: kit.pointLight(0x39ff88, 3, 10, 0, 2.2, -1.5, 1.0), on: { day: 0, dim: 0, glitch: 1 } });
@@ -228,6 +229,7 @@ export const studyRoom3D: LocationDef3D = {
     });
     return {
       kit,
+      look: CANDY_LOOK,
       shots: {
         wide: { pos: [0, 1.65, 4.6], look: [0, 1.4, -1.6], fov: 50 },
         board: { pos: [0.6, 1.55, 1.4], look: [0, 1.6, BACK], fov: 46 },

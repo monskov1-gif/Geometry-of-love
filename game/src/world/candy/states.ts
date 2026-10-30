@@ -8,7 +8,7 @@ import type { SkyMood } from './textures';
 export const CANDY_STATES = ['day', 'dim', 'glitch'] as const;
 
 export const CANDY_AMBIENT = {
-  day: { sky: 0xfff4fb, ground: 0xb890d8, hemi: 1.1, fill: 0xfff0e0, fillI: 0.75, bg: 0x9fdcff },
+  day: { sky: 0xfff4fb, ground: 0xb890d8, hemi: 0.95, fill: 0xfff0e0, fillI: 0.6, bg: 0x9fdcff },
   dim: { sky: 0xb8b4c4, ground: 0x4a4458, hemi: 0.8, fill: 0xc8c4d8, fillI: 0.3, bg: 0x7a7490 },
   glitch: { sky: 0x8a6aa8, ground: 0x180c20, hemi: 0.6, fill: 0x60ffa0, fillI: 0.3, bg: 0x1a0c24 },
 };
