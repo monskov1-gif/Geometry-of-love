@@ -14,6 +14,7 @@ import { binderRow, bunting, cubbies, kidChair, kidTable, mobile, ringRug, sideS
 import { floaters, glitchLayer, glitter, type Fx } from '../candy/fx';
 import { alphabetFrieze, checkerFloor, polkaWall, stripeWall } from '../candy/textures';
 import { CANDY, css, LOUD, RAINBOW } from '../candy/palette';
+import { CANDY_LOOK } from '../candy/look';
 import { ACCENT_ON, CANDY_AMBIENT, CANDY_STATES } from '../candy/states';
 import { candyRoom } from '../candy/room';
 import { fillTest, inCircle, pixelText } from '../candy/shapes';
@@ -228,6 +229,7 @@ export const studyRoom3D: LocationDef3D = {
     });
     return {
       kit,
+      look: CANDY_LOOK,
       shots: {
         wide: { pos: [0, 1.65, 4.6], look: [0, 1.4, -1.6], fov: 50 },
         board: { pos: [0.6, 1.55, 1.4], look: [0, 1.6, BACK], fov: 46 },

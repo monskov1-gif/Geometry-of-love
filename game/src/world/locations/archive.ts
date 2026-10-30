@@ -15,6 +15,7 @@ import { floaters, glitchLayer, glitter, type Fx } from '../candy/fx';
 import { checkerFloor, polkaWall, stripeWall } from '../candy/textures';
 import { CANDY, PASTEL } from '../candy/palette';
 import { CANDY_AMBIENT, CANDY_STATES } from '../candy/states';
+import { CANDY_LOOK } from '../candy/look';
 import { candyRoom } from '../candy/room';
 import { bareBulb } from '../props';
 import { pixelText } from '../candy/shapes';
@@ -157,6 +158,7 @@ export const archive3D: LocationDef3D = {
     });
     return {
       kit,
+      look: CANDY_LOOK,
       shots: {
         wide: { pos: [0, 1.7, 4.6], look: [0, 1.5, -1.6], fov: 50 },
         computer: { pos: [-1.2, 1.5, 0.6], look: [-1.7, 1.3, BACK], fov: 44 },

@@ -13,6 +13,7 @@ import { bunting, candyDoor, lockers, mushroom, sideStickers, smileClock, sticke
 import { confetti, floaters, glitchLayer, glitter, type Fx } from '../candy/fx';
 import { checkerFloor, polkaWall, stripeWall } from '../candy/textures';
 import { CANDY, LOUD, RAINBOW } from '../candy/palette';
+import { CANDY_LOOK } from '../candy/look';
 import { ACCENT_ON, CANDY_AMBIENT, CANDY_STATES } from '../candy/states';
 import { candyRoom } from '../candy/room';
 
@@ -137,6 +138,7 @@ export const corridor3D: LocationDef3D = {
     });
     return {
       kit,
+      look: CANDY_LOOK,
       shots: {
         wide: { pos: [0, 1.65, 4.6], look: [0, 1.35, -1.4], fov: 50 },
         long: { pos: [-8.5, 1.6, 2.6], look: [2, 1.2, -1.2], fov: 52 },

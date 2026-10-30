@@ -11,7 +11,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { LookLayers, WindowLight } from './kit/window-light';
 import { Actor, type ActorFacing } from './actor';
 import { locations3D } from './locations';
-import type { LocationBuild, Shot, Vec3 } from './types';
+import { DEFAULT_LOOK, type LocationBuild, type Shot, type Vec3 } from './types';
 import type { Emotion } from '../render/sprites';
 
 export interface CastMember {
@@ -39,6 +39,17 @@ function isSoftwareGL(gl: THREE.WebGLRenderer): boolean {
   const ext = ctx.getExtension('WEBGL_debug_renderer_info');
   const name = ext ? String(ctx.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
   return /swiftshader|llvmpipe|software/i.test(name);
+}
+
+/**
+ * Who the window-light response (exposure, bloom, lens flares near a lamp or a
+ * window) follows. Only a player walking in an interactive episode: in dialogue
+ * the light must not depend on who stands where. (It used to follow Dameo on the
+ * story stage, so every time he stepped in next to a candy pendant the frame got
+ * brighter — chapter 9 went almost white as the cast changed.)
+ */
+export function lightSubject(follow: { position: THREE.Vector3 } | null): { player: { position: THREE.Vector3 } | null; keyScene: boolean } {
+  return follow ? { player: { position: follow.position }, keyScene: false } : { player: null, keyScene: true };
 }
 
 export class World3D {
@@ -85,7 +96,7 @@ export class World3D {
     this.gl = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: false, powerPreference: 'high-performance' });
     this.gl.outputColorSpace = THREE.SRGBColorSpace;
     this.gl.toneMapping = THREE.ACESFilmicToneMapping;
-    this.gl.toneMappingExposure = 1.05;
+    this.gl.toneMappingExposure = DEFAULT_LOOK.exposure;
     this.gl.localClippingEnabled = true; // actors being erased are clipped by a plane
     // ?low=1 / ?low=0 force the mode (screenshots, debugging); otherwise software GL → low.
     const forced = new URLSearchParams(location.search).get('low');
@@ -93,7 +104,7 @@ export class World3D {
     if (!this.low) {
       this.composer = new EffectComposer(this.gl);
       this.composer.addPass(new RenderPass(this.scene, this.camera));
-      this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.5, 0.8);
+      this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), DEFAULT_LOOK.bloom, 0.5, DEFAULT_LOOK.threshold);
       this.composer.addPass(this.bloom);
       this.composer.addPass(new OutputPass());
     }
@@ -124,6 +135,7 @@ export class World3D {
       this.scene.add(this.group);
       this.build = def.build(this.group, { low: this.low });
       this.locationId = id;
+      this.applyLook(this.build.look);
       this.variant = null;
       for (const a of this.actors.values()) this.scene.remove(a.group);
       this.actors.clear();
@@ -141,6 +153,19 @@ export class World3D {
       this.build!.setVariant?.(variant);
     }
     this.start();
+  }
+
+  /**
+   * The location's own exposure and bloom become the base the window-light layer
+   * adds to. Set once per location (never per step): a story re-sending the same
+   * background or switching its state must not change the camera.
+   */
+  private applyLook(look: LocationBuild['look']): void {
+    const l = { ...DEFAULT_LOOK, ...look };
+    this.look.base = { exposure: l.exposure, bloom: l.bloom };
+    this.look.clearLayer('windowLight');
+    if (this.bloom) this.bloom.threshold = l.threshold;
+    this.look.apply();
   }
 
   private disposeLocation(): void {
@@ -425,8 +450,7 @@ export class World3D {
     this.applyCamera(base, [this.panX + sway[0], sway[1], sway[2]]);
     for (const u of this.updaters) u(dt);
     for (const a of this.actors.values()) a.update(dt, this.camera);
-    const player = this.follow ?? this.actors.get('dameo') ?? null;
-    this.windowLight.update(dt, { world: b.kit, player: player ? { position: player.position } : null, camera: this.camera });
+    this.windowLight.update(dt, { world: b.kit, ...lightSubject(this.follow), camera: this.camera });
     this.look.apply();
     if (this.composer) this.composer.render(dt);
     else this.gl.render(this.scene, this.camera);
