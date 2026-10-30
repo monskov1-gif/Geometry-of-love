@@ -355,6 +355,56 @@ test('manual save survives a page reload and loads the same line', async ({ page
   await expect(dialogue.locator('.dialogue-text')).toHaveText(text ?? '');
 });
 
+test('save slots 2 and 3 keep their own lines across a reload and load back independently', async ({ page }) => {
+  await page.getByTestId('new-game').click();
+  await expect(page.getByTestId('chapter-card')).toBeVisible();
+  await passCards(page);
+  const dialogue = page.getByTestId('dialogue');
+  const line = dialogue.locator('.dialogue-text');
+  const saveInto = async (slot: string) => {
+    await page.getByTestId('tool-save').click();
+    const panel = page.getByRole('dialog', { name: 'Сохранить' });
+    await panel.locator(`[data-slot="${slot}"]`).getByRole('button', { name: 'Сохранить' }).click();
+    await expect(panel.locator(`[data-slot="${slot}"]`)).toHaveAttribute('data-status', 'ok');
+    await panel.getByRole('button', { name: 'Закрыть' }).click();
+  };
+  for (let i = 0; i < 2; i++) await dialogue.click();
+  const second = await line.textContent();
+  await saveInto('slot-2');
+  for (let i = 0; i < 3; i++) await dialogue.click();
+  const third = await line.textContent();
+  expect(third).not.toBe(second);
+  await saveInto('slot-3');
+  // the quick slot is separate and stays untouched by manual saves
+  await page.getByTestId('tool-quicksave').click();
+  await page.getByTestId('tool-save').click();
+  await expect(page.locator('[data-slot="slot-2"]')).toContainText((second ?? '').slice(0, 20));
+  await expect(page.locator('[data-slot="slot-3"]')).toContainText((third ?? '').slice(0, 20));
+  await shot(page, '11-save-slots');
+  await page.reload();
+  await passIntro(page);
+  for (const [slot, text] of [
+    ['slot-2', second],
+    ['slot-3', third],
+  ] as const) {
+    await page.getByTestId('load').click();
+    await page.locator(`[data-slot="${slot}"]`).getByRole('button', { name: 'Загрузить' }).click();
+    await expect(line).toHaveText(text ?? '');
+    // back to the title for the next slot
+    await page.getByTestId('tool-menu').click();
+    await page.getByRole('dialog', { name: 'Меню' }).getByRole('button', { name: 'Главное меню' }).click();
+    await page.getByRole('dialog', { name: 'Подтверждение' }).getByRole('button', { name: 'Выйти' }).click();
+    await expect(page.getByTestId('new-game')).toBeVisible();
+  }
+  // loading in-game from the load panel works for a slot too
+  await page.getByTestId('load').click();
+  await page.locator('[data-slot="slot-3"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(line).toHaveText(third ?? '');
+  await page.getByTestId('tool-load').click();
+  await page.getByRole('dialog', { name: 'Загрузить' }).locator('[data-slot="slot-2"]').getByRole('button', { name: 'Загрузить' }).click();
+  await expect(line).toHaveText(second ?? '');
+});
+
 test('corrupted save is reported, not loaded', async ({ page }) => {
   await page.evaluate(() => localStorage.setItem('gol:save:slot-2', '{oops'));
   await page.getByTestId('load').click();

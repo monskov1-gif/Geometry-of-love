@@ -6,9 +6,9 @@ import { spriteFrame } from '../render/sprites';
 import { mix, rng, shade } from '../render/painter';
 import { pieceArt, type Pal } from './exit-art';
 import { buildSky } from './exit-sky';
-import { BLINK_WARN, blinkOn, blinkWarning, CRUMBLE_TIME, pieceRect, VIEW_H, VIEW_W, type Course, type Piece } from './exit-course';
+import { BLINK_WARN, blinkOn, blinkWarning, CRUMBLE_TIME, pieceRect, trackPoints, VIEW_H, VIEW_W, type Course, type Piece, type Point } from './exit-course';
 import type { RunState } from './exit-run';
-import { bitmap, disc, HEART, poly, px, ring, shape, SPARKLE, SPARKLE_S, type Ctx } from './exit-pixels';
+import { bitmap, disc, HEART, poly, px, shape, SPARKLE, SPARKLE_S, type Ctx } from './exit-pixels';
 
 const PARALLAX = 0.6;
 
@@ -45,7 +45,6 @@ export function createScene(ctx: Ctx, course: Course, P: Pal, reduceMotion: bool
   const toScreen = (y: number) => Math.round(y - camY);
 
   const drawHub = (cx: number, cy: number, radius: number, t: number, dir: number) => {
-    ring(ctx, cx, toScreen(cy), radius, P.paper, true);
     const turn = dir * t * 0.9;
     for (let k = 0; k < 8; k++) {
       const a = turn + (k / 8) * Math.PI * 2;
@@ -64,15 +63,20 @@ export function createScene(ctx: Ctx, course: Course, P: Pal, reduceMotion: bool
     px(ctx, cx + 5, toScreen(cy) + 1, 2, 1, P.pink);
   };
 
-  const drawTrack = (p: Piece) => {
+  // Dotted trajectories of moving pieces: exactly the anchors their collision
+  // boxes pass through (trackPoints), drawn once per path (a wheel's seats share one).
+  const tracks = new Map<string, Point[]>();
+  course.pieces.forEach((p, i) => {
     const m = p.motion;
-    if (m.kind !== 'slide') return;
-    const a = pieceRect(p, 0);
-    const steps = Math.ceil(Math.hypot(m.dx, m.dy) / 6);
-    for (let i = 0; i <= steps; i++) {
-      const k = i / steps;
-      px(ctx, a.x + p.w / 2 + m.dx * k, toScreen(a.y + m.dy * k + 4), 2, 2, i % 2 ? P.paper : P.pink);
-    }
+    if (m.kind === 'orbit') tracks.set(`orbit:${m.cx},${m.cy},${m.r}`, trackPoints(p));
+    else if (m.kind === 'slide') tracks.set(`slide:${i}`, trackPoints(p));
+  });
+  const drawTracks = () => {
+    for (const points of tracks.values())
+      points.forEach((pt, i) => {
+        const y = toScreen(pt.y);
+        if (y >= -2 && y <= VIEW_H + 2) px(ctx, pt.x - 1, y - 1, 2, 2, i % 2 ? P.paper : P.pink);
+      });
   };
 
   const drawFlag = (p: Piece, lit: boolean, t: number) => {
@@ -228,7 +232,7 @@ export function createScene(ctx: Ctx, course: Course, P: Pal, reduceMotion: bool
         if (on) bitmap(ctx, s.c % 2 ? SPARKLE : SPARKLE_S, s.x, y, { x: P.candy[s.c]!, o: '#ffffff' });
       }
       drawGlass(t);
-      for (const p of course.pieces) drawTrack(p);
+      drawTracks();
       const hubs = new Map<string, { cx: number; cy: number; r: number; dir: number }>();
       for (const p of course.pieces)
         if (p.motion.kind === 'orbit') hubs.set(`${p.motion.cx},${p.motion.cy}`, { cx: p.motion.cx, cy: p.motion.cy, r: p.motion.r, dir: p.motion.dir });
