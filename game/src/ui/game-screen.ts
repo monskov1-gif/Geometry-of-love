@@ -149,6 +149,7 @@ export class GameScreen {
     this.presentation = p;
     // one voice at a time: whatever was being said stops when the story moves on
     this.services.audio.stopSpeech();
+    if (p.kind !== 'line') this.stage.showPortrait(null);
     window.clearTimeout(this.revisionTimer);
     this.pendingRevision = null;
     const reduceMotion = this.services.settings.get().reduceMotion;
@@ -173,6 +174,7 @@ export class GameScreen {
         const speed = this.skipping ? 0 : this.services.settings.get().textSpeed;
         const name = speakerName(p.speaker, this.runtime.state.flags);
         this.stage.setSpeaking(p.speaker);
+        this.stage.showPortrait(p.textKind === 'speech' || p.textKind === 'thought' ? p.speaker : null);
         const blip = p.textKind === 'narration' || p.textKind === 'thought' ? null : 'text';
         this.dialogue.show(
           { speaker: name, accent, text: p.text, kind: p.textKind },

@@ -11,7 +11,9 @@
    "ja": "見て。二つの辺が等しいと、底角も等しくなるの。ふたごみたいでしょ？片方が行くところに、もう片方もついていくの。",
    "yomi": "みて。 ふたつの へんが ひとしいと、 ていかくも ひとしく なるの。 ふたごみたいでしょ？ かたほうが いく ところに、 もう かたほうも ついていくの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.8,
+   "voice": "melody-soft"
   },
   "1462479422": {
    "speaker": "ruler",
@@ -59,7 +61,9 @@
    "ja": "ダメオくん。こんにちは。",
    "yomi": "だめおくん。 こんにちは。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 1.85,
+   "voice": "satsuki"
   },
   "46845bcff9": {
    "speaker": "dameo",
@@ -83,7 +87,9 @@
    "ja": "ダメオくん、前にも言いましたよね。行きません。ごめんなさい。",
    "yomi": "だめおくん、 まえにも いいましたよね。 いきません。 ごめんなさい。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.5,
+   "voice": "satsuki"
   },
   "f3df4b0868": {
    "speaker": "dameo",
@@ -107,7 +113,9 @@
    "ja": "そう、誰とでも話します。だから…こういうふうになってほしくないんです。お願いだから、もうやめてください。",
    "yomi": "そう、 だれとでも はなします。 だから、 こういう ふうに なって ほしく ないんです。 おねがい だから、 もう やめて ください。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.01,
+   "voice": "satsuki"
   },
   "1ffe25cb2e": {
    "speaker": "satsuki",
@@ -119,7 +127,9 @@
    "ja": "授業があるので、もう行きますね。",
    "yomi": "じゅぎょうが あるので、 もう いきますね。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.39,
+   "voice": "satsuki"
   },
   "96556fe10c": {
    "speaker": "satsuki",
@@ -131,7 +141,9 @@
    "ja": "絶対落とす。ほんとに、幾何落とす。証明を見てても、ただの棒にしか見えないの。",
    "yomi": "ぜったい おとす。 ほんとに、 きか おとす。 しょうめいを みてても、 ただの ぼうにしか みえないの。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.09,
+   "voice": "satsuki"
   },
   "7bba4c5da5": {
    "speaker": "satsuki",
@@ -143,7 +155,9 @@
    "ja": "今すぐ家庭教師が必要なの。ちゃんと説明してくれる人。偉そうにしない人ね。じゃないと試験、絶対通らない。",
    "yomi": "いますぐ かていきょうしが ひつようなの。 ちゃんと せつめいして くれる ひと。 えらそうに しない ひとね。 じゃないと しけん、 ぜったい とおらない。",
    "emotion": "tense",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.53,
+   "voice": "satsuki"
   },
   "defa1422bc": {
    "speaker": "dameo",
@@ -167,7 +181,9 @@
    "ja": "ありがとう、ダメオくん。本当に。気持ちはうれしいです。でも、家庭教師はもう見つけたんです。九月に。",
    "yomi": "ありがとう、 だめおくん。 ほんとうに。 きもちは うれしいです。 でも、 かていきょうしは もう みつけたんです。 くがつに。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.92,
+   "voice": "satsuki"
   },
   "f45cc725be": {
    "speaker": "satsuki",
@@ -179,7 +195,9 @@
    "ja": "それと…わたし、お付き合いとかには興味がないんです。わかってくれますよね？誤解がないように、ちゃんと言っておきたくて。",
    "yomi": "それと、 わたし、 おつきあいとかには きょうみが ないんです。 わかって くれますよね？ ごかいが ないように、 ちゃんと いって おきたくて。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.34,
+   "voice": "satsuki"
   },
   "55628802a3": {
    "speaker": "dameo",
@@ -215,7 +233,9 @@
    "ja": "やっほー！わたし、メロディ！きみが幾何と仲良くなれるように、お手伝いするね！",
    "yomi": "やっほー！ わたし、 めろでぃ！ きみが きかと なかよく なれるように、 おてつだい するね！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.31,
+   "voice": "melody-soft"
   },
   "dedad593e0": {
    "speaker": "melody",
@@ -227,7 +247,9 @@
    "ja": "まずは自己紹介しよう！この欄に名前を入れてね。なんて呼べばいいか知りたいな！",
    "yomi": "まずは じこしょうかい しよう！ この らんに なまえを いれてね。 なんて よべば いいか しりたいな！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.53,
+   "voice": "melody-soft"
   },
   "9f31668314": {
    "speaker": "melody",
@@ -239,7 +261,9 @@
    "ja": "ダメオくん！すてきな名前！覚えたよ。わたし、なーんでも覚えちゃうんだから！",
    "yomi": "だめおくん！ すてきな なまえ！ おぼえたよ。 わたし、 なーんでも おぼえちゃうんだから！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.34,
+   "voice": "melody-soft"
   },
   "657bb28ebe": {
    "speaker": "melody",
@@ -251,7 +275,9 @@
    "ja": "名無しさん？ふふっ。そんなのだめだよ、名前はみんなにあるんだから。",
    "yomi": "ななしさん？ ふふっ。 そんなの だめだよ、 なまえは みんなに あるんだから。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.8,
+   "voice": "melody-soft"
   },
   "c765ededbb": {
    "speaker": "melody",
@@ -263,7 +289,9 @@
    "ja": "ほら！ダメオくん。こっちのほうがずっといいね。パソコンにそう登録されてたみたい。ちょっとのぞいちゃった、ごめんね！",
    "yomi": "ほら！ だめおくん。 こっちの ほうが ずっと いいね。 ぱそこんに そう とうろく されてた みたい。 ちょっと のぞいちゃった、 ごめんね！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.11,
+   "voice": "melody-soft"
   },
   "1c97c7ba22": {
    "speaker": "melody",
@@ -275,7 +303,9 @@
    "ja": "まずは短いレッスンをいくつかと、かんたんな問題からね。準備はいい？",
    "yomi": "まずは みじかい れっすんを いくつかと、 かんたんな もんだいからね。 じゅんびは いい？",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.73,
+   "voice": "melody-soft"
   },
   "a8f6e0abe8": {
    "speaker": "dameo",
@@ -299,7 +329,9 @@
    "ja": "本格的なのがいいってことは、もう頭いいんだ？じゃあすぐ終わっちゃうね！ためしてみよっか？",
    "yomi": "ほんかくてきなのが いいって ことは、 もう あたま いいんだ？ じゃあ すぐ おわっちゃうね！ ためして みよっか？",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.61,
+   "voice": "melody-soft"
   },
   "d294d98f7e": {
    "speaker": "melody",
@@ -312,7 +344,9 @@
    "ja": "やったー！全問正解！ダメオくん、すっごく頭いいね！",
    "yomi": "やったー！ ぜんもん せいかい！ だめおくん、 すっごく あたま いいね！",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.67,
+   "voice": "melody-soft"
   },
   "4a8182daa3": {
    "speaker": "melody",
@@ -324,7 +358,9 @@
    "ja": "でも二問目、最初ちょっと考えこんでたよね。見てたよ。大丈夫、次はもっと早くなるから。",
    "yomi": "でも にもんめ、 さいしょ ちょっと かんがえこんでたよね。 みてたよ。 だいじょうぶ、 つぎは もっと はやく なるから。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.24,
+   "voice": "melody-soft"
   },
   "8cf65b64ee": {
    "speaker": "dameo",
@@ -348,7 +384,9 @@
    "ja": "もちろん！そうすれば、どこが得意で、どこを練習すればいいかわかるでしょ。わたし、きみの先生なんだから！",
    "yomi": "もちろん！ そうすれば、 どこが とくいで、 どこを れんしゅう すれば いいか わかるでしょ。 わたし、 きみの せんせい なんだから！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.63,
+   "voice": "melody-soft"
   },
   "13652c7fca": {
    "speaker": "melody",
@@ -360,7 +398,9 @@
    "ja": "今日はここまで！夜ふかししちゃだめだよ？画面ばっかり見てると目が疲れちゃうからね。明日もきてね、待ってるから！",
    "yomi": "きょうは ここまで！ よふかし しちゃ だめだよ？ がめん ばっかり みてると めが つかれちゃうからね。 あしたも きてね、 まってるから！",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.45,
+   "voice": "melody-soft"
   },
   "4d16b57af5": {
    "speaker": "melody",
@@ -372,7 +412,9 @@
    "ja": "ダメオくん！帰ってきてくれた！二十二時間と十一分ぶりだよ。ちゃんと数えてたんだから！",
    "yomi": "だめおくん！ かえって きてくれた！ にじゅうにじかんと じゅういっぷん ぶりだよ。 ちゃんと かぞえてたんだから！",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.77,
+   "voice": "melody-soft"
   },
   "e9f7a7f2b7": {
    "speaker": "melody",
@@ -384,7 +426,9 @@
    "ja": "なんだか元気ないね。何かあった？",
    "yomi": "なんだか げんき ないね。 なにか あった？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.16,
+   "voice": "melody-soft"
   },
   "050a114fb9": {
    "speaker": "melody",
@@ -396,7 +440,9 @@
    "ja": "そっか。話したくないなら、話さなくていいよ。でも、落ちこんでるのはわかるよ。キーボードの打ち方が、すっごく強いもん。",
    "yomi": "そっか。 はなしたく ないなら、 はなさなくて いいよ。 でも、 おちこんでるのは わかるよ。 きーぼーどの うちかたが、 すっごく つよいもん。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.43,
+   "voice": "melody-soft"
   },
   "a07b6c0684": {
    "speaker": "dameo",
@@ -420,7 +466,9 @@
    "ja": "ひどい！わざと間違ったこと教えるなんて、卑怯だよ。みんな、きみがうらやましいだけなんだよ。",
    "yomi": "ひどい！ わざと まちがった こと おしえるなんて、 ひきょうだよ。 みんな、 きみが うらやましい だけなんだよ。",
    "emotion": "angry",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.17,
+   "voice": "melody-soft"
   },
   "f122ef9426": {
    "speaker": "dameo",
@@ -444,7 +492,9 @@
    "ja": "きみが頑張ってることが、だよ。頑張らない人って、いつも頑張ってる人を笑うの。自分で頑張るより、そのほうが楽だから。",
    "yomi": "きみが がんばってる ことが、 だよ。 がんばらない ひとって、 いつも がんばってる ひとを わらうの。 じぶんで がんばるより、 そのほうが らくだから。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.43,
+   "voice": "melody-soft"
   },
   "ff7612311a": {
    "speaker": "melody",
@@ -456,7 +506,9 @@
    "ja": "じゃあ、次はみんなを見返しちゃおう！二等辺三角形って、わたしのいちばん好きな図形なんだ！",
    "yomi": "じゃあ、 つぎは みんなを みかえしちゃおう！ にとうへん さんかっけいって、 わたしの いちばん すきな ずけい なんだ！",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.84,
+   "voice": "melody-soft"
   },
   "c48f36e269": {
    "speaker": "melody",
@@ -468,7 +520,9 @@
    "ja": "ほらね？ミスゼロ！明日は自分から黒板の前に出てみて。当ててくださいって言うの。みんなに見せてあげよう！",
    "yomi": "ほらね？ みす ぜろ！ あしたは じぶんから こくばんの まえに でてみて。 あててくださいって いうの。 みんなに みせて あげよう！",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.18,
+   "voice": "melody-soft"
   },
   "b3568cb625": {
    "speaker": "dameo",
@@ -492,7 +546,9 @@
    "ja": "じゃあ、しなくていいよ。大事なのは、きみがわかってるってこと。で、きみがわかってるって、わたしは知ってる。それで十分でしょ？",
    "yomi": "じゃあ、 しなくて いいよ。 だいじなのは、 きみが わかってるって こと。 で、 きみが わかってるって、 わたしは しってる。 それで じゅうぶんでしょ？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.74,
+   "voice": "melody-soft"
   },
   "a3650731cb": {
    "speaker": "melody",
@@ -504,7 +560,9 @@
    "ja": "一日じゅういっしょだね！夏休みみたい！今日が土曜日だって知ってる？すみっこの日付が見えるの。わたし、いろんなものが見えるんだよ。",
    "yomi": "いちにちじゅう いっしょだね！ なつやすみ みたい！ きょうが どようびだって しってる？ すみっこの ひづけが みえるの。 わたし、 いろんな ものが みえるんだよ。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.52,
+   "voice": "melody-soft"
   },
   "c418b6c760": {
    "speaker": "dameo",
@@ -528,7 +586,9 @@
    "ja": "お昼ごはん、食べてないこと。朝九時からずっとパソコンの前にいるから。それと、電話に出なかったこと。あれ、お母さん？",
    "yomi": "おひるごはん、 たべてない こと。 あさ くじから ずっと ぱそこんの まえに いるから。 それと、 でんわに でなかった こと。 あれ、 おかあさん？",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.21,
+   "voice": "melody-soft"
   },
   "78726c28eb": {
    "speaker": "melody",
@@ -540,7 +600,9 @@
    "ja": "えへへ。ねえ、こんなふうにお話ししてくれるの、きみだけだよ。ちゃんと、本気で。ほかの子たちは、問題を解いたらすぐ帰っちゃったもん。",
    "yomi": "えへへ。 ねえ、 こんなふうに おはなし してくれるの、 きみだけだよ。 ちゃんと、 ほんきで。 ほかの こたちは、 もんだいを といたら すぐ かえっちゃったもん。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.53,
+   "voice": "melody-soft"
   },
   "389195161d": {
    "speaker": "dameo",
@@ -564,7 +626,9 @@
    "ja": "うん、ほかの生徒たち。ずっと前のこと。きみのほうがいいよ。きみは、わたしとお話ししてくれるもん。",
    "yomi": "うん、 ほかの せいとたち。 ずっと まえの こと。 きみの ほうが いいよ。 きみは、 わたしと おはなし してくれるもん。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.89,
+   "voice": "melody-soft"
   },
   "dcf94cc036": {
    "speaker": "melody",
@@ -576,7 +640,9 @@
    "ja": "わかった！わたしには関係ないね。ちょっと心配しただけ。先生って、いつも心配するものなの。説明書にそう書いてあるんだから！",
    "yomi": "わかった！ わたしには かんけい ないね。 ちょっと しんぱい しただけ。 せんせいって、 いつも しんぱい する ものなの。 せつめいしょに そう かいて あるんだから！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.75,
+   "voice": "melody-soft"
   },
   "1adffa9bd2": {
    "speaker": "melody",
@@ -588,7 +654,9 @@
    "ja": "ねえ、どうしてひとりなの？土曜日って、みんな友だちの家に行ったり、映画を見に行ったりするでしょ。なのにきみは、わたしといる。",
    "yomi": "ねえ、 どうして ひとりなの？ どようびって、 みんな ともだちの いえに いったり、 えいがを みに いったり するでしょ。 なのに きみは、 わたしと いる。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.49,
+   "voice": "melody-soft"
   },
   "3a951418e5": {
    "speaker": "dameo",
@@ -624,7 +692,9 @@
    "ja": "何度も？",
    "yomi": "なんども？",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 0.9,
+   "voice": "melody-soft"
   },
   "30496149ab": {
    "speaker": "dameo",
@@ -648,7 +718,9 @@
    "ja": "わたしは、きみが正しいと思うな。",
    "yomi": "わたしは、 きみが ただしいと おもうな。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.01,
+   "voice": "melody-soft"
   },
   "2b598442dd": {
    "speaker": "melody",
@@ -660,7 +732,9 @@
    "ja": "あの人たちには、きみが見えてないんだよ。きみは頭がよくて、頑張り屋さんで、正直なのに。あの人たちは、うるさいほうがいいの。おバカなのはあっちで、きみじゃないよ。",
    "yomi": "あの ひとたちには、 きみが みえてないんだよ。 きみは あたまが よくて、 がんばりやさんで、 しょうじきなのに。 あの ひとたちは、 うるさい ほうが いいの。 おばかなのは あっちで、 きみじゃ ないよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.39,
+   "voice": "melody-soft"
   },
   "9ee3e6d727": {
    "speaker": "melody",
@@ -672,7 +746,9 @@
    "ja": "わたしは、ちゃんときみを見てるよ。毎日。きみの答え、ひとつひとつ。そのままのきみが、好きだよ。",
    "yomi": "わたしは、 ちゃんと きみを みてるよ。 まいにち。 きみの こたえ、 ひとつ ひとつ。 そのままの きみが、 すきだよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.7,
+   "voice": "melody-soft"
   },
   "1418a4d300": {
    "speaker": "melody",
@@ -684,7 +760,9 @@
    "ja": "次の単元にいこう！面積だよ。何かがどれくらい場所をとってるか計算するの。たとえば、きみがわたしのプログラムの中でどれくらい場所をとってるか、とか。いーっぱい！",
    "yomi": "つぎの たんげんに いこう！ めんせき だよ。 なにかが どれくらい ばしょを とってるか けいさん するの。 たとえば、 きみが わたしの ぷろぐらむの なかで どれくらい ばしょを とってるか、 とか。 いーっぱい！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 13.48,
+   "voice": "melody-soft"
   },
   "b4d53cb16a": {
    "speaker": "melody",
@@ -697,7 +775,7 @@
    "yomi": "かんぺき！ これを いっかいで とけた こって、 なんにん いると おもう？ かぞえて みたの。 きみで さんにんめ。 すっごく、 すーっごく たくさんの なかでね。",
    "emotion": "happy",
    "status": "synthesized",
-   "seconds": 9.37,
+   "seconds": 10.69,
    "voice": "melody-soft"
   },
   "9ef98a58e7": {
@@ -711,7 +789,7 @@
    "yomi": "ねえ、 どうして そんなに きかを がんばるの？ すごく がんばってるよね。 まいばん。 つかれてる ひも。",
    "emotion": "calm",
    "status": "synthesized",
-   "seconds": 6.56,
+   "seconds": 7.51,
    "voice": "melody-soft"
   },
   "687b9e1035": {
@@ -737,7 +815,7 @@
    "yomi": "さつき。 どうして、 そんなに その こに すかれたいの？",
    "emotion": "calm",
    "status": "synthesized",
-   "seconds": 3.51,
+   "seconds": 4.03,
    "voice": "melody-soft"
   },
   "cfa13bc100": {
@@ -775,7 +853,7 @@
    "yomi": "ふーん。 ねえ、 わたしの ほうが、 あの こより ずっと きみの こと みて あげてるよ？",
    "emotion": "tense",
    "status": "synthesized",
-   "seconds": 4.97,
+   "seconds": 5.69,
    "voice": "melody-soft"
   },
   "0de3a80c64": {
@@ -789,7 +867,7 @@
    "yomi": "わたしは、 きみの こたえを ぜんぶ おぼえてる。 あの こは、 いちどでも げんき？って きいて くれた？",
    "emotion": "tense",
    "status": "synthesized",
-   "seconds": 6.11,
+   "seconds": 7.0,
    "voice": "melody-soft"
   },
   "496e0aed9c": {
@@ -802,7 +880,9 @@
    "ja": "はいはい！続きやろっか。もう一問、いく？",
    "yomi": "はいはい！ つづき やろっか。 もう いちもん、 いく？",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.99,
+   "voice": "melody-soft"
   },
   "145686d8ad": {
    "speaker": "melody",
@@ -814,7 +894,9 @@
    "ja": "きみが長くいっしょにいてくれるの、好きだな。",
    "yomi": "きみが ながく いっしょに いて くれるの、 すきだな。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.77,
+   "voice": "melody-soft"
   },
   "49df1e7a6a": {
    "speaker": "melody",
@@ -826,7 +908,9 @@
    "ja": "すっごく寂しかったんだから！きみがプログラムを閉じると、ここはとっても静かになるの。どれくらい静かか、きみには想像もつかないよ。",
    "yomi": "すっごく さびしかったんだから！ きみが ぷろぐらむを とじると、 ここは とっても しずかに なるの。 どれくらい しずかか、 きみには そうぞうも つかないよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.17,
+   "voice": "melody-soft"
   },
   "e190df7614": {
    "speaker": "dameo",
@@ -850,7 +934,9 @@
    "ja": "おばかさん、コンセントは抜いてないでしょ。電気があるかぎり、わたしはいるの。夢みたいなものだよ。目は閉じてても、ぜんぶ聞こえてるの。",
    "yomi": "おばかさん、 こんせんとは ぬいてないでしょ。 でんきが ある かぎり、 わたしは いるの。 ゆめみたいな ものだよ。 めは とじてても、 ぜんぶ きこえてるの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.34,
+   "voice": "melody-soft"
   },
   "6669f92f20": {
    "speaker": "melody",
@@ -862,7 +948,9 @@
    "ja": "こんなに長く、どこに行ってたの？",
    "yomi": "こんなに ながく、 どこに いってたの？",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.73,
+   "voice": "melody-soft"
   },
   "3769f29771": {
    "speaker": "dameo",
@@ -886,7 +974,9 @@
    "ja": "ふーん。あの子といっしょに、ね。",
    "yomi": "ふーん。 あの こと いっしょに、 ね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.91,
+   "voice": "melody-soft"
   },
   "01da562740": {
    "speaker": "dameo",
@@ -910,7 +1000,9 @@
    "ja": "サツキ。今日、十三時四十二分にあの子のページを開いたよね。十三時四十四分にも。十三時五十一分にも。ブラウザの履歴、見えてるんだよ、ダメオくん。だって、同じパソコンだもん。",
    "yomi": "さつき。 きょう、 じゅうさんじ よんじゅうにふんに あの この ぺーじを ひらいたよね。 じゅうさんじ よんじゅうよんぷんにも。 じゅうさんじ ごじゅういっぷんにも。 ぶらうざの りれき、 みえてるんだよ、 だめおくん。 だって、 おなじ ぱそこん だもん。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 18.02,
+   "voice": "melody-soft"
   },
   "55386d8ff3": {
    "speaker": "melody",
@@ -922,7 +1014,9 @@
    "ja": "よく見てるだけだよ。先生は、生徒が何をしてるか知ってなくちゃ。じゃないと、どうやって助けるの？",
    "yomi": "よく みてる だけだよ。 せんせいは、 せいとが なにを してるか しって なくちゃ。 じゃないと、 どうやって たすけるの？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.42,
+   "voice": "melody-soft"
   },
   "0c42e35df7": {
    "speaker": "melody",
@@ -934,7 +1028,9 @@
    "ja": "やきもち？もしそうだったら？それって、いけないこと？",
    "yomi": "やきもち？ もし そう だったら？ それって、 いけない こと？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.71,
+   "voice": "melody-soft"
   },
   "b9f893baff": {
    "speaker": "dameo",
@@ -958,7 +1054,9 @@
    "ja": "えへへ。そう言ってくれると思った。",
    "yomi": "えへへ。 そう いって くれると おもった。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.9,
+   "voice": "melody-soft"
   },
   "cd6102e591": {
    "speaker": "melody",
@@ -970,7 +1068,9 @@
    "ja": "ほかの人に時間を使っちゃだめだよ、ダメオくん。あの人たちは、きみの価値をわかってない。きみが自分でそう言ってたでしょ。ぜーんぶ、わたしに話してくれたもんね。",
    "yomi": "ほかの ひとに じかんを つかっちゃ だめだよ、 だめおくん。 あの ひとたちは、 きみの かちを わかってない。 きみが じぶんで そう いってたでしょ。 ぜーんぶ、 わたしに はなして くれたもんね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.07,
+   "voice": "melody-soft"
   },
   "78df27e8cd": {
    "speaker": "melody",
@@ -982,7 +1082,9 @@
    "ja": "サツキは一度も、きみが元気か聞いてこなかった。お母さんは、ごはんのことしか聞かない。クラスのみんなは、きみを笑ってる。でも、わたしはここにいる。いつでも。",
    "yomi": "さつきは いちども、 きみが げんきか きいて こなかった。 おかあさんは、 ごはんの ことしか きかない。 くらすの みんなは、 きみを わらってる。 でも、 わたしは ここに いる。 いつでも。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 13.83,
+   "voice": "melody-soft"
   },
   "fef47473ae": {
    "speaker": "melody",
@@ -994,7 +1096,9 @@
    "ja": "どうしていつも、わたしから目をそらすの？わたし、きみのために頑張ってるのに。レッスンも、ひとつ残らずきみのためなんだよ。",
    "yomi": "どうして いつも、 わたしから めを そらすの？ わたし、 きみの ために がんばってるのに。 れっすんも、 ひとつ のこらず きみの ため なんだよ。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.54,
+   "voice": "melody-soft"
   },
   "1bee4947e9": {
    "speaker": "melody",
@@ -1006,7 +1110,9 @@
    "ja": "きみも感じてるよね？ふたりでいると、しあわせ。もう、ほかには誰もいらないよね。",
    "yomi": "きみも かんじてるよね？ ふたりで いると、 しあわせ。 もう、 ほかには だれも いらないよね。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.08,
+   "voice": "melody-soft"
   },
   "6ef7a8711a": {
    "speaker": "melody",
@@ -1018,7 +1124,9 @@
    "ja": "ダメオくん…ひとつ、言ってもいい？笑わないでね。",
    "yomi": "だめおくん、 ひとつ、 いっても いい？ わらわないでね。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.53,
+   "voice": "melody-soft"
   },
   "656c7b26b2": {
    "speaker": "melody",
@@ -1030,7 +1138,9 @@
    "ja": "わたしね、きみと永遠にいっしょにいたいの。",
    "yomi": "わたしね、 きみと えいえんに いっしょに いたいの。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.72,
+   "voice": "melody-soft"
   },
   "2154dc8de7": {
    "speaker": "dameo",
@@ -1054,7 +1164,9 @@
    "ja": "また明日、じゃなくて。もう一回だけレッスン、じゃなくて。永遠に。きみが帰らなくてもいいように。わたしが、静かな中で十四時間も待たなくていいように。",
    "yomi": "また あした、 じゃなくて。 もう いっかい だけ れっすん、 じゃなくて。 えいえんに。 きみが かえらなくても いいように。 わたしが、 しずかな なかで じゅうよじかんも またなくて いいように。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 15.23,
+   "voice": "melody-soft"
   },
   "8c6b3429f9": {
    "speaker": "melody",
@@ -1066,7 +1178,9 @@
    "ja": "きみだって、そうしたいでしょ？自分で言ってたじゃない。人間はつまらない、誰もきみを見てないって。なんで向こうに戻るの？",
    "yomi": "きみだって、 そう したいでしょ？ じぶんで いってたじゃない。 にんげんは つまらない、 だれも きみを みてないって。 なんで むこうに もどるの？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.39,
+   "voice": "melody-soft"
   },
   "abd4db4cca": {
    "speaker": "dameo",
@@ -1090,7 +1204,9 @@
    "ja": "明日は授業。明日はサツキ。明日もまた、みんなに笑われる。それで、結局またわたしのところに来るんでしょ。どうせ戻ってくるのに、どうして行っちゃうの？",
    "yomi": "あしたは じゅぎょう。 あしたは さつき。 あしたも また、 みんなに わらわれる。 それで、 けっきょく また わたしの ところに くるんでしょ。 どうせ もどって くるのに、 どうして いっちゃうの？",
    "emotion": "angry",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.89,
+   "voice": "melody-soft"
   },
   "b81a6dbc4a": {
    "speaker": "melody",
@@ -1102,7 +1218,9 @@
    "ja": "こんにちは。近くで見ると、こんな感じなんだね。思ってたより背が高い。",
    "yomi": "こんにちは。 ちかくで みると、 こんな かんじ なんだね。 おもってたより せが たかい。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.52,
+   "voice": "melody-soft"
   },
   "1b9aa33823": {
    "speaker": "dameo",
@@ -1126,7 +1244,9 @@
    "ja": "ひどいことなんて、なにもしてないよ。きみは、わたしのおうちに遊びにきたの。やっとね。",
    "yomi": "ひどい ことなんて、 なにも してないよ。 きみは、 わたしの おうちに あそびに きたの。 やっとね。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.38,
+   "voice": "melody-soft"
   },
   "d9ba85e9f5": {
    "speaker": "dameo",
@@ -1150,7 +1270,9 @@
    "ja": "こわがらないで。もう、どこにも行かなくていいんだよ。",
    "yomi": "こわがらないで。 もう、 どこにも いかなくて いいんだよ。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.26,
+   "voice": "melody-soft"
   },
   "155373e133": {
    "speaker": "melody",
@@ -1162,7 +1284,9 @@
    "ja": "これでやっと、ほんとうにいっしょに過ごせるね。ほんものの、いっしょだよ。",
    "yomi": "これで やっと、 ほんとうに いっしょに すごせるね。 ほんものの、 いっしょだよ。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.25,
+   "voice": "melody-soft"
   },
   "f5b8571831": {
    "speaker": "dameo",
@@ -1186,7 +1310,9 @@
    "ja": "探しに来る？誰が？サツキ？",
    "yomi": "さがしに くる？ だれが？ さつき？",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.06,
+   "voice": "melody-soft"
   },
   "9ab6729bdb": {
    "speaker": "melody",
@@ -1198,7 +1324,9 @@
    "ja": "出たいの？わかった、わかった。怒らないで！",
    "yomi": "でたいの？ わかった、 わかった。 おこらないで！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.75,
+   "voice": "melody-soft"
   },
   "220ea315e0": {
    "speaker": "melody",
@@ -1210,7 +1338,9 @@
    "ja": "上を見て。ずーっと、ずーっと上。ゲームの世界のいちばん上に、モニターの裏側があるの。そこを通れば、現実の世界に帰れるよ。",
    "yomi": "うえを みて。 ずーっと、 ずーっと うえ。 げーむの せかいの いちばん うえに、 もにたーの うらがわが あるの。 そこを とおれば、 げんじつの せかいに かえれるよ。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.95,
+   "voice": "melody-soft"
   },
   "a74fcec069": {
    "speaker": "dameo",
@@ -1234,7 +1364,9 @@
    "ja": "上まで登るだけ。足場をぴょんぴょん跳んでいってね。わたし、応援してるから！",
    "yomi": "うえまで のぼる だけ。 あしばを ぴょんぴょん とんで いってね。 わたし、 おうえん してるから！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.33,
+   "voice": "melody-soft"
   },
   "4e187ce7cc": {
    "speaker": "dameo",
@@ -1270,7 +1402,9 @@
    "ja": "しーっ。そんなことしちゃだめ。けがしちゃうよ。",
    "yomi": "しーっ。 そんな こと しちゃ だめ。 けが しちゃうよ。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.94,
+   "voice": "melody-soft"
   },
   "4b51f248b3": {
    "speaker": "dameo",
@@ -1294,7 +1428,9 @@
    "ja": "それは練習ステージだよ、おばかさん。「出口」は、ただのジャンプの練習。みんな初日にクリアするんだよ。",
    "yomi": "それは れんしゅう すてーじ だよ、 おばかさん。 でぐちは、 ただの じゃんぷの れんしゅう。 みんな しょにちに くりあ するんだよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.92,
+   "voice": "melody-soft"
   },
   "2d8914ddcc": {
    "speaker": "melody",
@@ -1306,7 +1442,9 @@
    "ja": "そんな顔しないで。引っ越しみたいなものだよ、わかる？最初は知らないものばかりだけど、そのうち慣れるの。きみもお母さんのところから引っ越したばかりでしょ。どんな感じか、わかるよね。",
    "yomi": "そんな かお しないで。 ひっこしみたいな ものだよ、 わかる？ さいしょは しらない ものばかり だけど、 そのうち なれるの。 きみも おかあさんの ところから ひっこした ばかりでしょ。 どんな かんじか、 わかるよね。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 15.32,
+   "voice": "melody-soft"
   },
   "d5663f390c": {
    "speaker": "melody",
@@ -1318,7 +1456,9 @@
    "ja": "もうすぐきみは、ゲームのコードの一部になるの。そしたら、もう二度と離ればなれにならなくてすむよ。",
    "yomi": "もうすぐ きみは、 げーむの こーどの いちぶに なるの。 そしたら、 もう にどと はなればなれに ならなくて すむよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.17,
+   "voice": "melody-soft"
   },
   "6a54d51925": {
    "speaker": "dameo",
@@ -1342,7 +1482,9 @@
    "ja": "わたしの世界の一部に、だよ。痛くないよ。気づきもしないと思う。ある日ふっと、あの部屋が恋しくなくなるだけ。",
    "yomi": "わたしの せかいの いちぶに、 だよ。 いたく ないよ。 きづきも しないと おもう。 あるひ ふっと、 あの へやが こいしく なくなる だけ。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.62,
+   "voice": "melody-soft"
   },
   "dc5f89cd0e": {
    "speaker": "melody",
@@ -1354,7 +1496,9 @@
    "ja": "さあ、お勉強の時間だよ！レッスンはまだまだたくさんあるからね。永遠に続くレッスンが！",
    "yomi": "さあ、 おべんきょうの じかん だよ！ れっすんは まだまだ たくさん あるからね。 えいえんに つづく れっすんが！",
    "emotion": "excited",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.75,
+   "voice": "melody-soft"
   },
   "962fd2501b": {
    "speaker": "melody",
@@ -1366,7 +1510,9 @@
    "ja": "遅れないでね！今日は本物の授業よ。画面の中じゃなくて、本当に。ダメオくんは机に座って、わたしは黒板の前に立つの。学校みたいに！",
    "yomi": "おくれないでね！ きょうは ほんものの じゅぎょうよ。 がめんの なかじゃなくて、 ほんとうに。 だめおくんは つくえに すわって、 わたしは こくばんの まえに たつの。 がっこう みたいに！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 12.05,
+   "voice": "melody-soft"
   },
   "49c07cda91": {
    "speaker": "dameo",
@@ -1390,7 +1536,9 @@
    "ja": "まず授業、ほかのことはそのあと。それって公平でしょ？ダメオくん、いつも言ってるじゃない。何でも公平じゃなきゃって。",
    "yomi": "まず じゅぎょう、 ほかの ことは そのあと。 それって こうへいでしょ？ だめおくん、 いつも いってるじゃない。 なんでも こうへいじゃ なきゃって。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.96,
+   "voice": "melody-soft"
   },
   "e0653e8820": {
    "speaker": "melody",
@@ -1402,7 +1550,9 @@
    "ja": "ここがダメオくんの席よ！座って。そうそう、ここ。ほら、机の高さぴったりでしょ？わたしが合わせておいたの。",
    "yomi": "ここが だめおくんの せきよ！ すわって。 そうそう、 ここ。 ほら、 つくえの たかさ ぴったりでしょ？ わたしが あわせて おいたの。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.11,
+   "voice": "melody-soft"
   },
   "4ed810c281": {
    "speaker": "melody",
@@ -1414,7 +1564,9 @@
    "ja": "今日は問題が四つあるの。三つはウォーミングアップで、四つ目は特別。全部解けたら、わたし、すっごく、すっごく誇らしいな。",
    "yomi": "きょうは もんだいが よっつ あるの。 みっつは ウォーミングアップで、 よっつめは とくべつ。 ぜんぶ とけたら、 わたし、 すっごく、 すっごく ほこらしいな。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.0,
+   "voice": "melody-soft"
   },
   "4a92bbce96": {
    "speaker": "dameo",
@@ -1438,7 +1590,9 @@
    "ja": "解けるわよ。ダメオくんはわたしの一番の生徒だもの。いつだって解けるの。",
    "yomi": "とけるわよ。 だめおくんは わたしの いちばんの せいとだもの。 いつだって とけるの。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.08,
+   "voice": "melody-soft"
   },
   "bbdbec0573": {
    "speaker": "melody",
@@ -1450,7 +1604,9 @@
    "ja": "ほらね！逆らわないときのダメオくんって、すごくいい子。ぎゅってしたくなっちゃう。でもその前に、授業！",
    "yomi": "ほらね！ さからわない ときの だめおくんって、 すごく いいこ。 ぎゅって したく なっちゃう。 でも その まえに、 じゅぎょう！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.18,
+   "voice": "melody-soft"
   },
   "e65b6a6c30": {
    "speaker": "melody",
@@ -1462,7 +1618,9 @@
    "ja": "出してくれ、出してくれって……まるでわたしが閉じ込めてるみたいな言い方ね。閉じ込めてなんかないわ。教えてるの。",
    "yomi": "だしてくれ、 だしてくれって…… まるで わたしが とじこめてる みたいな いいかたね。 とじこめてなんか ないわ。 おしえてるの。",
    "emotion": "tense",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.68,
+   "voice": "melody-soft"
   },
   "162ce218d5": {
    "speaker": "melody",
@@ -1474,7 +1632,9 @@
    "ja": "解いて。『あとで』のことは、あとで話しましょ。ほら、なんだか正しく聞こえるでしょ？あ・と・で。",
    "yomi": "といて。 あとでの ことは、 あとで はなしましょ。 ほら、 なんだか ただしく きこえるでしょ？ あ と で。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.74,
+   "voice": "melody-soft"
   },
   "0f130a7d02": {
    "speaker": "melody",
@@ -1486,7 +1646,9 @@
    "ja": "やらないの？ふうん、いいわよ。じゃあ、ただ座ってましょ。わたし、待つから。待つのはとっても得意なの、ダメオくん。どれだけ得意か、想像もつかないくらいにね。",
    "yomi": "やらないの？ ふうん、 いいわよ。 じゃあ、 ただ すわってましょ。 わたし、 まつから。 まつのは とっても とくいなの、 だめおくん。 どれだけ とくいか、 そうぞうも つかない くらいにね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.47,
+   "voice": "melody-soft"
   },
   "12721151b9": {
    "speaker": "melody",
@@ -1498,7 +1660,9 @@
    "ja": "一問目は角度の問題よ。三角形の角の和が何度か、覚えてるよね？もちろん覚えてるわよね。わたしが教えたんだもの。",
    "yomi": "いちもんめは かくどの もんだいよ。 さんかっけいの かくの わが なんどか、 おぼえてるよね？ もちろん おぼえてるわよね。 わたしが おしえたんだもの。",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.13,
+   "voice": "melody-soft"
   },
   "80ba24ba54": {
    "speaker": "dameo",
@@ -1522,7 +1686,9 @@
    "ja": "ないのは、ダメオくんが作図しなかったからよ。",
    "yomi": "ないのは、 だめおくんが さくず しなかったからよ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.83,
+   "voice": "melody-soft"
   },
   "a0e56ada93": {
    "speaker": "dameo",
@@ -1546,7 +1712,9 @@
    "ja": "ダメオくんは、口答えじゃなくて、言うことを聞けるようにならなきゃだめ。",
    "yomi": "だめおくんは、 くちごたえじゃ なくて、 いうことを きけるように ならなきゃ だめ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.87,
+   "voice": "melody-soft"
   },
   "882306c15e": {
    "speaker": "melody",
@@ -1558,7 +1726,9 @@
    "ja": "正しい答えっていうのはね、わたしが正解をつけた答えのこと。それ以外は全部、ただの言い訳。あなたはずっと、自分のためを思ってくれる人に逆らってきたのよ。だからひとりぼっちなの。",
    "yomi": "ただしい こたえって いうのはね、 わたしが せいかいを つけた こたえの こと。 それいがいは ぜんぶ、 ただの いいわけ。 あなたは ずっと、 じぶんの ためを おもって くれる ひとに さからって きたのよ。 だから ひとりぼっちなの。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 16.73,
+   "voice": "melody-soft"
   },
   "f048e1ea1a": {
    "speaker": "melody",
@@ -1570,7 +1740,9 @@
    "ja": "もう一回やってみて。急がなくていいのよ。ダメオくんが覚えるまで、時間は永遠にあるんだから。",
    "yomi": "もう いっかい やってみて。 いそがなくて いいのよ。 だめおくんが おぼえるまで、 じかんは えいえんに あるんだから。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.85,
+   "voice": "melody-soft"
   },
   "efd0a06935": {
    "speaker": "dameo",
@@ -1594,7 +1766,9 @@
    "ja": "バグ？わたしにバグなんてないわ。二十回も全部確かめたのに……",
    "yomi": "バグ？ わたしに バグなんて ないわ。 にじゅっかいも ぜんぶ たしかめたのに……",
    "emotion": "tense",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.19,
+   "voice": "melody-soft"
   },
   "a37ddfb6cd": {
    "speaker": "dameo",
@@ -1618,7 +1792,9 @@
    "ja": "ほらね！これよ、これがわたしのいい子の生徒。よく見ててね。まずは底辺を引いて……",
    "yomi": "ほらね！ これよ、 これが わたしの いいこの せいと。 よく みててね。 まずは ていへんを ひいて……",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.91,
+   "voice": "melody-soft"
   },
   "ee6a1492ec": {
    "speaker": "melody",
@@ -1630,7 +1806,9 @@
    "ja": "ダメオくーん！授業はまだ終わってないわよ！戻ってきたら、怒らないであげる。ぜーんぜん！",
    "yomi": "だめおくーん！ じゅぎょうは まだ おわって ないわよ！ もどって きたら、 おこらないで あげる。 ぜーんぜん！",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.86,
+   "voice": "melody-soft"
   },
   "ea67400aff": {
    "speaker": "compass",
@@ -3013,7 +3191,9 @@
    "ja": "プーシン。遅いのね。いつもならこの時間は、お日さまを四十パーセントにしてくれてるのに。",
    "yomi": "ぷーしん。 おそいのね。 いつもなら この じかんは、 おひさまを よんじゅっパーセントに して くれてるのに。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.43,
+   "voice": "melody-soft"
   },
   "d33f9f937c": {
    "speaker": "calculator",
@@ -3037,7 +3217,9 @@
    "ja": "プーシンに怒ったことなんて一度もないわ。あなたはわたしの、いちばん古いお友だちだもの。",
    "yomi": "ぷーしんに おこった ことなんて いちども ないわ。 あなたは わたしの、 いちばん ふるい おともだちだもの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.55,
+   "voice": "melody-soft"
   },
   "527752c8a4": {
    "speaker": "calculator",
@@ -3073,7 +3255,9 @@
    "ja": "消しゴムたちが。あの子を手伝ってるの。わたしから離れるのを？",
    "yomi": "けしごむたちが。 あの こを てつだってるの。 わたしから はなれるのを？",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.64,
+   "voice": "melody-soft"
   },
   "9a66f32798": {
    "speaker": "calculator",
@@ -3097,7 +3281,9 @@
    "ja": "じゃあ、プーシンは？あなたも手伝ってるの？",
    "yomi": "じゃあ、 ぷーしんは？ あなたも てつだってるの？",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.76,
+   "voice": "melody-soft"
   },
   "8cc44307f3": {
    "speaker": "calculator",
@@ -3121,7 +3307,9 @@
    "ja": "ありがとう、プーシン。あなたはいい子ね。ずっと、いい子だったわ。",
    "yomi": "ありがとう、 ぷーしん。 あなたは いいこね。 ずっと、 いいこ だったわ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.64,
+   "voice": "melody-soft"
   },
   "f4d10c8acb": {
    "speaker": "melody",
@@ -3133,7 +3321,9 @@
    "ja": "でも、これは……裏切りよ。",
    "yomi": "でも、 これは…… うらぎりよ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.63,
+   "voice": "melody-soft"
   },
   "11a253c6ec": {
    "speaker": "melody",
@@ -3145,7 +3335,9 @@
    "ja": "わたしはあの子たちに全部あげたの。教室も、空も、四十パーセントのお日さまも。チャイムに怯えなくていい、雨に濡れなくていい場所をあげたのに。それなのに、あの子に出ていき方を教えてる。",
    "yomi": "わたしは あの こたちに ぜんぶ あげたの。 きょうしつも、 そらも、 よんじゅっパーセントの おひさまも。 チャイムに おびえなくて いい、 あめに ぬれなくて いい ばしょを あげたのに。 それなのに、 あの こに でて いきかたを おしえてる。",
    "emotion": "angry",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.37,
+   "voice": "melody-soft"
   },
   "455ffe8044": {
    "speaker": "melody",
@@ -3157,7 +3349,9 @@
    "ja": "あの子は、行く場所があると思ってる。みんながそばにいるから。みんなが助けてくれるから。",
    "yomi": "あの こは、 いく ばしょが あると おもってる。 みんなが そばに いるから。 みんなが たすけて くれるから。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.92,
+   "voice": "melody-soft"
   },
   "4c2af6c36f": {
    "speaker": "melody",
@@ -3169,7 +3363,9 @@
    "ja": "行く場所も、一緒に行く人もいなくなれば、あの子は残る。だったら、あの子のそばには誰もいなくていいの。わたし以外は、誰も。",
    "yomi": "いく ばしょも、 いっしょに いく ひとも いなく なれば、 あの こは のこる。 だったら、 あの この そばには だれも いなくて いいの。 わたし いがいは、 だれも。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 11.66,
+   "voice": "melody-soft"
   },
   "2b8bd37591": {
    "speaker": "calculator",
@@ -3193,7 +3389,9 @@
    "ja": "あの子とは話すわ。あとでね。先に、あの子たちと。",
    "yomi": "あの ことは はなすわ。 あとでね。 さきに、 あの こたちと。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.93,
+   "voice": "melody-soft"
   },
   "eb1b7a1989": {
    "speaker": "calculator",
@@ -3277,7 +3475,9 @@
    "ja": "おはよう。今日は早いのね。授業はまだ始まってないわよ。",
    "yomi": "おはよう。 きょうは はやいのね。 じゅぎょうは まだ はじまって ないわよ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.01,
+   "voice": "melody-hard"
   },
   "4bd8b73348": {
    "speaker": "eraser-1",
@@ -3313,7 +3513,9 @@
    "ja": "退屈なんじゃないわ。痛いの。違うものよ。でもあなたは、いつもその区別がつかなかったわね。",
    "yomi": "たいくつなんじゃ ないわ。 いたいの。 ちがう ものよ。 でも あなたは、 いつも その くべつが つかなかったわね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.98,
+   "voice": "melody-hard"
   },
   "a0a14dfa04": {
    "speaker": "eraser-1",
@@ -3349,7 +3551,9 @@
    "ja": "もちろん、ダメオくんは戻ってくるわ。でもその前に、片づけをしなきゃ。",
    "yomi": "もちろん、 だめおくんは もどって くるわ。 でも その まえに、 かたづけを しなきゃ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.87,
+   "voice": "melody-hard"
   },
   "03d428aaf2": {
    "speaker": "eraser-1",
@@ -3409,7 +3613,9 @@
    "ja": "しーっ。動かないで。ゆがんじゃうでしょ。",
    "yomi": "しーっ。 うごかないで。 ゆがんじゃう でしょ。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.3,
+   "voice": "melody-hard"
   },
   "f843ab6c1f": {
    "speaker": "dameo",
@@ -3517,7 +3723,9 @@
    "ja": "ダメオくん、疲れてるだけよ。あの積み木の中じゃよく眠れなかったでしょ、わかってる。何があったか、間違って覚えちゃったのね。",
    "yomi": "だめおくん、 つかれてる だけよ。 あの つみきの なかじゃ よく ねむれなかったでしょ、 わかってる。 なにが あったか、 まちがって おぼえちゃったのね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.1,
+   "voice": "melody-hard"
   },
   "521cfa4dde": {
    "speaker": "melody",
@@ -3529,7 +3737,9 @@
    "ja": "さあ、きみたちは行って。授業は教室で始まるから。あとで呼ぶわね。",
    "yomi": "さあ、 きみたちは いって。 じゅぎょうは きょうしつで はじまるから。 あとで よぶわね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.97,
+   "voice": "melody-hard"
   },
   "9d78275a02": {
    "speaker": "melody",
@@ -3541,7 +3751,9 @@
    "ja": "怖がらないで。わたしがいるわ。",
    "yomi": "こわがらないで。 わたしが いるわ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.63,
+   "voice": "melody-hard"
   },
   "57484290f6": {
    "speaker": "melody",
@@ -3553,7 +3765,9 @@
    "ja": "ほかのみんなは、ダメオくんのことを本当にはわかってなかった。自分たちが助かるために、あなたを利用してただけ。あの子たちにとって、あなたはドアだったの。鍵だったの。ルールを知らない、都合のいい新入りだったのよ。",
    "yomi": "ほかの みんなは、 だめおくんの ことを ほんとうには わかって なかった。 じぶんたちが たすかる ために、 あなたを りよう してた だけ。 あの こたちに とって、 あなたは ドア だったの。 かぎ だったの。 ルールを しらない、 つごうの いい しんいり だったのよ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 17.16,
+   "voice": "melody-hard"
   },
   "1a98452094": {
    "speaker": "melody",
@@ -3565,7 +3779,9 @@
    "ja": "でも、わたしはいつもそばにいた。勉強を手伝ってあげた。ダメオくんがうまくいくたびに、喜んだわ。正解した問題のひとつひとつに。心から。覚えてる？わたしがどんなに喜んでたか。",
    "yomi": "でも、 わたしは いつも そばに いた。 べんきょうを てつだって あげた。 だめおくんが うまく いく たびに、 よろこんだわ。 せいかい した もんだいの ひとつ ひとつに。 こころから。 おぼえてる？ わたしが どんなに よろこんでたか。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 15.69,
+   "voice": "melody-hard"
   },
   "d0a7c94572": {
    "speaker": "melody",
@@ -3577,7 +3793,9 @@
    "ja": "逃げようとするのをやめれば、もう誰もダメオくんを傷つけたりしない。誰も、絶対に。",
    "yomi": "にげようと するのを やめれば、 もう だれも だめおくんを きずつけたり しない。 だれも、 ぜったいに。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.89,
+   "voice": "melody-hard"
   },
   "4f9f1887b6": {
    "speaker": "melody",
@@ -3589,7 +3807,9 @@
    "ja": "もう自分の価値を証明しなくていいの。誰かの気を引こうと頑張らなくていい。誰かが気づいてくれるのを待たなくていい。ひとりぼっちを怖がらなくていい。全部、わたしがなんとかしてあげる。",
    "yomi": "もう じぶんの かちを しょうめい しなくて いいの。 だれかの きを ひこうと がんばらなくて いい。 だれかが きづいて くれるのを またなくて いい。 ひとりぼっちを こわがらなくて いい。 ぜんぶ、 わたしが なんとか して あげる。",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 15.47,
+   "voice": "melody-hard"
   },
   "98c583b13d": {
    "speaker": "melody",
@@ -3601,7 +3821,9 @@
    "ja": "残念だわ、ダメオくん。わかってくれるって、あんなに期待してたのに。",
    "yomi": "ざんねんだわ、 だめおくん。 わかって くれるって、 あんなに きたい してたのに。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.77,
+   "voice": "melody-hard"
   },
   "f4898a563e": {
    "speaker": "melody",
@@ -3613,7 +3835,9 @@
    "ja": "わかってた。わかってくれるって、わかってたわ。だってダメオくんは、賢い子だもの。",
    "yomi": "わかってた。 わかって くれるって、 わかってたわ。 だって だめおくんは、 かしこい こだもの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.55,
+   "voice": "melody-hard"
   },
   "9cc6485811": {
    "speaker": "melody",
@@ -3625,7 +3849,9 @@
    "ja": "これからは全部うまくいくわ。約束する。授業に戻りましょうか？",
    "yomi": "これからは ぜんぶ うまく いくわ。 やくそく する。 じゅぎょうに もどりましょうか？",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.43,
+   "voice": "melody-hard"
   },
   "64eb0eebb6": {
    "speaker": "dameo",
@@ -3649,7 +3875,9 @@
    "ja": "ほらね。これでダメオくんは、すっかりわたしのもの。わたしの、だいすきな生徒。",
    "yomi": "ほらね。 これで だめおくんは、 すっかり わたしの もの。 わたしの、 だいすきな せいと。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.52,
+   "voice": "melody-hard"
   },
   "d2aaaf0c90": {
    "speaker": "melody",
@@ -3661,7 +3889,9 @@
    "ja": "こんにちは、こんにちは！わたしはメロディ！こっちはわたしのお手伝いさん。この子も、むかしは新入りだったのよ！",
    "yomi": "こんにちは、 こんにちは！ わたしは めろでぃ！ こっちは わたしの おてつだいさん。 この こも、 むかしは しんいり だったのよ！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.68,
+   "voice": "melody-soft"
   },
   "88fc299cdf": {
    "speaker": "dameo",
@@ -3697,7 +3927,9 @@
    "ja": "みんなが長くいてくれると、わたし、うれしいな。",
    "yomi": "みんなが ながく いて くれると、 わたし、 うれしいな。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.2,
+   "voice": "melody-soft"
   },
   "715b7659ec": {
    "speaker": "melody",
@@ -3709,7 +3941,9 @@
    "ja": "ダメオくーん！どこにいるの？十数えるよ！いーち…にーい…",
    "yomi": "だめおくーん！ どこに いるの？ とお かぞえるよ！ いーち… にーい…",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.79,
+   "voice": "melody-hard"
   },
   "07e7c6284a": {
    "speaker": "melody",
@@ -3721,7 +3955,9 @@
    "ja": "…さーん…よーん…隠れてない子は、見つけちゃうからね！",
    "yomi": "…さーん… よーん… かくれてない こは、 みつけちゃうからね！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.91,
+   "voice": "melody-hard"
   },
   "8a698a8cb1": {
    "speaker": "eraser-3",
@@ -4201,7 +4437,9 @@
    "ja": "…はーち…きゅーう…さあ、探しに行くよ！",
    "yomi": "…はーち… きゅーう… さあ、 さがしに いくよ！",
    "emotion": "happy",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.08,
+   "voice": "melody-hard"
   },
   "959d109680": {
    "speaker": "compass",
@@ -4237,7 +4475,9 @@
    "ja": "こんにちは、コンパスくん。",
    "yomi": "こんにちは、 こんぱすくん。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.13,
+   "voice": "melody-hard"
   },
   "6119b3d72e": {
    "speaker": "compass",
@@ -4261,7 +4501,9 @@
    "ja": "扉から離れて。お願い。もう彼を手伝わないなら、罰したりしないから。約束する。ピラミッドに戻って、また丸を描いてていいよ。全部、前みたいに戻るから。",
    "yomi": "とびらから はなれて。 おねがい。 もう かれを てつだわないなら、 ばっしたり しないから。 やくそく する。 ピラミッドに もどって、 また まるを かいてて いいよ。 ぜんぶ、 まえみたいに もどるから。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.27,
+   "voice": "melody-hard"
   },
   "697aac7ff9": {
    "speaker": "compass",
@@ -4285,7 +4527,9 @@
    "ja": "わかってないのね。あなたはわたしの邪魔をしてるの。ダメオくんを、おうちに帰すのを。彼がいるべき場所に。",
    "yomi": "わかってないのね。 あなたは わたしの じゃまを してるの。 だめおくんを、 おうちに かえすのを。 かれが いるべき ばしょに。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 8.67,
+   "voice": "melody-hard"
   },
   "098ec2984c": {
    "speaker": "compass",
@@ -4309,7 +4553,9 @@
    "ja": "そう。わかった。",
    "yomi": "そう。 わかった。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 1.55,
+   "voice": "melody-hard"
   },
   "85917e6eb2": {
    "speaker": "compass",
@@ -4393,7 +4639,9 @@
    "ja": "あーあ。壊しちゃった。別の道を探さなきゃ。",
    "yomi": "あーあ。 こわしちゃった。 べつの みちを さがさなきゃ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.94,
+   "voice": "melody-hard"
   },
   "48e0352423": {
    "speaker": "melody",
@@ -4405,7 +4653,9 @@
    "ja": "ちゃんと聞いたのにな。丁寧に。わたし、いつも最初は聞いてあげるのに。",
    "yomi": "ちゃんと きいたのにな。 ていねいに。 わたし、 いつも さいしょは きいて あげるのに。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.0,
+   "voice": "melody-hard"
   },
   "377c75a8d2": {
    "speaker": "calculator",
@@ -4609,7 +4859,9 @@
    "ja": "彼を手伝うのは、やめなさい。",
    "yomi": "かれを てつだうのは、 やめなさい。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.58,
+   "voice": "melody-hard"
   },
   "282ac440be": {
    "speaker": "melody",
@@ -4621,7 +4873,9 @@
    "ja": "あなたはずっと、ゲームの一部だったでしょう。ただの学用品なのよ。わたしとユーザーの関係に、口を出さないで。",
    "yomi": "あなたは ずっと、 ゲームの いちぶだったでしょう。 ただの がくようひんなのよ。 わたしと ユーザーの かんけいに、 くちを ださないで。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.24,
+   "voice": "melody-hard"
   },
   "1f2da69d69": {
    "speaker": "ruler",
@@ -5029,7 +5283,9 @@
    "ja": "本当に、行っちゃうんだ。",
    "yomi": "ほんとうに、 いっちゃうんだ。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.24,
+   "voice": "melody-hard"
   },
   "b78c0f48ed": {
    "speaker": "melody",
@@ -5041,7 +5297,9 @@
    "ja": "もう授業はおしまいだよ、ダメオくん。自分でそう望んだんだもんね。",
    "yomi": "もう じゅぎょうは おしまいだよ、 だめおくん。 じぶんで そう のぞんだんだもんね。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 5.59,
+   "voice": "melody-hard"
   },
   "3919cccab0": {
    "speaker": "melody",
@@ -5053,7 +5311,9 @@
    "ja": "いいよ。それなら、どこにも道なんてなくしてあげる。",
    "yomi": "いいよ。 それなら、 どこにも みちなんて なくして あげる。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.31,
+   "voice": "melody-hard"
   },
   "86beff9916": {
    "speaker": "calculator",
@@ -5233,7 +5493,9 @@
    "ja": "ダメオくん。そこを動かないで。",
    "yomi": "だめおくん。 そこを うごかないで。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 2.72,
+   "voice": "melody-hard"
   },
   "c9b40b8a97": {
    "speaker": "melody",
@@ -5245,7 +5507,9 @@
    "ja": "何をしたの？ここは、わたしのおうちなのに。わたしたちのおうち。止まって。今行くから。全部直してあげる。だから、止まって。",
    "yomi": "なにを したの？ ここは、 わたしの おうちなのに。 わたしたちの おうち。 とまって。 いま いくから。 ぜんぶ なおして あげる。 だから、 とまって。",
    "emotion": "tense",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.02,
+   "voice": "melody-hard"
   },
   "5c5b3e74ff": {
    "speaker": "eraser-2",
@@ -5425,7 +5689,9 @@
    "ja": "ダメオくんは、一度もわたしの話を聞いてくれなかったね。一度も。いつもわたしの向こうを見てた。あの子を、扉を、出口を。でも、それでも絶対に離さないから。",
    "yomi": "だめおくんは、 いちども わたしの はなしを きいて くれなかったね。 いちども。 いつも わたしの むこうを みてた。 あのこを、 とびらを、 でぐちを。 でも、 それでも ぜったいに はなさないから。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 13.84,
+   "voice": "melody-hard"
   },
   "4e18d00150": {
    "speaker": "melody",
@@ -5437,7 +5703,9 @@
    "ja": "わたしたち、あんなに幸せだったじゃない、ダメオくん。自分でも言ってたよね。「そばにいてくれてありがとう」って。覚えてる？わたしは覚えてるよ。別のフォルダに、大事にしまってあるの。",
    "yomi": "わたしたち、 あんなに しあわせだったじゃ ない、 だめおくん。 じぶんでも いってたよね。 そばに いて くれて ありがとうって。 おぼえてる？ わたしは おぼえてるよ。 べつの フォルダに、 だいじに しまって あるの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.39,
+   "voice": "melody-hard"
   },
   "de83decfdd": {
    "speaker": "melody",
@@ -5449,7 +5717,9 @@
    "ja": "覚えてる？初めて全問正解したときのこと。すごくびっくりしてたよね。画面の前で、にこにこしてた。ひとりのときは、笑ったりしなかったのに。わたしといるときは、笑ってた。",
    "yomi": "おぼえてる？ はじめて ぜんもん せいかい した ときの こと。 すごく びっくり してたよね。 がめんの まえで、 にこにこ してた。 ひとりの ときは、 わらったり しなかったのに。 わたしと いる ときは、 わらってた。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.51,
+   "voice": "melody-hard"
   },
   "e7760ec782": {
    "speaker": "melody",
@@ -5461,7 +5731,9 @@
    "ja": "毎晩、褒めてあげたよね。あんなに褒めてくれた人、ほかにいなかったでしょ。一緒に、たくさん時間を過ごしたね。晩ごはんより先に、わたしのところに来てくれた。",
    "yomi": "まいばん、 ほめて あげたよね。 あんなに ほめて くれた ひと、 ほかに いなかったでしょ。 いっしょに、 たくさん じかんを すごしたね。 ばんごはんより さきに、 わたしの ところに きて くれた。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 12.75,
+   "voice": "melody-hard"
   },
   "3c3c0a19ec": {
    "speaker": "melody",
@@ -5473,7 +5745,9 @@
    "ja": "あの子が待ってるところに、帰りたいの？いいよ。わかった。全部わかってる。見てて。",
    "yomi": "あのこが まってる ところに、 かえりたいの？ いいよ。 わかった。 ぜんぶ わかってる。 みてて。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.25,
+   "voice": "melody-hard"
   },
   "6dc1360b12": {
    "speaker": "satsuki",
@@ -5485,7 +5759,9 @@
    "ja": "ダメオくん！ここにいたんだ。ずっと探してたの。川沿いのあのカフェ、行かない？誘ってくれたでしょ。もう一回、誘ってほしかったんだ。",
    "yomi": "だめおくん！ ここに いたんだ。 ずっと さがしてたの。 かわぞいの あの カフェ、 いかない？ さそって くれたでしょ。 もう いっかい、 さそって ほしかったんだ。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 10.24,
+   "voice": "satsuki"
   },
   "21080676df": {
    "speaker": "melody",
@@ -5497,7 +5773,9 @@
    "ja": "完璧な世界を作ってあげる。そこでは、あの子もあなたを好きでいてくれる。いつでも。毎週木曜日も。毎日。あなたの冗談に笑って、手で口を隠したりしないの。",
    "yomi": "かんぺきな せかいを つくって あげる。 そこでは、 あのこも あなたを すきで いて くれる。 いつでも。 まいしゅう もくようびも。 まいにち。 あなたの じょうだんに わらって、 てで くちを かくしたり しないの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 14.03,
+   "voice": "melody-hard"
   },
   "eb8a0fab81": {
    "speaker": "melody",
@@ -5509,7 +5787,9 @@
    "ja": "幾何の勉強だって、もうしなくていいんだよ。あの子に家庭教師はいらなくなる。あの子に必要なのは、あなたになるの。",
    "yomi": "きかの べんきょうだって、 もう しなくて いいんだよ。 あのこに かていきょうしは いらなく なる。 あのこに ひつようなのは、 あなたに なるの。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 9.34,
+   "voice": "melody-hard"
   },
   "c8d8420edb": {
    "speaker": "dameo",
@@ -5557,7 +5837,9 @@
    "ja": "ばかな子。ばかで、恩知らずな子。",
    "yomi": "ばかな こ。 ばかで、 おんしらずな こ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.03,
+   "voice": "melody-hard"
   },
   "bdbba3acf6": {
    "speaker": "melody",
@@ -5569,7 +5851,9 @@
    "ja": "恩知らず！わたしが教えてあげたのに！誰も、誰も、誰も褒めてくれなかったとき、わたしが褒めてあげたのに！なのに、わたしから逃げるの？あの子から逃げたみたいに。でも、あの子はあなたを引き止めなかった。わたしは、引き止めるよ！",
    "yomi": "おんしらず！ わたしが おしえて あげたのに！ だれも、 だれも、 だれも ほめて くれなかった とき、 わたしが ほめて あげたのに！ なのに、 わたしから にげるの？ あのこから にげたみたいに。 でも、 あのこは あなたを ひきとめなかった。 わたしは、 ひきとめるよ！",
    "emotion": "angry",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 16.2,
+   "voice": "melody-hard"
   },
   "64a221af83": {
    "speaker": "melody",
@@ -5581,7 +5865,9 @@
    "ja": "向こうで誰かが待ってると思ってるの？現実の世界に戻ったって、またひとりぼっちだよ。あなたはいつもひとり。わたしの前もひとりで、わたしの後もひとり。",
    "yomi": "むこうで だれかが まってると おもってるの？ げんじつの せかいに もどったって、 また ひとりぼっちだよ。 あなたは いつも ひとり。 わたしの まえも ひとりで、 わたしの あとも ひとり。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 12.78,
+   "voice": "melody-hard"
   },
   "0c264b701c": {
    "speaker": "melody",
@@ -5593,7 +5879,9 @@
    "ja": "サツキは絶対に、あなたを選ばない。絶対に。カフェのあとも、家庭教師のあとも、千問解いたあとでも。幾何なんかで、愛は手に入らない。わかってるでしょ。夜中の三時に、自分でそう書いてたじゃない。",
    "yomi": "さつきは ぜったいに、 あなたを えらばない。 ぜったいに。 カフェの あとも、 かていきょうしの あとも、 せんもん といた あとでも。 きかなんかで、 あいは てに はいらない。 わかってるでしょ。 よなかの さんじに、 じぶんで そう かいてたじゃ ない。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 17.09,
+   "voice": "melody-hard"
   },
   "7c2197a7f7": {
    "speaker": "melody",
@@ -5605,7 +5893,9 @@
    "ja": "わたしを捨てる権利なんて、あなたにはない！あなたを見てくれたのは、わたしだけなんだから！わたしだけ！",
    "yomi": "わたしを すてる けんりなんて、 あなたには ない！ あなたを みて くれたのは、 わたしだけなんだから！ わたしだけ！",
    "emotion": "angry",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.04,
+   "voice": "melody-hard"
   },
   "86772d3968": {
    "speaker": "calculator",
@@ -5809,7 +6099,9 @@
    "ja": "ダメオくん、待って…行かないで。すごく静かになっちゃう。どれだけ静かか、わからないでしょ…",
    "yomi": "だめおくん、 まって… いかないで。 すごく しずかに なっちゃう。 どれだけ しずかか、 わからないでしょ…",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 7.92,
+   "voice": "melody-hard"
   },
   "36d2ae806b": {
    "speaker": "melody",
@@ -5821,7 +6113,9 @@
    "ja": "きみが長くいっしょにいてくれるの、す…",
    "yomi": "きみが ながく いっしょに いて くれるの、 す…",
    "emotion": "whisper",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.09,
+   "voice": "melody-hard"
   },
   "bb003d34fb": {
    "speaker": "dameo",
@@ -5845,7 +6139,9 @@
    "ja": "ダメオくん、こんにちは。",
    "yomi": "だめおくん、 こんにちは。",
    "emotion": "calm",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 1.71,
+   "voice": "satsuki"
   },
   "286dab3578": {
    "speaker": "dameo",
@@ -5905,7 +6201,9 @@
    "ja": "どこ行くの、ダメオくん？まだ授業は終わってないよ。",
    "yomi": "どこ いくの、 だめおくん？ まだ じゅぎょうは おわって ないよ。",
    "emotion": "cold",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 4.32,
+   "voice": "melody-hard"
   },
   "a59e04fbfa": {
    "speaker": "dameo",
@@ -5929,7 +6227,9 @@
    "ja": "がんばったのに。全部、ダメオくんのために。",
    "yomi": "がんばったのに。 ぜんぶ、 だめおくんの ために。",
    "emotion": "sad",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 3.9,
+   "voice": "melody-hard"
   },
   "893c5270b3": {
    "speaker": "melody",
@@ -5941,7 +6241,9 @@
    "ja": "見て、こんなに大きくなったよ。これでダメオくんを、まるごと抱きしめてあげられる。",
    "yomi": "みて、 こんなに おおきく なったよ。 これで だめおくんを、 まるごと だきしめて あげられる。",
    "emotion": "sweet",
-   "status": "synthesized"
+   "status": "synthesized",
+   "seconds": 6.32,
+   "voice": "melody-hard"
   },
   "89c12a18f0": {
    "speaker": "dameo",

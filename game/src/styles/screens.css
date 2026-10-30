@@ -1170,3 +1170,46 @@
     opacity: 0;
   }
 }
+
+/* The speaker's painted portrait (stage.ts showPortrait): beside the dialogue in 3D and
+   monitor scenes, kept until the next line. Painted art is not pixel art: smooth scaling. */
+.speaker-portrait {
+  position: absolute;
+  bottom: 0;
+  height: 74%;
+  max-width: 46%;
+  background: center bottom / contain no-repeat;
+  opacity: 0;
+  transform: translateY(5%);
+  transition:
+    opacity var(--dur-med) ease,
+    transform var(--dur-med) ease;
+  pointer-events: none;
+  /* no z-index: the dialogue band (later in the DOM) stays on top and the portrait shows through it */
+  filter: drop-shadow(0 0 18px rgba(0, 0, 0, 0.55));
+}
+
+.speaker-portrait[data-side='left'] {
+  left: 2%;
+}
+
+.speaker-portrait[data-side='right'] {
+  right: 2%;
+}
+
+.speaker-portrait.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.reduce-motion .speaker-portrait {
+  transition: none;
+}
+
+@media (max-width: 640px) {
+  /* phones: stand on top of the dialogue band, not behind the text */
+  .speaker-portrait {
+    bottom: var(--hud-height);
+    height: 34%;
+  }
+}

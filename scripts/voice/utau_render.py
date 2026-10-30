@@ -164,6 +164,11 @@ class Voice:
     range_st: float = 3.0  # semitones of rise and fall across a phrase
     mora_ms: float = 120.0
     gain: float = 0.9
+    # 0..1: how sung the speech is — glides between morae, a slow vibrato on held
+    # vowels and drawn-out phrase ends (measured from the bank's own demo: ~3.5 Hz, ±0.2 st)
+    sing: float = 0.0
+    vib_hz: float = 3.5
+    vib_st: float = 0.2
 
 
 # sounds some banks lack, read as the kana they are pronounced like
@@ -210,6 +215,9 @@ def speak(v: Voice, kana: str, question: bool | None = None, energy: float = 1.0
         if m == '_long':
             continue
         length = v.mora_ms * (1.8 if i + 1 < len(ms) and ms[i + 1] == '_long' else 1.0)
+        nxt_m = next((x for x in ms[i + 1:] if x not in ('_space', '_long')), '_end')
+        if v.sing and nxt_m in ('_end', '_pause'):
+            length *= 1 + 0.7 * v.sing  # the last mora of a phrase is drawn out
         o = pick_alias(v, prev_v, m)
         if o is None:
             print(f'  no sample for "{m}" (after {prev_v})', file=sys.stderr)
@@ -238,7 +246,19 @@ def speak(v: Voice, kana: str, question: bool | None = None, energy: float = 1.0
         e_ms = (nxt['on'] - nxt['o'].pre * nxt['k'] + nxt['o'].overlap * nxt['k']) if nxt else nt['on'] + nt['len'] + 40
         total_ms = max(30.0, e_ms - s_ms)
         hz_end = nt['hz'] * 2 ** (-0.6 * v.range_st / total / 12)
-        y = render_note(o, kv, total_ms, np.linspace(nt['hz'], hz_end, 8), SR) * v.gain
+        n = 64
+        tt = np.linspace(0, total_ms, n)
+        contour = np.linspace(nt['hz'], hz_end, n)
+        if v.sing:
+            # glide in from the previous mora's pitch over the lead-in, then a slow vibrato
+            prev_hz = notes[j - 1]['hz'] if j > 0 and not notes[j - 1]['stop'] else nt['hz']
+            lead = o.pre * kv + 0.25 * v.sing * nt['len']
+            g = np.clip(tt / max(lead, 1.0), 0, 1)
+            g = g * g * (3 - 2 * g)
+            contour = prev_hz * (contour / prev_hz) ** g
+            depth = v.vib_st * v.sing * np.clip((tt - lead - 60) / 120, 0, 1)
+            contour = contour * 2 ** (depth * np.sin(2 * np.pi * v.vib_hz * tt / 1000) / 12)
+        y = render_note(o, kv, total_ms, contour, SR) * v.gain
         fade_in = min(len(y), int(o.overlap * kv / 1000 * SR))
         if fade_in > 0 and j > 0:
             y[:fade_in] *= np.linspace(0, 1, fade_in)

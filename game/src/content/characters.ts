@@ -4,6 +4,7 @@
 import { EMOTIONS, type Emotion } from '../render/sprites';
 import melodySheet01 from '../assets/characters/melody/melody-sheet-01.png';
 import melodySheet02 from '../assets/characters/melody/melody-sheet-02.png';
+import dameoBust from '../assets/characters/dameo/dameo-bust.png';
 
 export interface SheetPose {
   kind: 'sheet';
@@ -31,6 +32,9 @@ export interface CharacterDef {
   referenceHeight?: number;
   /** Nameplate accent; must be one of the design tokens. */
   accent: string;
+  /** The author's painted portrait, shown beside the dialogue while this character speaks
+   * in 3D and monitor scenes (where their pixel figure is small or off screen). */
+  portrait?: { src: string; w: number; h: number; side: 'left' | 'right' };
   poses: Record<string, Pose>;
 }
 
@@ -82,7 +86,14 @@ export const characters: Record<string, CharacterDef> = {
       },
     },
   },
-  dameo: { id: 'dameo', name: 'Дамео', accent: 'var(--rainbow-blue)', poses: pixel() },
+  dameo: {
+    id: 'dameo',
+    name: 'Дамео',
+    accent: 'var(--rainbow-blue)',
+    poses: pixel(),
+    // author art 2026-10-30 (materials/characters/melody-dameo-2026-10-30.png), cut out
+    portrait: { src: dameoBust, w: 933, h: 1304, side: 'left' },
+  },
   satsuki: { id: 'satsuki', name: 'Сацуки', accent: 'var(--reality-olive)', poses: pixel() },
   calculator: { id: 'calculator', name: 'Калькулятор-Пушин', accent: 'var(--mint)', poses: pixel() },
   ruler: { id: 'ruler', name: 'Говорящая Линейка', accent: 'var(--lemon)', poses: pixel() },

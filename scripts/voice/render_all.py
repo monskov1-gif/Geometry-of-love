@@ -32,10 +32,12 @@ BANKS = Path(os.environ.get('VOICEBANKS', ''))
 # Voice casting (approved by the author 2026-10-30): bank folder, alias suffix, base pitch,
 # mora length (ms), phrase range (semitones).
 CAST = {
-    'melody-soft': ('-.-/ゲキヤク-カプセル剤-', 'WD4', 300, 120, 3.0),
-    'melody-hard': ('-.-/ゲキヤク-カプセル剤-', 'D4', 285, 115, 3.5),
+    # Melody: a little sung (author 2026-10-30), pitched toward the bank demos (soft ~350 Hz, normal ~390 Hz)
+    'melody-soft': ('-.-/ゲキヤク-カプセル剤-', 'WD4', 320, 135, 4.5),
+    'melody-hard': ('-.-/ゲキヤク-カプセル剤-', 'D4', 335, 125, 5.0),
     'dameo': ('default/x/カロガド単独音', '', 140, 115, 2.2),
-    'satsuki': ('vivid/暗鳴ニュイ vivid連続音', 'E4', 235, 125, 2.5),
+    # Satsuki: higher and more emotional (author 2026-10-30)
+    'satsuki': ('vivid/暗鳴ニュイ vivid連続音', 'E4', 290, 120, 4.5),
     'calculator': ('TETO-tougou-110401/重音テト音声ライブラリー', '', 310, 105, 4.0),
     'ruler': ('TETO-tougou-110401/重音テト音声ライブラリー', '', 220, 130, 1.8),
     'compass': ('Soft', '', 390, 125, 3.0),
@@ -43,6 +45,9 @@ CAST = {
     'eraser-2': ('TETO-tougou-110401/重音テト音声ライブラリー', '', 345, 110, 3.2),
     'eraser-3': ('vivid/暗鳴ニュイ vivid連続音', 'A4', 300, 115, 3.0),
 }
+
+# how sung each voice is (0 = plain speech)
+SING = {'melody-soft': 0.75, 'melody-hard': 0.55}
 
 # emotion → (pitch shift in semitones, range factor, tempo factor (>1 slower), energy)
 EMOTION = {
@@ -76,7 +81,11 @@ def render(job: tuple[str, dict]) -> tuple[str, dict]:
     if folder not in _banks:
         _banks[folder] = load_bank(BANKS / folder)
     shift, rf, tf, energy = EMOTION.get(line.get('emotion', 'calm'), EMOTION['calm'])
-    v = Voice(_banks[folder], suffix, base_hz=base * 2 ** (shift / 12), range_st=rng * rf, mora_ms=mora * tf)
+    sing = SING.get(key, 0.0)
+    # Satsuki plays every emotion a third stronger
+    k_emo = 1.35 if key == 'satsuki' else 1.0
+    v = Voice(_banks[folder], suffix, base_hz=base * 2 ** (shift * k_emo / 12), range_st=rng * (1 + (rf - 1) * k_emo), mora_ms=mora * tf, sing=sing)
+    energy = 1 + (energy - 1) * k_emo
     if not any(not m.startswith('_') for m in morae(line['yomi'])):
         return lid, {'status': 'silent'}  # a wordless line («…»): nothing to say
     y = speak(v, line['yomi'], energy=energy)

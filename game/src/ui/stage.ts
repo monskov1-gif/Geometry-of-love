@@ -103,10 +103,13 @@ export class Stage {
   /** Black veil over a change of place, so locations never cut hard. */
   private readonly veil = el('div', { class: 'stage-veil', 'aria-hidden': 'true' });
   private place: string | null = null;
+  /** The painted portrait of whoever speaks (characters[].portrait), kept until the next line. */
+  private readonly portrait = el('div', { class: 'speaker-portrait', 'aria-hidden': 'true' });
+  private portraitOf: string | null = null;
 
   constructor() {
     this.cast = el('div', { class: 'stage-cast' });
-    this.root = el('div', { class: 'stage' }, this.scene.root, this.cast, this.veil);
+    this.root = el('div', { class: 'stage' }, this.scene.root, this.cast, this.portrait, this.veil);
     this.ticker = window.setInterval(() => {
       this.beat++;
       for (const { actor } of this.nodes.values()) actor?.tick(this.beat);
@@ -180,6 +183,25 @@ export class Stage {
       entry.node.dataset.speaking = String(cid === id);
     }
     if (this.in3D) peekWorld()?.setSpeaker(id);
+  }
+
+  /**
+   * Shows the speaker's painted portrait beside the dialogue (3D and monitor scenes only:
+   * in 2D scenes their figure already stands on stage). null hides it.
+   */
+  showPortrait(id: string | null): void {
+    const def = id ? characters[id] : undefined;
+    const p = def?.portrait;
+    const on = !!p && this.root.dataset.mode !== '2d';
+    if (on && this.portraitOf !== id) {
+      this.portraitOf = id;
+      Object.assign(this.portrait.style, { backgroundImage: `url("${p.src}")`, aspectRatio: `${p.w} / ${p.h}` });
+      this.portrait.dataset.side = p.side;
+      loadImage(p.src).catch(() => {
+        this.portrait.textContent = 'Портрет не загрузился';
+      });
+    }
+    this.portrait.classList.toggle('is-on', on);
   }
 
   /** True while the current location is a 3D scene. */
