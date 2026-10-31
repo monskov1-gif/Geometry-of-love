@@ -2,7 +2,7 @@
 // merged into one LineSegments per call site (vertex colours), so a whole sky
 // of outlines is a single draw call; grids are pixel textures on big planes.
 import * as THREE from 'three';
-import { TX } from '../kit/location-kit';
+import { canvasTexture, TX } from '../kit/location-kit';
 
 /** Collects edge outlines of many shapes, then makes one LineSegments. */
 export class WireBatch {
@@ -66,8 +66,8 @@ export class WireBatch {
  * lines, brighter major lines. Colours are CSS strings; the background may be
  * transparent (lines only, for additive planes).
  */
-export const gridTex = (key: string, bg: string | null, minor: string, major: string, cells = 8) =>
-  TX(`grid-${key}`, 64, 64, (ctx, w, h) => {
+export const gridTex = (key: string, bg: string | null, minor: string, major: string, cells = 8, smooth = false) =>
+  (smooth ? canvasTexture : TX)(`grid-${key}`, 64, 64, (ctx, w, h) => {
     if (bg) {
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
@@ -81,7 +81,7 @@ export const gridTex = (key: string, bg: string | null, minor: string, major: st
     ctx.fillStyle = major;
     ctx.fillRect(0, 0, w, 1);
     ctx.fillRect(0, 0, 1, h);
-  }, { color: !!bg });
+  }, smooth ? { color: !!bg, aniso: 4 } : { color: !!bg });
 
 /** A flat plane with a repeating texture, `tile` metres per repeat (no stretching). */
 export function tiledPlane(root: THREE.Object3D, mat: THREE.Material & { map?: THREE.Texture | null }, w: number, h: number, tile: number): THREE.Mesh {
