@@ -17,6 +17,7 @@ import { bunting, cloud, giantFlower, mushroom, rainbowArch, ringRug, stickerBom
 import { confetti, floaters, glitchLayer, glitter, type Fx } from '../candy/fx';
 import { candyGrass, checkerFloor, skyBackdrop, sprinkleSand } from '../candy/textures';
 import { CANDY, LOUD, PASTEL, RAINBOW } from '../candy/palette';
+import { CANDY_LOOK } from '../candy/look';
 import { ACCENT_ON, CANDY_AMBIENT, CANDY_STATES, moodOf } from '../candy/states';
 
 const XL = -11;
@@ -168,7 +169,7 @@ function buildSandbox(root: THREE.Group, low: boolean): LocationBuild {
   stickerBomb(ck, -1.85, -0.55, 1.42, 2.08, -5.2 + 0.05, 16, { wrong: 0.08, min: 0.14, max: 0.26 });
 
   // ---- accent lights: pink and blue pools, a warm sun light
-  kit.lamp('sunLight', { light: kit.pointLight(0xfff0c0, 6, 30, 6, 8, 2, 0.6), on: { day: 1, dim: 0.2, glitch: 0 } });
+  kit.lamp('sunLight', { light: kit.pointLight(0xfff0c0, 4.5, 30, 6, 8, 2, 0.6), on: { day: 1, dim: 0.2, glitch: 0 } });
   kit.lamp('pinkPool', { light: kit.pointLight(CANDY.pink, 3, 9, -5, 2.5, -1.5, 1.2), on: ACCENT_ON });
   kit.lamp('bluePool', { light: kit.pointLight(CANDY.blue, 3, 9, 4, 2.5, -1.0, 1.2), on: ACCENT_ON });
   kit.lamp('codeLight', { light: kit.pointLight(0x39ff88, 4, 14, 0, 3, -2, 1.0), on: { day: 0, dim: 0, glitch: 1 } });
@@ -195,6 +196,7 @@ function buildSandbox(root: THREE.Group, low: boolean): LocationBuild {
 
   return {
     kit,
+    look: CANDY_LOOK,
     shots: {
       wide: { pos: [0, 1.75, 5.4], look: [0, 1.35, -2.4], fov: 50 },
       cube: { pos: [-3.6, 1.5, 2.2], look: [-5.6, 1.3, -3.0], fov: 46 },

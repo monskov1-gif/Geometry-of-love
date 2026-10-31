@@ -11,7 +11,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { LookLayers, WindowLight } from './kit/window-light';
 import { Actor, type ActorFacing } from './actor';
 import { locations3D } from './locations';
-import type { LocationBuild, Shot, Vec3 } from './types';
+import { DEFAULT_LOOK, type LocationBuild, type Shot, type Vec3 } from './types';
 import type { Emotion } from '../render/sprites';
 
 export interface CastMember {
@@ -39,6 +39,71 @@ function isSoftwareGL(gl: THREE.WebGLRenderer): boolean {
   const ext = ctx.getExtension('WEBGL_debug_renderer_info');
   const name = ext ? String(ctx.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
   return /swiftshader|llvmpipe|software/i.test(name);
+}
+
+/**
+ * Who the window-light response (exposure, bloom, lens flares near a lamp or a
+ * window) follows. Only a player walking in an interactive episode: in dialogue
+ * the light must not depend on who stands where. (It used to follow Dameo on the
+ * story stage, so every time he stepped in next to a candy pendant the frame got
+ * brighter — chapter 9 went almost white as the cast changed.)
+ */
+export function lightSubject(follow: { position: THREE.Vector3 } | null): { player: { position: THREE.Vector3 } | null; keyScene: boolean } {
+  return follow ? { player: { position: follow.position }, keyScene: false } : { player: null, keyScene: true };
+}
+
+/**
+ * Floor points for a cast: each actor stands on its mark, but never on a spot
+ * already taken (within 0.5 m) — the newcomer steps aside 0.6 m, alternating
+ * right/left, inside the walk range. `shared` lets marks coincide (ch14–15).
+ */
+export function spreadMarks(
+  marks: { x: number; z: number }[],
+  walk: { minX: number; maxX: number },
+  shared = false,
+): { x: number; z: number }[] {
+  const taken: { x: number; z: number }[] = [];
+  return marks.map((m) => {
+    let p = { x: m.x, z: m.z };
+    const clash = (q: { x: number; z: number }) => taken.some((t) => Math.hypot(t.x - q.x, t.z - q.z) < 0.5);
+    if (!shared)
+      for (let k = 1; k <= 8 && clash(p); k++) {
+        const side = k % 2 ? 1 : -1;
+        p = { x: Math.max(walk.minX, Math.min(walk.maxX, m.x + side * 0.6 * Math.ceil(k / 2))), z: m.z };
+      }
+    taken.push(p);
+    return p;
+  });
+}
+
+/**
+ * Dialogue framing for a cast: camera at about eye height of the tallest, tilted
+ * so the feet (y = 0) sit at `feetNdc` — above the dialogue band (bottom ~27% of
+ * the stage) — and backed off until the tallest head is inside the frame.
+ */
+export function castShot(
+  c: { x: number; z: number; spread: number; tallest: number; shortest: number },
+  maxDist: number,
+  fov = 46,
+): Shot {
+  let dist = Math.min(maxDist, Math.max(2.3, 2.0 + c.spread * 0.9));
+  const camY = c.tallest * 0.86;
+  if (c.shortest >= 1.4) {
+    // full-size cast: the established medium shot
+    return { pos: [c.x, camY, c.z + dist], look: [c.x, c.tallest * 0.7, c.z - 1.2], fov };
+  }
+  // short figures (erasers, the calculator, the compass) stand whole above the dialogue band
+  const t = Math.tan(THREE.MathUtils.degToRad(fov / 2));
+  const feetNdc = -0.4;
+  let pitch = 0;
+  for (let i = 0; i < 12; i++) {
+    pitch = Math.atan(camY / dist) - Math.atan(-feetNdc * t);
+    const head = Math.tan(Math.atan((c.tallest + 0.08 - camY) / dist) + pitch) / t;
+    if (head <= 0.94 || dist >= maxDist) break;
+    dist = Math.min(maxDist, dist + 0.25);
+  }
+  const look: Vec3 = [c.x, camY - Math.tan(pitch) * (dist + 1.2), c.z - 1.2];
+  return { pos: [c.x, camY, c.z + dist], look, fov };
 }
 
 export class World3D {
@@ -85,7 +150,7 @@ export class World3D {
     this.gl = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: false, powerPreference: 'high-performance' });
     this.gl.outputColorSpace = THREE.SRGBColorSpace;
     this.gl.toneMapping = THREE.ACESFilmicToneMapping;
-    this.gl.toneMappingExposure = 1.05;
+    this.gl.toneMappingExposure = DEFAULT_LOOK.exposure;
     this.gl.localClippingEnabled = true; // actors being erased are clipped by a plane
     // ?low=1 / ?low=0 force the mode (screenshots, debugging); otherwise software GL → low.
     const forced = new URLSearchParams(location.search).get('low');
@@ -93,7 +158,7 @@ export class World3D {
     if (!this.low) {
       this.composer = new EffectComposer(this.gl);
       this.composer.addPass(new RenderPass(this.scene, this.camera));
-      this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.5, 0.8);
+      this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), DEFAULT_LOOK.bloom, 0.5, DEFAULT_LOOK.threshold);
       this.composer.addPass(this.bloom);
       this.composer.addPass(new OutputPass());
     }
@@ -124,6 +189,7 @@ export class World3D {
       this.scene.add(this.group);
       this.build = def.build(this.group, { low: this.low });
       this.locationId = id;
+      this.applyLook(this.build.look);
       this.variant = null;
       for (const a of this.actors.values()) this.scene.remove(a.group);
       this.actors.clear();
@@ -143,6 +209,19 @@ export class World3D {
     this.start();
   }
 
+  /**
+   * The location's own exposure and bloom become the base the window-light layer
+   * adds to. Set once per location (never per step): a story re-sending the same
+   * background or switching its state must not change the camera.
+   */
+  private applyLook(look: LocationBuild['look']): void {
+    const l = { ...DEFAULT_LOOK, ...look };
+    this.look.base = { exposure: l.exposure, bloom: l.bloom };
+    this.look.clearLayer('windowLight');
+    if (this.bloom) this.bloom.threshold = l.threshold;
+    this.look.apply();
+  }
+
   private disposeLocation(): void {
     if (!this.group) return;
     this.build?.dispose?.();
@@ -159,7 +238,7 @@ export class World3D {
   }
 
   /** Places, adds and removes characters to match the story stage. */
-  setCast(cast: CastMember[]): void {
+  setCast(cast: CastMember[], { sharedSpots = false }: { sharedSpots?: boolean } = {}): void {
     const b = this.build;
     if (!b) return;
     const keep = new Set(cast.map((c) => c.id));
@@ -170,20 +249,26 @@ export class World3D {
         this.actors.delete(id);
       }
     }
-    for (const c of cast) {
-      const mark = b.marks[c.mark] ?? b.marks.center;
+    const marks = cast.map((c) => b.marks[c.mark] ?? b.marks.center);
+    const spots = spreadMarks(marks, b.walk, sharedSpots);
+    cast.forEach((c, i) => {
+      const mark = marks[i]!;
+      const spot = spots[i]!;
       let a = this.actors.get(c.id);
       if (!a) {
         a = new Actor(c.id);
-        a.place(mark.x, mark.z, mark.facing ?? 'front');
+        a.place(spot.x, spot.z, mark.facing ?? 'front');
         this.actors.set(c.id, a);
         this.scene.add(a.group);
-      } else if (!a.moving && (Math.abs(a.position.x - mark.x) > 0.05 || Math.abs(a.position.z - mark.z) > 0.05)) {
+      } else if (!a.moving && (Math.abs(a.position.x - spot.x) > 0.05 || Math.abs(a.position.z - spot.z) > 0.05)) {
         // a change of stage position is a walk, not a teleport
-        void a.moveTo(mark.x, mark.z).then(() => a!.turn(mark.facing ?? 'front'));
+        const actor = a;
+        void actor.moveTo(spot.x, spot.z).then(() => actor.turn(mark.facing ?? 'front'));
       }
       a.emotion = c.emotion;
-    }
+      a.reduceMotion = this.reduceMotion;
+      a.storyFx = c.fx ?? null;
+    });
     this.frameCast();
   }
 
@@ -217,11 +302,10 @@ export class World3D {
     const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
     const cz = zs.reduce((a, z) => a + z, 0) / zs.length;
     const spread = Math.max(...xs) - Math.min(...xs);
-    const wide = b.shots.wide;
-    const dist = Math.min(wide.pos[2] - cz, Math.max(2.3, 2.0 + spread * 0.9));
     const x = Math.max(b.walk.minX, Math.min(b.walk.maxX, cx));
-    const height = Math.max(...people.map((a) => a.height));
-    void this.setShot({ pos: [x, height * 0.86, cz + dist], look: [x, height * 0.7, cz - 1.2], fov: 46 }, duration);
+    const heights = people.map((a) => a.height);
+    const shot = castShot({ x, z: cz, spread, tallest: Math.max(...heights), shortest: Math.min(...heights) }, b.shots.wide.pos[2] - cz);
+    void this.setShot(shot, duration);
   }
 
   actor(id: string): Actor | undefined {
@@ -425,8 +509,7 @@ export class World3D {
     this.applyCamera(base, [this.panX + sway[0], sway[1], sway[2]]);
     for (const u of this.updaters) u(dt);
     for (const a of this.actors.values()) a.update(dt, this.camera);
-    const player = this.follow ?? this.actors.get('dameo') ?? null;
-    this.windowLight.update(dt, { world: b.kit, player: player ? { position: player.position } : null, camera: this.camera });
+    this.windowLight.update(dt, { world: b.kit, ...lightSubject(this.follow), camera: this.camera });
     this.look.apply();
     if (this.composer) this.composer.render(dt);
     else this.gl.render(this.scene, this.camera);

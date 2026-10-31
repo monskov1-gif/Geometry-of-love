@@ -192,22 +192,57 @@ export function bareBulb(kit: LocationKit, id: string, x: number, ceiling: numbe
   });
 }
 
-/** Instant noodle cup, energy can, crumpled paper — the desk's story. */
+/**
+ * Instant noodle cup, energy can, crumpled paper — the desk's story.
+ * The cup is a real vessel: a closed wall (outside in the brand colour, a white
+ * paper inside down to a bottom), a rolled rim, cold broth with noodles in it and
+ * the foil lid torn half off. A single open cone used to show only its outer
+ * faces, so from above the far wall vanished and the cups looked see-through.
+ */
 export function noodleCup(kit: LocationKit, x: number, y: number, z: number, seed: number): void {
   const r = rng(seed);
   const c = [0xd83a2a, 0xe8c040, 0x2a8ac8][Math.floor(r() * 3)]!;
+  const outside = kit.M(`cup-${c}`, c, { roughness: 0.6 });
+  const inside = kit.M('cupInside', 0xece6d8, { roughness: 0.85 });
+  // outside: the base from the axis, the tapered wall, the rolled rim
   kit.lathe(
     [
-      [0.035, 0],
-      [0.045, 0.1],
-      [0.047, 0.105],
+      [0.001, 0],
+      [0.034, 0],
+      [0.036, 0.004],
+      [0.046, 0.1],
+      [0.049, 0.103],
+      [0.049, 0.108],
     ],
-    kit.M(`cup-${c}`, c, { roughness: 0.6 }),
+    outside,
     x,
     y,
     z,
-    { seg: 20 },
+    { seg: 24 },
   );
+  // inside: from the rim down to the bottom (normals toward the axis: seen from above)
+  const wall = new THREE.LatheGeometry(
+    [
+      [0.049, 0.108],
+      [0.045, 0.106],
+      [0.043, 0.098],
+      [0.034, 0.012],
+      [0.001, 0.012],
+    ].map(([px, py]) => new THREE.Vector2(px, py)),
+    24,
+  );
+  kit._add(wall, inside, x, y, z);
+  // cold broth and a tangle of noodles, a little below the rim
+  kit.cy(0.041, 0.041, 0.004, kit.M('broth', 0xb87a3a, { roughness: 0.25 }), x, y + 0.078, z, { seg: 20 });
+  const noodle = kit.M('noodle', 0xe8d49a, { roughness: 0.7 });
+  for (let i = 0; i < 4; i++) {
+    const a = r() * Math.PI * 2;
+    kit.torus(0.012 + r() * 0.008, 0.0025, noodle, x + Math.cos(a) * 0.014, y + 0.081, z + Math.sin(a) * 0.014, { rx: Math.PI / 2, ts: 14, rs: 5 });
+  }
+  // the foil lid, still hinged at the back rim and lifted at the front
+  const lid = kit.M(`cupLid-${c}`, 0xf2eee6, { roughness: 0.4, metalness: 0.2 });
+  const ry = r() * Math.PI * 2;
+  kit.withT(x, z, ry, () => kit.cy(0.05, 0.05, 0.002, lid, 0, y + 0.125, -0.002, { rx: -0.35, seg: 20 }));
   if (r() < 0.6) kit.cy(0.002, 0.002, 0.2, kit.M('chopstick', 0xd8c090), x + 0.01, y + 0.13, z, { rz: 0.3 + r() * 0.3, seg: 6 });
 }
 

@@ -53,7 +53,21 @@ export interface LocationBuild {
   screen?: { app: AppScreen; corners: THREE.Vector3[] };
   /** Objects that the render must not reuse once the location is gone. */
   dispose?: () => void;
+  /**
+   * The camera "film" of this place: tone-mapping exposure and bloom (strength,
+   * threshold). Pale candy rooms need a high threshold, or every pastel wall blooms
+   * into a white haze. Defaults: {@link DEFAULT_LOOK}.
+   */
+  look?: Partial<LocationLook>;
 }
+
+export interface LocationLook {
+  exposure: number;
+  bloom: number;
+  threshold: number;
+}
+
+export const DEFAULT_LOOK: LocationLook = { exposure: 1.05, bloom: 0.5, threshold: 0.8 };
 
 export interface LocationDef3D {
   id: string;

@@ -8,6 +8,7 @@ import { backgrounds, characters } from '../content';
 import type { SheetPose } from '../content/characters';
 import type { StageState, StagedCharacter } from '../core/types';
 import { loadImage } from '../platform/assets';
+import { SHARED_SPOT_SCENES } from '../core/validate';
 import { SPRITE_H, SPRITE_W, spriteFrame, spriteSize, type Emotion } from '../render/sprites';
 import { el } from './dom';
 import { SceneView } from './scene-view';
@@ -196,6 +197,9 @@ export class Stage {
     if (on && this.portraitOf !== id) {
       this.portraitOf = id;
       Object.assign(this.portrait.style, { backgroundImage: `url("${p.src}")`, aspectRatio: `${p.w} / ${p.h}` });
+      this.portrait.style.setProperty('--portrait-scale', String(p.scale ?? 1));
+      // small figures (the tools) stand on top of the dialogue band instead of hiding behind it
+      this.portrait.toggleAttribute('data-small', (p.scale ?? 1) < 0.8);
       this.portrait.dataset.side = p.side;
       loadImage(p.src).catch(() => {
         this.portrait.textContent = 'Портрет не загрузился';
@@ -209,7 +213,7 @@ export class Stage {
     return this.root.dataset.mode === '3d';
   }
 
-  render(stage: Readonly<StageState>, themeRoot: HTMLElement, reduceMotion = false): void {
+  render(stage: Readonly<StageState>, themeRoot: HTMLElement, reduceMotion = false, sceneId = ''): void {
     themeRoot.dataset.space = stage.space;
     themeRoot.dataset.phase = stage.phase;
     // The app's own screens are not places: they are what Dameo's old CRT shows,
@@ -241,7 +245,11 @@ export class Stage {
         world.setStoryShot(stage.shot ?? 'crt');
       } else {
         world.show(stage.background!, stage.lighting, stage.variant);
-        world.setCast(stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })));
+        world.setCast(
+          stage.characters.map((c) => ({ id: c.id, emotion: poseEmotion(c.id, c.pose), mark: c.position, fx: c.fx ?? null })),
+          // only the final chase lets two figures share a spot (core/validate.ts)
+          { sharedSpots: SHARED_SPOT_SCENES.includes(sceneId) },
+        );
         world.setScreen(monitor(stage, reduceMotion));
         world.setStoryShot(stage.shot);
       }

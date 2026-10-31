@@ -154,7 +154,7 @@ export class GameScreen {
     this.pendingRevision = null;
     const reduceMotion = this.services.settings.get().reduceMotion;
     const stage = this.runtime.state.stage;
-    this.stage.render(stage, this.services.themeRoot, reduceMotion);
+    this.stage.render(stage, this.services.themeRoot, reduceMotion, this.runtime.state.position.scene);
     this.effects.play(this.runtime.takeEffects(), reduceMotion);
     // Music follows the scene, place and music() steps (content/music-map.ts), so it is
     // restored on load; the engine crossfades and keeps a theme that already plays.
