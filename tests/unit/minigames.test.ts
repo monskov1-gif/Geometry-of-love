@@ -5,7 +5,6 @@ import { AIR_TIME, BODY, buildCourse, CONFIGS, hits, JUMP_HEIGHT, obstacleBox, s
 import { buildCourse as buildClimbCourse } from '../../game/src/episodes/exit-course';
 import { MAX_JUMP_HEIGHT, stepBody, unreachablePlatforms, type Body } from '../../game/src/episodes/physics';
 import { RULER_MAX, tryBridge } from '../../game/src/episodes/ruler-bridge';
-import { cutLink, LINKS } from '../../game/src/episodes/system-files';
 
 describe('platformer physics', () => {
   const ground = [{ x: 0, y: 100, w: 200, h: 10 }];
@@ -74,21 +73,7 @@ describe('Mini-game 3 «Предел измерения»', () => {
   });
 });
 
-describe('Mini-game 4 «Системные файлы»', () => {
-  const binding = LINKS.filter((l) => l.role === 'binding').map((l) => l.id);
-  const vital = LINKS.filter((l) => l.role === 'vital').map((l) => l.id);
-  it('cutting a vital link is refused', () => {
-    for (const id of vital) expect(cutLink(new Set(), id)).toBe('refused');
-  });
-  it('cutting every binding link completes the puzzle', () => {
-    const cut = new Set<string>();
-    binding.slice(0, -1).forEach((id) => {
-      expect(cutLink(cut, id)).toBe('cut');
-      cut.add(id);
-    });
-    expect(cutLink(cut, binding.at(-1)!)).toBe('done');
-  });
-});
+// Mini-game 4 «Системные файлы»: tests/unit/system-files.test.ts
 
 describe('Mini-game 5 «Погоня»', () => {
   for (const config of Object.values(CONFIGS)) {

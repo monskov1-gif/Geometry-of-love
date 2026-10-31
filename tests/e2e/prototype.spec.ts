@@ -4,6 +4,7 @@
 // real-time mini-games (platformer, chase) whose rules are unit-tested.
 // Set SHOTS_DIR=<dir> to also save screenshots of each stage.
 import { expect, test, type Page } from '@playwright/test';
+import { playSystemFiles } from './system-files-play';
 
 async function shot(page: Page, name: string) {
   const dir = process.env.SHOTS_DIR;
@@ -253,16 +254,7 @@ test('ending 3 «За пределами экрана»: the whole story with ev
 
   // Chapter 13: Mini-game 4, played for real.
   await startEpisode(page, 'Системные файлы');
-  const files = page.getByTestId('episode');
-  await files.getByRole('listitem').filter({ hasText: 'core.sys' }).click();
-  await files.locator('[data-link="l3"]').click();
-  await expect(files.locator('.episode-caption')).toHaveText(/Стой!/); // vital link refused
-  await files.getByRole('listitem').filter({ hasText: 'user_07.usr' }).click();
-  await expect(files.locator('.files-info')).toContainText('Владелец: Дамео');
-  await shot(page, '08-files');
-  await files.locator('[data-link="l1"]').click();
-  await files.locator('[data-link="l2"]').click();
-  await expect(files).toBeHidden({ timeout: 10_000 });
+  await playSystemFiles(page, (name) => shot(page, name));
 
   // Chapters 14–15: Mini-game 5, both phases.
   await expect(page.locator('#app')).toHaveAttribute('data-phase', 'E');

@@ -1,95 +1,63 @@
-// Mini-game No. 4 «Системные файлы» (chapter 13): explore the program's
-// file structure, find Dameo's file among the user files, inspect its links
-// and cut only the links that bind him to the game. Cutting a link that
-// holds the world together is refused by the Calculator and resets the
-// puzzle (failure → retry). Success = every binding link of Dameo's file cut.
-// Look: the code space of the brief (near-black, green, pink-red for damage)
-// with a pixel backdrop, file-type icons, Dameo's sprite by his file and the
-// Calculator's sprite next to his hints (episodes/files-art.ts).
+// Mini-game No. 4 «Системные файлы» (chapter 13). Canon: find Dameo's file,
+// check the links between files and switch off his binding to the program;
+// some data is damaged; the Calculator says what is dangerous; system
+// components must not be touched. Four escalating stages (files-stages.ts):
+//   1. trace — follow the wires and mark the link files that hang on user_07;
+//   2. order — cut only Dameo's links, each after the files hanging on it are freed;
+//   3. unstable — the same, while the program locks his files and restores
+//      cut links; the Calculator's examples give the unlock digits in time;
+//   4. separate — leave no path user_07 → world.map within three cuts.
+// Mistakes restart the current stage (files-run.ts); success only after stage 4.
+// Look: the code space palette, pixel backdrop and icons (files-art.ts),
+// Dameo's and the Calculator's sprites by the hints.
 import { el } from '../ui/dom';
-import type { Emotion } from '../render/sprites';
-import { fileIcon, filesBackdrop, spriteURL, type FileKind } from './files-art';
+import type { Emotion } from '../render/sprites/humans';
+import { spriteURL } from './files-art';
+import { renderPanel } from './files-panel';
+import { StageRun, type RunEvent } from './files-run';
+import { STAGES } from './files-stages';
+import { graphSvg, renderGraph, svgEl } from './files-view';
 import type { EpisodeDefinition, EpisodeOutcome } from './types';
 
-export interface FileNode {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-  kind: 'system' | 'user' | 'damaged' | 'link';
-  meta: string;
-}
-
-export interface FileLink {
-  id: string;
-  from: string;
-  to: string;
-  /** binding = Dameo's tie to the game (must be cut); vital = holds the world (never cut). */
-  role: 'binding' | 'vital';
-}
-
-export const NODES: FileNode[] = [
-  { id: 'core', label: 'core.sys', x: 50, y: 12, kind: 'system', meta: 'Ядро программы. Системный компонент.' },
-  { id: 'world', label: 'world.map', x: 82, y: 30, kind: 'system', meta: 'Карта мира и Песочницы. Системный компонент.' },
-  { id: 'session', label: 'session.lnk', x: 50, y: 50, kind: 'link', meta: 'Активная сессия пользователя. Связывает пользователя с программой.' },
-  { id: 'progress', label: 'progress.dat', x: 22, y: 70, kind: 'link', meta: 'Учебный прогресс. Привязан к пользователю.' },
-  { id: 'u03', label: 'user_03.usr', x: 14, y: 32, kind: 'damaged', meta: 'Владелец: ▒▒▒▒▒. Файл повреждён: данные стёрты.' },
-  { id: 'u05', label: 'user_05.usr', x: 86, y: 70, kind: 'damaged', meta: 'Владелец: ▒▒▒▒. Повреждён. Последняя запись: «держу дверь».' },
-  { id: 'u06', label: 'user_06.usr', x: 66, y: 88, kind: 'damaged', meta: 'Владелец: ▒▒▒▒▒▒. Повреждён. Длина: предельная.' },
-  { id: 'u07', label: 'user_07.usr', x: 36, y: 88, kind: 'user', meta: 'Владелец: Дамео. Статус: «становится частью кода».' },
-];
-
-export const LINKS: FileLink[] = [
-  { id: 'l1', from: 'u07', to: 'session', role: 'binding' },
-  { id: 'l2', from: 'u07', to: 'progress', role: 'binding' },
-  { id: 'l3', from: 'session', to: 'core', role: 'vital' },
-  { id: 'l4', from: 'u07', to: 'world', role: 'vital' },
-  { id: 'l5', from: 'progress', to: 'world', role: 'vital' },
-  { id: 'l6', from: 'u03', to: 'world', role: 'vital' },
-];
-
-export type CutResult = 'cut' | 'refused' | 'done';
-
-/** Puzzle rule, unit-tested. Cutting a vital link fails; cutting all binding links wins. */
-export function cutLink(cut: ReadonlySet<string>, linkId: string): CutResult {
-  const link = LINKS.find((l) => l.id === linkId);
-  if (!link || link.role === 'vital') return 'refused';
-  const next = new Set(cut).add(linkId);
-  return LINKS.filter((l) => l.role === 'binding').every((l) => next.has(l.id)) ? 'done' : 'cut';
-}
-
-const SVG = 'http://www.w3.org/2000/svg';
-const svgEl = (tag: string, attrs: Record<string, string | number>) => {
-  const n = document.createElementNS(SVG, tag);
-  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, String(v));
-  return n;
-};
+const NEXT_STAGE_MS = 1400;
 
 export const systemFiles: EpisodeDefinition = {
   id: 'system-files',
   kind: 'minigame',
   title: 'Системные файлы',
   instructions:
-    'Найдите файл Дамео среди пользовательских файлов, изучите его связи и разорвите только те, что привязывают его к игре. Выберите файл, чтобы увидеть сведения и связи. Связи, которые держат мир, трогать нельзя.',
+    'Четыре этапа. Найдите нити, которые держат файл Дамео user_07.usr, и разорвите их, не задев чужие файлы и связи самой программы: на них держится мир. Выбирайте файлы и провода на схеме (мышь, касание или Tab и Enter), действия — на панели справа или снизу. Ошибка откатывает текущий этап.',
   create({ root, reduceMotion }) {
     let finish: ((o: EpisodeOutcome) => void) | null = null;
-    const cut = new Set<string>();
-    let selected: string | null = null;
-    const svg = svgEl('svg', { viewBox: '0 0 100 100', class: 'files-graph', role: 'img', 'aria-label': 'Граф файлов' }) as SVGSVGElement;
-    const info = el('div', { class: 'files-info', 'aria-live': 'polite' });
-    const hint = el('p', { class: 'episode-caption' }, 'Калькулятор: «Пользовательские файлы — внизу. Ищи по владельцу. Связи ядра и карты мира не трогай: на них держится всё».');
-    const list = el('div', { class: 'files-list', role: 'list' });
-    const calc = el('img', { src: spriteURL('calculator'), alt: 'Калькулятор', width: 48, height: 96, style: { imageRendering: 'pixelated', flex: 'none', width: '48px', height: '96px' } });
-    const setCalc = (emotion: Emotion) => (calc.src = spriteURL('calculator', emotion));
-    const hintRow = el('div', { style: { display: 'flex', gap: 'var(--space-2)', alignItems: 'center' } }, calc, hint);
-    root.replaceChildren(el('div', { class: 'files' }, hintRow, el('div', { class: 'files-main' }, svg, el('div', { class: 'files-side' }, list, info))));
-    const backdrop = filesBackdrop();
-    const icons = Object.fromEntries((['system', 'user', 'damaged', 'link'] as FileKind[]).map((k) => [k, fileIcon(k)]));
-    const dameo = spriteURL('dameo', 'tired');
-    const image = (href: string, x: number, y: number, w: number, h: number) =>
-      svgEl('image', { href, x, y, width: w, height: h, preserveAspectRatio: 'none', style: 'image-rendering: pixelated', 'pointer-events': 'none' });
+    let index = 0;
+    let run = new StageRun(STAGES[0]!);
+    let selectedNode: string | null = null;
+    let selectedLink: string | null = null;
+    let traced: string[] = [];
+    let timer = 0;
+
+    const svg = graphSvg();
+    // beside the graph (wide screens) the panel scrolls on its own, so the graph stays in view
+    const wide = typeof matchMedia === 'function' && matchMedia('(min-width: 641px)').matches;
+    const side = el('div', { class: 'files-side', style: wide ? { maxHeight: '60vh', overflowY: 'auto' } : {} });
+    const title = el('h3', { class: 'pixel files-stage', style: { margin: 0, color: 'var(--code-green)' } });
+    const hint = el('p', { class: 'episode-caption', 'aria-live': 'polite' });
+    const sprite = (id: string, emotion: Emotion) =>
+      el('img', { src: spriteURL(id, emotion), alt: '', width: 48, height: 96, style: { imageRendering: 'pixelated', flex: 'none', width: '48px', height: '96px' } });
+    const dameo = sprite('dameo', 'tired');
+    const calc = sprite('calculator', 'neutral');
+    root.replaceChildren(
+      el(
+        'div',
+        { class: 'files' },
+        title,
+        el('div', { style: { display: 'flex', gap: 'var(--space-2)', alignItems: 'center' } }, dameo, calc, hint),
+        el('div', { class: 'files-main' }, svg, side),
+      ),
+    );
+
     // a slow scanline over the graph (still when reduce-motion is on)
-    const scan = svgEl('rect', { x: -60, y: 0, width: 220, height: 1.2, fill: 'var(--code-green)', opacity: 0.12, 'pointer-events': 'none' });
+    const scan = svgEl('rect', { x: -50, y: 0, width: 220, height: 1.2, fill: 'var(--code-green)', opacity: 0.12, 'pointer-events': 'none' });
     let frame = 0;
     if (!reduceMotion) {
       const t0 = performance.now();
@@ -100,106 +68,104 @@ export const systemFiles: EpisodeDefinition = {
       frame = requestAnimationFrame(loop);
     }
 
-    const nodeById = (id: string) => NODES.find((n) => n.id === id)!;
+    const say = (e: RunEvent) => {
+      if (!e.text) return;
+      hint.textContent = e.text;
+      hint.dataset.state = e.tone === 'bad' || e.tone === 'reset' ? 'wrong' : '';
+      calc.src = spriteURL('calculator', e.emotion);
+      dameo.src = spriteURL('dameo', e.tone === 'reset' ? 'scared' : e.tone === 'done' ? 'neutral' : 'tired');
+    };
 
     const render = () => {
-      svg.replaceChildren(image(backdrop, -60, 0, 220, 100));
-      for (const l of LINKS) {
-        const a = nodeById(l.from);
-        const b = nodeById(l.to);
-        svg.append(
-          svgEl('line', {
-            x1: a.x,
-            y1: a.y,
-            x2: b.x,
-            y2: b.y,
-            class: `files-link${cut.has(l.id) ? ' is-cut' : ''}${selected && (l.from === selected || l.to === selected) ? ' is-active' : ''}`,
-          }),
-        );
-      }
-      for (const n of NODES) {
-        const g = svgEl('g', { class: `files-node kind-${n.kind}${selected === n.id ? ' is-selected' : ''}` });
-        g.append(svgEl('rect', { x: n.x - 12, y: n.y - 4, width: 24, height: 8, rx: 1 }));
-        g.append(image(icons[n.kind]!, n.x - 11.4, n.y - 2.5, 3, 2.5 * 2));
-        const t = svgEl('text', { x: n.x + 1.6, y: n.y + 1.6, 'text-anchor': 'middle' });
-        t.textContent = n.label;
-        g.append(t);
-        g.addEventListener('click', () => select(n.id));
-        svg.append(g);
-      }
-      // Dameo stands by his own file: the program is turning him into it
-      const me = nodeById('u07');
-      svg.append(image(dameo, me.x - 18.5, me.y - 12, 4.8, 12));
-      svg.append(scan);
-      list.replaceChildren(
-        ...NODES.map((n) =>
-          el(
-            'button',
-            { class: `btn files-item kind-${n.kind}`, type: 'button', role: 'listitem', 'aria-pressed': String(selected === n.id), onclick: () => select(n.id) },
-            n.label,
-          ),
-        ),
-      );
-      if (!selected) {
-        info.replaceChildren(el('p', { class: 'muted' }, 'Выберите файл.'));
-        return;
-      }
-      const node = nodeById(selected);
-      const links = LINKS.filter((l) => l.from === node.id || l.to === node.id);
-      info.replaceChildren(
-        el('h3', { class: 'pixel' }, node.label),
-        el('p', {}, node.meta),
-        el(
-          'ul',
-          { class: 'files-links' },
-          ...links.map((l) => {
-            const other = nodeById(l.from === node.id ? l.to : l.from);
-            return el(
-              'li',
-              {},
-              el('span', {}, `↔ ${other.label}${cut.has(l.id) ? ' (разорвано)' : ''}`),
-              cut.has(l.id)
-                ? null
-                : el('button', { class: 'btn btn-danger', type: 'button', dataset: { link: l.id }, onclick: () => onCut(l.id) }, 'Разорвать'),
-            );
-          }),
-        ),
-      );
+      const focused = (document.activeElement as HTMLElement | null)?.dataset?.focus;
+      title.textContent = run.stage.title;
+      renderGraph(svg, run.stage, { selectedNode, selectedLink, cut: run.cut, tags: run.tags, locked: run.lock?.node ?? null, relinked: run.relinked, traced }, { node: selectNode, link: selectLink }, scan);
+      renderPanel(side, run, selectedNode, selectedLink, { cut: onCut, tag: onTag, submitTags: onSubmit, trace: onTrace, digit: onDigit });
+      if (focused) root.querySelector<HTMLElement | SVGElement>(`[data-focus="${focused}"]`)?.focus();
     };
 
-    const select = (id: string) => {
-      selected = id;
+    const startStage = (i: number) => {
+      index = i;
+      run = new StageRun(STAGES[i]!);
+      selectedNode = null;
+      selectedLink = null;
+      traced = [];
+      say({ tone: 'info', text: run.stage.intro, emotion: 'neutral' });
       render();
     };
 
-    const onCut = (linkId: string) => {
-      const result = cutLink(cut, linkId);
-      if (result === 'refused') {
-        cut.clear();
-        selected = null;
-        hint.textContent = 'Калькулятор: «Стой! Эта связь держит мир. Я откатил изменения — начни заново».';
-        hint.dataset.state = 'wrong';
-        setCalc('scared');
-        render();
-        return;
+    const handle = (e: RunEvent) => {
+      if (e.tone === 'reset') {
+        selectedNode = null;
+        selectedLink = null;
+        traced = [];
       }
-      cut.add(linkId);
-      hint.dataset.state = '';
-      setCalc(result === 'done' ? 'happy' : 'neutral');
-      hint.textContent = result === 'done' ? 'Привязка отключена.' : 'Калькулятор: «Так. Ещё одна связь держит тебя».';
+      say(e);
       render();
-      if (result === 'done') window.setTimeout(() => finish?.({ outcome: 'success' }), 900);
+      if (e.tone !== 'done') return;
+      window.setTimeout(() => {
+        if (!finish) return;
+        if (index + 1 < STAGES.length) startStage(index + 1);
+        else finish({ outcome: 'success' });
+      }, NEXT_STAGE_MS);
     };
+
+    const selectNode = (id: string) => {
+      selectedNode = id;
+      selectedLink = null;
+      render();
+    };
+    const selectLink = (id: string) => {
+      selectedLink = id;
+      selectedNode = null;
+      render();
+    };
+    const onCut = (id: string) => {
+      traced = [];
+      handle(run.tryCut(id));
+    };
+    const onTag = (id: string) => {
+      run.toggleTag(id);
+      render();
+    };
+    const onSubmit = () => handle(run.submitTags());
+    const onTrace = () => {
+      traced = run.trace() ?? [];
+      say({ tone: 'info', text: traced.length ? `Калькулятор: «Путь ещё есть — подсветил его жёлтым. Проводов в нём: ${traced.length}».` : 'Калькулятор: «Путей нет».', emotion: 'neutral' });
+      render();
+    };
+    const onDigit = (d: string) => {
+      if (run.lock) handle(run.typeDigit(d));
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (!run.lock || !/^[0-9]$/.test(e.key)) return;
+      e.preventDefault();
+      onDigit(e.key);
+    };
+    window.addEventListener('keydown', onKey);
+
+    let last = performance.now();
+    timer = window.setInterval(() => {
+      const now = performance.now();
+      const dt = (now - last) / 1000;
+      last = now;
+      const e = run.tick(dt);
+      if (e) handle(e);
+      const bar = side.querySelector<HTMLElement>('[data-lock-left]');
+      if (bar && run.lock) bar.style.width = `${(100 * run.lock.left) / run.lock.limit}%`;
+    }, 100);
 
     return {
       run: () =>
         new Promise<EpisodeOutcome>((resolve) => {
           finish = resolve;
-          render();
+          startStage(0);
         }),
       destroy: () => {
         finish = null;
         cancelAnimationFrame(frame);
+        window.clearInterval(timer);
+        window.removeEventListener('keydown', onKey);
         root.replaceChildren();
       },
     };

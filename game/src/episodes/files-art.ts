@@ -9,6 +9,9 @@ import { rng } from '../world/kit/location-kit';
 import { LOUD, css } from '../world/candy/palette';
 import { fillTest, inCircle, inHeart, inStar } from '../world/candy/shapes';
 import { strip, type Ctx } from './backdrops';
+import type { FileKind } from './files-graph';
+
+export type { FileKind };
 
 const BLACK = '#080d0a';
 const PANEL = '#101a14';
@@ -66,7 +69,6 @@ export function filesBackdrop(): string {
   );
 }
 
-export type FileKind = 'system' | 'user' | 'damaged' | 'link';
 
 /** A 12×10 file-type icon. */
 export function fileIcon(kind: FileKind): string {
@@ -106,4 +108,21 @@ export function fileIcon(kind: FileKind): string {
 /** A character's front sprite frame as a data URL. */
 export function spriteURL(id: string, emotion: Emotion = 'neutral', mouthOpen = false): string {
   return url(spriteFrame(id, { facing: 'front', emotion, walk: -1, breath: 0, mouthOpen }));
+}
+
+/** A 10×10 padlock (stage 3: a file the program has locked). */
+export function lockIcon(): string {
+  return url(
+    strip(10, 10, (ctx) => {
+      ctx.fillStyle = CORRUPT;
+      ctx.fillRect(2, 0, 6, 1);
+      ctx.fillRect(1, 1, 1, 4);
+      ctx.fillRect(8, 1, 1, 4);
+      ctx.fillRect(0, 4, 10, 6);
+      ctx.fillStyle = BLACK;
+      ctx.fillRect(4, 6, 2, 3);
+      ctx.fillStyle = WARN;
+      ctx.fillRect(4, 6, 2, 1);
+    }),
+  );
 }
