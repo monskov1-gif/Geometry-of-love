@@ -77,3 +77,14 @@ export function mouth(put: Put, x: number, y: number, e: Emotion, open: boolean,
   else if (e === 'tired') rect(put, x - 1, y, 2, 1, c);
   else rect(put, x - 1, y, 3, 1, c);
 }
+
+/** The compass's tiny dot face (unchanged working design): eyes 4 apart. */
+export function dotFace(put: Put, cx: number, y: number, e: Emotion, mouthOpen: boolean, c = INK): void {
+  if (e === 'happy') dots(put, [[cx - 2, y + 1], [cx - 3, y], [cx + 2, y + 1], [cx + 3, y]], c);
+  else if (e === 'scared') rect(put, cx - 3, y - 1, 1, 2, c), rect(put, cx + 2, y - 1, 1, 2, c);
+  else dots(put, [[cx - 2, y], [cx + 2, y]], c);
+  if (e === 'angry') dots(put, [[cx - 3, y - 2], [cx + 3, y - 2]], c);
+  if (mouthOpen) rect(put, cx - 1, y + 2, 2, 2, c);
+  else if (e === 'sad' || e === 'scared') rect(put, cx - 1, y + 3, 2, 1, c), put(cx - 2, y + 4, c), put(cx + 1, y + 4, c);
+  else rect(put, cx - 1, y + 3, 2, 1, c);
+}

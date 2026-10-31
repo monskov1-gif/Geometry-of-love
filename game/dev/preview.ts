@@ -31,12 +31,14 @@ for (const id of ids) {
 document.body.dataset.ready = '1';
 
 // ?sprites=1 — every character: emotions (front), talking, walk cycle (side).
+// &only=calculator,ruler limits the rows to those ids.
 import { EMOTIONS, spriteFrame, spriteIds, type Frame } from '../src/render/sprites';
 if (params.get('sprites')) {
   out.replaceChildren();
   out.style.display = 'block';
   const scale = Number(params.get('scale') ?? 5);
-  for (const id of spriteIds) {
+  const only = params.get('only')?.split(',');
+  for (const id of spriteIds.filter((s) => !only || only.includes(s))) {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;gap:6px;align-items:flex-end;margin:6px;background:#cfc9bd;padding:6px';
     row.append(id);
