@@ -259,7 +259,8 @@
 [data-phase='E'] .dialogue {
   border-style: dashed;
   border-radius: 0;
-  background: color-mix(in srgb, var(--surface) calc(var(--dialog-opacity) * 90%), transparent);
+  /* the band's own dark ground: --surface is near-white paper in the game space and the text is light */
+  background: color-mix(in srgb, var(--dlg-bg) calc(var(--dialog-opacity) * 90%), transparent);
 }
 
 [data-phase='E'] .nameplate {
