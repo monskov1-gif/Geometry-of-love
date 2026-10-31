@@ -85,8 +85,15 @@ export function castShot(
   c: { x: number; z: number; spread: number; tallest: number; shortest: number },
   maxDist: number,
   fov = 46,
+  aspect = 16 / 9,
 ): Shot {
-  let dist = Math.min(maxDist, Math.max(2.3, 2.0 + c.spread * 0.9));
+  // everyone must fit across the frame: on a tall phone screen the frame is narrow,
+  // so the camera backs off (or, against a wall, opens the lens) until the cast fits
+  const halfWidth = c.spread / 2 + 0.55;
+  const tanV = Math.tan(THREE.MathUtils.degToRad(fov / 2));
+  const fitDist = halfWidth / (tanV * aspect);
+  if (fitDist > maxDist) fov = Math.min(80, THREE.MathUtils.radToDeg(2 * Math.atan(halfWidth / (maxDist * aspect))));
+  let dist = Math.min(maxDist, Math.max(2.3, 2.0 + c.spread * 0.9, fitDist));
   const camY = c.tallest * 0.86;
   if (c.shortest >= 1.4) {
     // full-size cast: the established medium shot
@@ -304,7 +311,7 @@ export class World3D {
     const spread = Math.max(...xs) - Math.min(...xs);
     const x = Math.max(b.walk.minX, Math.min(b.walk.maxX, cx));
     const heights = people.map((a) => a.height);
-    const shot = castShot({ x, z: cz, spread, tallest: Math.max(...heights), shortest: Math.min(...heights) }, b.shots.wide.pos[2] - cz);
+    const shot = castShot({ x, z: cz, spread, tallest: Math.max(...heights), shortest: Math.min(...heights) }, b.shots.wide.pos[2] - cz, 46, this.camera.aspect);
     void this.setShot(shot, duration);
   }
 
@@ -531,8 +538,10 @@ export class World3D {
     this.composer?.setSize(rw, rh);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    // the cast framing depends on the screen shape too (phone turned, window resized)
+    if (this.build && !this.storyShot && this.actors.size) this.frameCast(0);
     // a fitted shot keeps its subject in frame when the view changes shape
-    if (this.shotDef?.fit) {
+    else if (this.shotDef?.fit) {
       const to = this.fitted(this.shotDef);
       if (this.move) this.move.to = to;
       else this.shot = to;

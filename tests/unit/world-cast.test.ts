@@ -52,3 +52,22 @@ describe('castShot', () => {
     }
   });
 });
+
+describe('cast framing on a tall phone screen', () => {
+  it('keeps the outermost characters inside the frame for any aspect ratio', async () => {
+    const THREE = await import('three');
+    const { castShot } = await import('../../game/src/world/world');
+    for (const aspect of [16 / 9, 4 / 3, 1, 412 / 839]) {
+      const c = { x: 0, z: -1, spread: 3.2, tallest: 1.74, shortest: 1.74 };
+      const shot = castShot(c, 12, 46, aspect);
+      const cam = new THREE.PerspectiveCamera(shot.fov ?? 46, aspect, 0.05, 80);
+      cam.position.set(...shot.pos);
+      cam.lookAt(new THREE.Vector3(...shot.look));
+      cam.updateMatrixWorld();
+      for (const x of [-1.6, 1.6]) {
+        const p = new THREE.Vector3(x, 1.0, -1).project(cam);
+        expect(Math.abs(p.x), `aspect ${aspect.toFixed(2)}, x ${x}`).toBeLessThan(1);
+      }
+    }
+  });
+});
